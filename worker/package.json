@@ -1,0 +1,18 @@
+{
+  "name": "balochsahab-app-worker",
+  "private": true,
+  "version": "1.0.0",
+  "description": "TikTok Login (OAuth) + content publishing backend for balochsahab.com, deployed as a Cloudflare Worker.",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "migrate:local": "wrangler d1 execute balochsahab-app --local --file=migrations/0001_init.sql",
+    "migrate:remote": "wrangler d1 execute balochsahab-app --remote --file=migrations/0001_init.sql",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^5.20250101.0",
+    "typescript": "^5.5.0",
+    "wrangler": "^4.0.0"
+  }
+}

@@ -19,6 +19,16 @@
     }
   });
 
+  // Wire FAQ buttons to their panels for screen readers
+  document.querySelectorAll(".faq-item").forEach(function (item, i) {
+    var trigger = item.querySelector("[data-faq-trigger]");
+    var panel = item.querySelector(".faq-panel");
+    if (trigger && panel) {
+      if (!panel.id) panel.id = "faq-panel-" + i;
+      trigger.setAttribute("aria-controls", panel.id);
+    }
+  });
+
   // Mobile nav
   document.addEventListener("click", function (e) {
     var navBtn = e.target.closest("[data-nav-toggle]");

@@ -62,7 +62,6 @@ async function main() {
   await recompressPng(master, "favicon.png", 64);
   await recompressPng(master, "favicon-32.png", 32);
   await recompressPng(master, "favicon-180.png", 180);
-  fs.copyFileSync(path.join(imgDir, "logo-512.png"), path.join(imgDir, "logo.png"));
 
   const mainCss = fs.readFileSync(path.join(cssDir, "main.css"), "utf8");
   const critCss = fs.readFileSync(path.join(cssDir, "critical.css"), "utf8");

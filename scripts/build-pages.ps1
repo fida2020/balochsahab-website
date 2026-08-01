@@ -1,4 +1,10 @@
-﻿$ErrorActionPreference = 'Stop'
+﻿# DEPRECATED / UNUSED — do not run.
+# This script generates an older placeholder site (teal color scheme, different
+# copy/pricing/email) that conflicts with the live black+gold production site.
+# The real build is `npm run build`, which calls build-site.ps1 + chrome.ps1 +
+# scripts/bodies/*.html. This file is kept only for reference and is not
+# wired into package.json. Running it would overwrite the production pages.
+$ErrorActionPreference = 'Stop'
 $root = Split-Path -Parent $PSScriptRoot
 function Page($path,$title,$desc,$canon,$body) {
   $full=Join-Path $root $path; $dir=Split-Path -Parent $full

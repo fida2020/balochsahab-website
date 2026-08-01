@@ -11,7 +11,7 @@ if (Test-Path $critPath) {
 
 function Head($title,$desc,$canon,[string]$extra="") {
 $og = "https://balochsahab.com$canon"
-$csp = "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'self'; img-src 'self' data: https:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; script-src 'self' 'unsafe-inline'; connect-src 'self' https:; form-action 'self' mailto: https:; upgrade-insecure-requests"
+$csp = "default-src 'self'; base-uri 'self'; object-src 'none'; img-src 'self' data: https:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; script-src 'self' 'unsafe-inline'; connect-src 'self' https:; form-action 'self' mailto: https:; upgrade-insecure-requests"
 @"
 <!DOCTYPE html>
 <html lang="en">

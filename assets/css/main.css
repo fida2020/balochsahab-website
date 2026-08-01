@@ -337,12 +337,64 @@ a:hover { color: var(--gold-bright); }
   outline: none; border-color: var(--gold); box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.2);
 }
 .form-note { color: var(--muted); font-size: 0.85rem; margin: 0; }
-.form-success {
-  display: none; padding: 0.9rem 1rem; border-radius: 10px;
-  background: rgba(212, 175, 55, 0.12); color: var(--gold-bright); font-weight: 600;
+.form-success, .form-error {
+  display: none; padding: 0.9rem 1rem; border-radius: 10px; font-weight: 600;
 }
-.form-success.show { display: block; }
-.form-success[hidden] { display: none !important; }
+.form-success {
+  background: rgba(212, 175, 55, 0.12); color: var(--gold-bright);
+}
+.form-error {
+  background: rgba(180, 40, 40, 0.18); color: #ffb4b4;
+}
+.form-success.show, .form-error:not([hidden]) { display: block; }
+.form-success[hidden], .form-error[hidden] { display: none !important; }
+.field-error {
+  color: #ffb4b4; font-size: 0.8rem; font-weight: 500; margin: 0;
+}
+.field-error[hidden] { display: none !important; }
+.hp-field {
+  position: absolute; left: -10000px; top: auto; width: 1px; height: 1px; overflow: hidden;
+}
+.breadcrumbs {
+  display: flex; flex-wrap: wrap; gap: 0.35rem 0.55rem; align-items: center;
+  font-size: 0.85rem; color: var(--muted); margin-bottom: 1rem; justify-content: center;
+}
+.breadcrumbs a { color: var(--muted); }
+.breadcrumbs a:hover { color: var(--gold-bright); }
+.breadcrumbs [aria-current="page"] { color: var(--gold); }
+.trust-strip {
+  display: grid; gap: 1rem; grid-template-columns: 1fr;
+  margin-top: 1.5rem;
+}
+@media (min-width: 720px) { .trust-strip { grid-template-columns: repeat(4, 1fr); } }
+.trust-item {
+  text-align: center; padding: 1rem; border-radius: 16px;
+  border: 1px solid var(--border); background: rgba(255,255,255,0.02);
+}
+.trust-item strong {
+  display: block; font-family: var(--display); font-size: 1.6rem;
+  color: var(--gold-bright); margin-bottom: 0.25rem;
+}
+.trust-item span { color: var(--muted); font-size: 0.85rem; }
+.logo-row {
+  display: flex; flex-wrap: wrap; gap: 0.75rem; justify-content: center; align-items: center;
+}
+.logo-pill {
+  min-width: 120px; padding: 0.85rem 1rem; text-align: center;
+  border: 1px solid var(--border); border-radius: 12px; color: var(--muted);
+  font-weight: 700; letter-spacing: 0.04em; font-size: 0.82rem;
+  background: rgba(255,255,255,0.02);
+}
+.email-grid { display: grid; gap: 0.75rem; grid-template-columns: 1fr; }
+@media (min-width: 640px) { .email-grid { grid-template-columns: repeat(2, 1fr); } }
+.email-card {
+  padding: 1rem 1.1rem; border-radius: 14px; border: 1px solid var(--glass-border);
+  background: var(--elevated);
+}
+.email-card strong { display: block; color: var(--gold-bright); margin-bottom: 0.2rem; }
+.email-card span { color: var(--muted); font-size: 0.88rem; }
+.help-list { display: grid; gap: 0.75rem; }
+.help-list a.feature-card { color: inherit; }
 .contact-info { padding: 1.5rem; }
 .contact-info h3 { font-family: var(--ui); margin: 0 0 0.75rem; }
 .contact-info p { color: var(--muted); margin: 0 0 1rem; }

@@ -1,17 +1,36 @@
-<section class="page-hero"><div class="container reveal"><span class="eyebrow">Contact</span><h1>We are here to help</h1><p>Reach us on WhatsApp, email, or through the form below.</p></div></section>
+<section class="page-hero"><div class="container reveal"><nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/index.html">Home</a><span aria-hidden="true">/</span><span aria-current="page">Contact</span></nav><span class="eyebrow">Contact</span><h1>We are here to help</h1><p>Reach us on WhatsApp, email, or through the form below — messages route to the right team.</p></div></section>
 <section class="section"><div class="container"><div class="contact-grid">
 <form class="form reveal" data-contact-form>
-<label>Name<input name="name" type="text" required autocomplete="name" placeholder="Your name"></label>
-<label>Email<input name="email" type="email" required autocomplete="email" placeholder="you@company.com"></label>
-<label>Subject<input name="subject" type="text" value="Website inquiry"></label>
-<label>Message<textarea name="message" required placeholder="How can we help?"></textarea></label>
+<label>Name<input id="name" name="name" type="text" required autocomplete="name" placeholder="Your full name"></label>
+<span class="field-error" data-error-for="name" hidden></span>
+<label>Email<input id="email" name="email" type="email" required autocomplete="email" placeholder="you@company.com"></label>
+<span class="field-error" data-error-for="email" hidden></span>
+<label>Company<input id="company" name="company" type="text" autocomplete="organization" placeholder="Company or brand name"></label>
+<span class="field-error" data-error-for="company" hidden></span>
+<label>Phone<input id="phone" name="phone" type="tel" autocomplete="tel" placeholder="+1 555 000 0000"></label>
+<span class="field-error" data-error-for="phone" hidden></span>
+<label>Department<select id="department" name="department" required>
+<option value="support">Support — product &amp; technical help</option>
+<option value="sales">Sales — plans &amp; Enterprise</option>
+<option value="billing">Billing — invoices &amp; subscriptions</option>
+<option value="info">Info — general inquiries</option>
+<option value="careers">Careers — roles &amp; talent</option>
+<option value="hello">Hello — introductions &amp; feedback</option>
+</select></label>
+<span class="field-error" data-error-for="department" hidden></span>
+<label>Subject<input id="subject" name="subject" type="text" placeholder="How can we help?"></label>
+<span class="field-error" data-error-for="subject" hidden></span>
+<label>Message<textarea id="message" name="message" required rows="6" placeholder="Tell us about your automation goals or question"></textarea></label>
+<span class="field-error" data-error-for="message" hidden></span>
+<label class="hp-field" aria-hidden="true">Website<input name="website" type="text" tabindex="-1" autocomplete="off"></label>
 <button class="btn btn-primary" type="submit">Send Message</button>
-<p class="form-note">Messages open your email client to support@balochsahab.com.</p>
-<div class="form-success" data-form-success hidden>Ready to send via your mail app.</div>
+<p class="form-note">By default, messages open your email client to the selected department inbox. Optionally add a <code>data-form-endpoint</code> attribute for Formspree or similar serverless form delivery.</p>
+<div class="form-error" data-form-error hidden></div>
+<div class="form-success" data-form-success hidden>Thank you — your message is ready to send.</div>
 </form>
 <aside class="contact-info reveal">
 <h3>Contact details</h3>
-<p>Public product support and sales inquiries welcome.</p>
+<p>Public product support, sales, and onboarding inquiries welcome.</p>
 <dl>
 <dt>WhatsApp</dt><dd><a href="https://wa.me/923218818909" target="_blank" rel="noopener noreferrer">+92 321 8818909</a></dd>
 <dt>Email</dt><dd><a href="mailto:support@balochsahab.com">support@balochsahab.com</a></dd>

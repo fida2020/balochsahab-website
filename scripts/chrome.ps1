@@ -1,8 +1,17 @@
 $ErrorActionPreference = "Stop"
 $root = "C:\Users\Administrator\tiktok-verification"
+$criticalCss = ""
+$critPath = Join-Path $root "assets\css\critical.min.css"
+if (Test-Path $critPath) {
+  $criticalCss = [IO.File]::ReadAllText($critPath).Trim()
+} else {
+  $critPath2 = Join-Path $root "assets\css\critical.css"
+  if (Test-Path $critPath2) { $criticalCss = [IO.File]::ReadAllText($critPath2).Trim() }
+}
 
 function Head($title,$desc,$canon,[string]$extra="") {
 $og = "https://balochsahab.com$canon"
+$csp = "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'self'; img-src 'self' data: https:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; script-src 'self' 'unsafe-inline'; connect-src 'self' https:; form-action 'self' mailto: https:; upgrade-insecure-requests"
 @"
 <!DOCTYPE html>
 <html lang="en">
@@ -12,41 +21,63 @@ $og = "https://balochsahab.com$canon"
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>$title</title>
 <meta name="description" content="$desc">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta name="author" content="Baloch Sahab Automation">
 <meta name="theme-color" content="#090909">
+<meta name="color-scheme" content="dark">
 <link rel="canonical" href="$og">
 <meta property="og:type" content="website">
+<meta property="og:locale" content="en_US">
 <meta property="og:site_name" content="Baloch Sahab Automation">
 <meta property="og:title" content="$title">
 <meta property="og:description" content="$desc">
 <meta property="og:url" content="$og">
 <meta property="og:image" content="https://balochsahab.com/assets/img/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="$title">
 <meta name="twitter:description" content="$desc">
 <meta name="twitter:image" content="https://balochsahab.com/assets/img/og-cover.png">
-<link rel="icon" href="/assets/img/favicon.png" type="image/png">
+<meta http-equiv="Content-Security-Policy" content="$csp">
+<meta http-equiv="X-Content-Type-Options" content="nosniff">
+<meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+<meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()">
+<link rel="icon" href="/assets/img/favicon.webp" type="image/webp">
+<link rel="icon" href="/assets/img/favicon.png" type="image/png" sizes="64x64">
 <link rel="icon" href="/assets/img/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="/assets/img/favicon-180.png">
-<link rel="preload" href="/assets/img/logo-512.png" as="image">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="preload" as="image" href="/assets/img/logo-256.webp" type="image/webp" fetchpriority="high">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Manrope:wght@400;500;600;700&family=Sora:wght@600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Manrope:wght@400;600;700&family=Sora:wght@600;700&display=swap">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Manrope:wght@400;600;700&family=Sora:wght@600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Manrope:wght@400;600;700&family=Sora:wght@600;700&display=swap" rel="stylesheet"></noscript>
+<style>$criticalCss</style>
+<link rel="stylesheet" href="/assets/css/main.min.css" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="/assets/css/main.min.css"></noscript>
 $extra
 </head>
-<body>
-<div class="loader" data-loader aria-hidden="true"><img src="/assets/img/logo-256.png" width="96" height="96" alt=""></div>
+<body class="no-js">
+<script>document.body.classList.remove('no-js');</script>
 <a class="skip-link" href="#main">Skip to content</a>
 <header class="site-header">
 <div class="container nav" data-nav>
-<a class="brand" href="/index.html"><img src="/assets/img/logo-256.png" width="44" height="44" alt="Baloch Sahab Automation"><span class="brand-text">Baloch Sahab Automation</span></a>
+<a class="brand" href="/index.html">
+<picture>
+<source type="image/webp" srcset="/assets/img/logo-128.webp 128w, /assets/img/logo-256.webp 256w" sizes="44px">
+<img src="/assets/img/logo-256.png" srcset="/assets/img/logo-128.png 128w, /assets/img/logo-256.png 256w" sizes="44px" width="44" height="44" alt="Baloch Sahab Automation" decoding="async" fetchpriority="high">
+</picture>
+<span class="brand-text">Baloch Sahab Automation</span>
+</a>
 <ul class="nav-links">
 <li><a href="/index.html">Home</a></li>
 <li><a href="/features.html">Features</a></li>
 <li><a href="/solutions.html">Solutions</a></li>
 <li><a href="/pricing.html">Pricing</a></li>
 <li><a href="/about.html">About</a></li>
-<li><a href="/faq.html">FAQ</a></li>
+<li><a href="/resources.html">Resources</a></li>
 <li><a href="/contact.html">Contact</a></li>
 </ul>
 <div class="nav-actions">
@@ -55,7 +86,7 @@ $extra
 </div>
 </div>
 <div class="mobile-panel" data-mobile-nav>
-<a href="/index.html">Home</a><a href="/features.html">Features</a><a href="/solutions.html">Solutions</a><a href="/pricing.html">Pricing</a><a href="/about.html">About</a><a href="/faq.html">FAQ</a><a href="/contact.html">Contact</a><a href="/privacy-policy.html">Privacy</a><a href="/terms-of-service.html">Terms</a>
+<a href="/index.html">Home</a><a href="/features.html">Features</a><a href="/solutions.html">Solutions</a><a href="/pricing.html">Pricing</a><a href="/about.html">About</a><a href="/resources.html">Resources</a><a href="/faq.html">FAQ</a><a href="/support.html">Support</a><a href="/contact.html">Contact</a><a href="/help-center.html">Help Center</a>
 </div>
 </header>
 <main id="main">
@@ -72,25 +103,31 @@ function Foot {
 <div class="container">
 <div class="footer-grid">
 <div class="footer-brand">
-<a class="brand" href="/index.html"><img src="/assets/img/logo-256.png" width="52" height="52" alt="Baloch Sahab Automation"><span class="brand-text">Baloch Sahab Automation</span></a>
+<a class="brand" href="/index.html">
+<picture>
+<source type="image/webp" srcset="/assets/img/logo-256.webp">
+<img src="/assets/img/logo-256.png" width="52" height="52" alt="Baloch Sahab Automation" loading="lazy" decoding="async">
+</picture>
+<span class="brand-text">Baloch Sahab Automation</span>
+</a>
 <p>AI-Powered Social Media Automation Platform for creators and businesses.</p>
 <div class="socials" aria-label="Social links">
 <a href="https://github.com/fida2020" target="_blank" rel="noopener noreferrer" aria-label="GitHub">GH</a>
 <a href="https://wa.me/923218818909" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">WA</a>
-<a href="mailto:support@balochsahab.com" aria-label="Email">EM</a>
+<a href="mailto:hello@balochsahab.com" aria-label="Email hello@balochsahab.com">EM</a>
 </div>
 </div>
-<div class="footer-col"><h4>Company</h4><ul><li><a href="/about.html">About</a></li><li><a href="/features.html">Features</a></li><li><a href="/solutions.html">Solutions</a></li><li><a href="/pricing.html">Pricing</a></li></ul></div>
-<div class="footer-col"><h4>Support</h4><ul><li><a href="/faq.html">FAQ</a></li><li><a href="/contact.html">Contact</a></li><li><a href="mailto:support@balochsahab.com">support@balochsahab.com</a></li><li><a href="https://wa.me/923218818909" target="_blank" rel="noopener noreferrer">WhatsApp +92 321 8818909</a></li></ul></div>
-<div class="footer-col"><h4>Legal</h4><ul><li><a href="/privacy-policy.html">Privacy Policy</a></li><li><a href="/terms-of-service.html">Terms of Service</a></li><li><a href="/cookie-policy.html">Cookie Policy</a></li></ul></div>
+<div class="footer-col"><h4>Company</h4><ul><li><a href="/about.html">About</a></li><li><a href="/company.html">Company</a></li><li><a href="/mission.html">Mission</a></li><li><a href="/vision.html">Vision</a></li><li><a href="/services.html">Services</a></li><li><a href="/solutions.html">Solutions</a></li><li><a href="/pricing.html">Pricing</a></li></ul></div>
+<div class="footer-col"><h4>Support</h4><ul><li><a href="/support.html">Support</a></li><li><a href="/help-center.html">Help Center</a></li><li><a href="/faq.html">FAQ</a></li><li><a href="/contact.html">Contact</a></li><li><a href="/docs/index.html">Documentation</a></li><li><a href="/resources.html">Resources</a></li><li><a href="mailto:support@balochsahab.com">support@balochsahab.com</a></li></ul></div>
+<div class="footer-col"><h4>Legal</h4><ul><li><a href="/privacy-policy.html">Privacy Policy</a></li><li><a href="/terms-of-service.html">Terms of Service</a></li><li><a href="/cookie-policy.html">Cookie Policy</a></li><li><a href="/refund-policy.html">Refund Policy</a></li><li><a href="/acceptable-use-policy.html">Acceptable Use</a></li><li><a href="/sla.html">SLA</a></li><li><a href="/security-policy.html">Security</a></li><li><a href="/responsible-disclosure.html">Responsible Disclosure</a></li></ul></div>
 </div>
 <div class="footer-bottom">
 <p>&copy; <span data-year>2026</span> Baloch Sahab Automation. All Rights Reserved.</p>
-<nav aria-label="Legal"><a href="/privacy-policy.html">Privacy</a><a href="/terms-of-service.html">Terms</a><a href="mailto:support@balochsahab.com">Support</a></nav>
+<nav aria-label="Legal"><a href="/privacy-policy.html">Privacy</a><a href="/terms-of-service.html">Terms</a><a href="/security-policy.html">Security</a><a href="mailto:support@balochsahab.com">Support</a></nav>
 </div>
 </div>
 </footer>
-<script src="/assets/js/main.js" defer></script>
+<script src="/assets/js/main.min.js" defer></script>
 </body>
 </html>
 "@

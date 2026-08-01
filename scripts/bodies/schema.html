@@ -1,7 +1,12 @@
 <script type="application/ld+json">
 {"@context":"https://schema.org","@graph":[
-{"@type":"Organization","name":"Baloch Sahab Automation","url":"https://balochsahab.com","logo":"https://balochsahab.com/assets/img/logo-512.png","email":"support@balochsahab.com","sameAs":["https://github.com/fida2020","https://wa.me/923218818909"]},
-{"@type":"WebSite","name":"Baloch Sahab Automation","url":"https://balochsahab.com","description":"AI-Powered Social Media Automation Platform","publisher":{"@type":"Organization","name":"Baloch Sahab Automation"}},
-{"@type":"SoftwareApplication","name":"Baloch Sahab Automation","applicationCategory":"BusinessApplication","operatingSystem":"Web","offers":{"@type":"AggregateOffer","lowPrice":"9","highPrice":"49","priceCurrency":"USD"}}
+{"@type":"Organization","@id":"https://balochsahab.com/#organization","name":"Baloch Sahab Automation","url":"https://balochsahab.com","logo":{"@type":"ImageObject","url":"https://balochsahab.com/assets/img/logo-512.webp"},"email":"support@balochsahab.com","sameAs":["https://github.com/fida2020","https://wa.me/923218818909"],"contactPoint":[{"@type":"ContactPoint","contactType":"customer support","email":"support@balochsahab.com","telephone":"+923218818909","availableLanguage":["English"]},{"@type":"ContactPoint","contactType":"sales","email":"sales@balochsahab.com"},{"@type":"ContactPoint","contactType":"billing support","email":"billing@balochsahab.com"}]},
+{"@type":"WebSite","@id":"https://balochsahab.com/#website","name":"Baloch Sahab Automation","url":"https://balochsahab.com","description":"AI-Powered Social Media Automation Platform","publisher":{"@id":"https://balochsahab.com/#organization"},"potentialAction":{"@type":"SearchAction","target":"https://balochsahab.com/resources.html?q={search_term_string}","query-input":"required name=search_term_string"}},
+{"@type":"SoftwareApplication","name":"Baloch Sahab Automation","applicationCategory":"BusinessApplication","operatingSystem":"Web","offers":{"@type":"AggregateOffer","lowPrice":"9","highPrice":"49","priceCurrency":"USD"},"provider":{"@id":"https://balochsahab.com/#organization"}},
+{"@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"What is Baloch Sahab Automation?","acceptedAnswer":{"@type":"Answer","text":"Baloch Sahab Automation is a public AI-powered SaaS platform for planning, creating, scheduling, and publishing social media content across major networks including TikTok."}},
+{"@type":"Question","name":"How much does it cost?","acceptedAnswer":{"@type":"Answer","text":"Starter is $9/month, Professional $19/month, Business $49/month. Enterprise is custom — contact sales@balochsahab.com."}},
+{"@type":"Question","name":"How do I get support?","acceptedAnswer":{"@type":"Answer","text":"Email support@balochsahab.com or message WhatsApp +92 321 8818909. Visit the Help Center for guides."}}
+]}
 ]}
 </script>

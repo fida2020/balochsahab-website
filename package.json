@@ -1,0 +1,13 @@
+{
+  "name": "balochsahab-site",
+  "private": true,
+  "version": "2.0.0",
+  "description": "Static site tooling for balochsahab.com",
+  "scripts": {
+    "optimize": "node scripts/optimize.mjs",
+    "build": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/build-site.ps1"
+  },
+  "devDependencies": {
+    "sharp": "^0.34.2"
+  }
+}

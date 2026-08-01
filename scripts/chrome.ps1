@@ -1,22 +1,28 @@
+$ErrorActionPreference = "Stop"
+$root = "C:\Users\Administrator\tiktok-verification"
+
+function Head($title,$desc,$canon,[string]$extra="") {
+$og = "https://balochsahab.com$canon"
+@"
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <script>(function(){var h=location.hostname;if(h==="www.balochsahab.com"||location.protocol==="http:"){location.replace("https://balochsahab.com"+location.pathname+location.search+location.hash);}})();</script><!-- apex-https-redirect -->
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Terms of Service | Baloch Sahab Automation</title>
-<meta name="description" content="Terms of Service for Baloch Sahab Automation public SaaS website and product.">
+<title>$title</title>
+<meta name="description" content="$desc">
 <meta name="theme-color" content="#090909">
-<link rel="canonical" href="https://balochsahab.com/terms-of-service.html">
+<link rel="canonical" href="$og">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Baloch Sahab Automation">
-<meta property="og:title" content="Terms of Service | Baloch Sahab Automation">
-<meta property="og:description" content="Terms of Service for Baloch Sahab Automation public SaaS website and product.">
-<meta property="og:url" content="https://balochsahab.com/terms-of-service.html">
+<meta property="og:title" content="$title">
+<meta property="og:description" content="$desc">
+<meta property="og:url" content="$og">
 <meta property="og:image" content="https://balochsahab.com/assets/img/og-cover.png">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Terms of Service | Baloch Sahab Automation">
-<meta name="twitter:description" content="Terms of Service for Baloch Sahab Automation public SaaS website and product.">
+<meta name="twitter:title" content="$title">
+<meta name="twitter:description" content="$desc">
 <meta name="twitter:image" content="https://balochsahab.com/assets/img/og-cover.png">
 <link rel="icon" href="/assets/img/favicon.png" type="image/png">
 <link rel="icon" href="/assets/img/favicon-32.png" sizes="32x32" type="image/png">
@@ -26,7 +32,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Manrope:wght@400;500;600;700&family=Sora:wght@600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/css/main.css">
-
+$extra
 </head>
 <body>
 <div class="loader" data-loader aria-hidden="true"><img src="/assets/img/logo-256.png" width="96" height="96" alt=""></div>
@@ -52,23 +58,12 @@
 <a href="/index.html">Home</a><a href="/features.html">Features</a><a href="/solutions.html">Solutions</a><a href="/pricing.html">Pricing</a><a href="/about.html">About</a><a href="/faq.html">FAQ</a><a href="/contact.html">Contact</a><a href="/privacy-policy.html">Privacy</a><a href="/terms-of-service.html">Terms</a>
 </div>
 </header>
-<main id="main"><section class="page-hero"><div class="container reveal"><span class="eyebrow">Legal</span><h1>Terms of Service</h1><p>Last updated: August 1, 2026</p></div></section>
-<section class="section"><div class="container"><div class="prose reveal">
-<h2>1. Agreement</h2>
-<p>By accessing balochsahab.com or using Baloch Sahab Automation services, you agree to these Terms.</p>
-<h2>2. Service description</h2>
-<p>We provide a public AI-powered social media automation SaaS. Features and platform integrations may evolve over time.</p>
-<h2>3. Accounts and acceptable use</h2>
-<p>You are responsible for account credentials and for using the service lawfully. You must comply with third-party platform rules (including TikTok) when connecting accounts.</p>
-<h2>4. Plans and billing</h2>
-<p>Paid plans (Starter, Professional, Business) are billed as described on the Pricing page. Enterprise terms are agreed separately. Fees are non-refundable except where required by law.</p>
-<h2>5. Intellectual property</h2>
-<p>The website, branding, and software remain our property. You retain rights to content you upload, and grant us a limited license to process it for service delivery.</p>
-<h2>6. Disclaimers and liability</h2>
-<p>The service is provided "as is." To the fullest extent permitted by law, we disclaim warranties and limit liability for indirect or consequential damages.</p>
-<h2>7. Contact</h2>
-<p>Questions: <a href="mailto:support@balochsahab.com">support@balochsahab.com</a> · WhatsApp <a href="https://wa.me/923218818909" target="_blank" rel="noopener noreferrer">+92 321 8818909</a></p>
-</div></div></section>
+<main id="main">
+"@
+}
+
+function Foot {
+@"
 </main>
 <a class="wa-float" href="https://wa.me/923218818909" target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp">
 <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.5 3.5A11 11 0 0 0 3.2 17.7L2 22l4.4-1.2A11 11 0 1 0 20.5 3.5zm-8.5 17a9 9 0 0 1-4.6-1.3l-.3-.2-2.6.7.7-2.5-.2-.3A9 9 0 1 1 12 20.5zm5.2-6.7c-.3-.1-1.6-.8-1.9-.9s-.4-.1-.6.2-.7.9-.8 1-.3.2-.6.1a7.3 7.3 0 0 1-2.2-1.4 8.2 8.2 0 0 1-1.5-1.9c-.2-.3 0-.4.1-.6l.4-.5.2-.3a.5.5 0 0 0 0-.5c0-.1-.6-1.5-.8-2s-.5-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.8 11.8 11.8 0 0 0 4.5 4 14 14 0 0 0 1.5.6 3.6 3.6 0 0 0 1.7.1 2.9 2.9 0 0 0 1.9-1.3 2.4 2.4 0 0 0 .2-1.3c-.1-.1-.3-.2-.6-.3z"/></svg>
@@ -98,3 +93,14 @@
 <script src="/assets/js/main.js" defer></script>
 </body>
 </html>
+"@
+}
+
+function Write-SitePage {
+  param([string]$Rel,[string]$Title,[string]$Desc,[string]$Canon,[string]$Body,[string]$Extra="")
+  $full = Join-Path $root $Rel
+  $dir = Split-Path $full -Parent
+  if ($dir -and !(Test-Path $dir)) { New-Item -ItemType Directory -Force -Path $dir | Out-Null }
+  [IO.File]::WriteAllText($full, ((Head $Title $Desc $Canon $Extra) + $Body + (Foot)), [Text.UTF8Encoding]::new($false))
+  Write-Output "OK $Rel"
+}

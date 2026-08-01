@@ -3,11 +3,7 @@
 
   window.addEventListener("load", function () {
     var loader = document.querySelector("[data-loader]");
-    if (loader) {
-      requestAnimationFrame(function () {
-        loader.classList.add("hide");
-      });
-    }
+    if (loader) loader.classList.add("hide");
   });
 
   document.addEventListener("click", function (e) {
@@ -43,8 +39,9 @@
   }
   var current = normalize(location.pathname);
   document.querySelectorAll("[data-nav] a, .mobile-panel a").forEach(function (link) {
-    var href = normalize(link.getAttribute("href") || "");
-    if (href === current) link.setAttribute("aria-current", "page");
+    if (normalize(link.getAttribute("href") || "") === current) {
+      link.setAttribute("aria-current", "page");
+    }
   });
 
   var form = document.querySelector("[data-contact-form]");
@@ -59,7 +56,7 @@
       if (!name || !email || !message) return;
       var body = ["Name: " + name, "Email: " + email, "", message].join("\n");
       location.href =
-        "mailto:shamsfida92@gmail.com?subject=" +
+        "mailto:support@balochsahab.com?subject=" +
         encodeURIComponent(subject) +
         "&body=" +
         encodeURIComponent(body);
@@ -85,13 +82,9 @@
       },
       { threshold: 0.12, rootMargin: "0px 0px -40px 0px" }
     );
-    reveals.forEach(function (el) {
-      io.observe(el);
-    });
+    reveals.forEach(function (el) { io.observe(el); });
   } else {
-    reveals.forEach(function (el) {
-      el.classList.add("visible");
-    });
+    reveals.forEach(function (el) { el.classList.add("visible"); });
   }
 
   document.querySelectorAll("[data-year]").forEach(function (el) {

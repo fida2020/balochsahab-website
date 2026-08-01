@@ -1,8 +1,14 @@
-/**
- * Baloch Sahab Automation — site interactions
- */
 (function () {
   "use strict";
+
+  window.addEventListener("load", function () {
+    var loader = document.querySelector("[data-loader]");
+    if (loader) {
+      requestAnimationFrame(function () {
+        loader.classList.add("hide");
+      });
+    }
+  });
 
   document.addEventListener("click", function (e) {
     var navBtn = e.target.closest("[data-nav-toggle]");
@@ -48,23 +54,15 @@
       var data = new FormData(form);
       var name = String(data.get("name") || "").trim();
       var email = String(data.get("email") || "").trim();
-      var company = String(data.get("company") || "").trim();
-      var service = String(data.get("service") || "").trim();
-      var subject = String(data.get("subject") || service || "Website inquiry").trim();
+      var subject = String(data.get("subject") || "Website inquiry").trim();
       var message = String(data.get("message") || "").trim();
       if (!name || !email || !message) return;
-
-      var lines = ["Name: " + name, "Email: " + email];
-      if (company) lines.push("Company: " + company);
-      if (service) lines.push("Service: " + service);
-      lines.push("", message);
-
+      var body = ["Name: " + name, "Email: " + email, "", message].join("\n");
       location.href =
         "mailto:shamsfida92@gmail.com?subject=" +
         encodeURIComponent(subject) +
         "&body=" +
-        encodeURIComponent(lines.join("\n"));
-
+        encodeURIComponent(body);
       var ok = form.querySelector("[data-form-success]");
       if (ok) {
         ok.hidden = false;

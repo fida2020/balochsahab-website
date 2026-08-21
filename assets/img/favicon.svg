@@ -1,12 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200" role="img" aria-label="Baloch Sahab">
 <title>Baloch Sahab</title>
-<defs>
-<linearGradient id="bsa-fav-gold" x1="0%" y1="0%" x2="100%" y2="100%">
-<stop offset="0%" stop-color="#FFD700"/>
-<stop offset="45%" stop-color="#D4AF37"/>
-<stop offset="100%" stop-color="#B8860B"/>
-</linearGradient>
-</defs>
-<rect width="200" height="200" rx="44" fill="#090909"/>
-<text x="100" y="140" font-family="'Sora',Arial,sans-serif" font-weight="800" font-size="118" fill="url(#bsa-fav-gold)" text-anchor="middle">BS</text>
+<rect width="200" height="200" rx="44" fill="#1a9d6a"/>
+<text x="100" y="133" font-family="Arial, Helvetica, sans-serif" font-weight="800" font-size="86" letter-spacing="-2" fill="#ffffff" text-anchor="middle">BS</text>
 </svg>

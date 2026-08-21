@@ -30,7 +30,7 @@ $csp = "default-src 'self'; base-uri 'self'; object-src 'none'; img-src 'self' d
 <meta name="description" content="$desc">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <meta name="author" content="Baloch Sahab">
-<meta name="theme-color" content="#090909">
+<meta name="theme-color" content="#eef0ef">
 <meta name="color-scheme" content="dark">
 <link rel="canonical" href="$og">
 <meta property="og:type" content="website">
@@ -55,14 +55,14 @@ $csp = "default-src 'self'; base-uri 'self'; object-src 'none'; img-src 'self' d
 <link rel="icon" href="/assets/img/favicon-16x16.png" sizes="16x16" type="image/png">
 <link rel="icon" href="/assets/img/favicon-32x32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
-<link rel="mask-icon" href="/assets/img/mask-icon.svg" color="#D4AF37">
+<link rel="mask-icon" href="/assets/img/mask-icon.svg" color="#1a9d6a">
 <link rel="manifest" href="/site.webmanifest">
 <link rel="preload" as="image" href="/assets/img/logo-256.webp" type="image/webp" fetchpriority="high">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Manrope:wght@400;600;700&family=Sora:wght@600;700&display=swap">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Manrope:wght@400;600;700&family=Sora:wght@600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
-<noscript><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Manrope:wght@400;600;700&family=Sora:wght@600;700&display=swap" rel="stylesheet"></noscript>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&family=Sora:wght@600;700&display=swap">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&family=Sora:wght@600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&family=Sora:wght@600;700&display=swap" rel="stylesheet"></noscript>
 <style>$criticalCss</style>
 <link rel="stylesheet" href="/assets/css/main.min.css?v=$buildVersion" media="print" onload="this.media='all'">
 <noscript><link rel="stylesheet" href="/assets/css/main.min.css?v=$buildVersion"></noscript>

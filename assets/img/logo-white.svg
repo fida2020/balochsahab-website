@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200" role="img" aria-label="Baloch Sahab">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200" role="img" aria-label="Baloch Sahab — White">
 <title>Baloch Sahab — White</title>
-<circle cx="100" cy="100" r="74" fill="none" stroke="#FFFFFF" stroke-width="5"/>
-<text x="100" y="132" font-family="'Sora',Arial,sans-serif" font-weight="800" font-size="88" fill="#FFFFFF" text-anchor="middle">BS</text>
+<rect width="200" height="200" rx="44" fill="none" stroke="#FFFFFF" stroke-width="6"/>
+<text x="100" y="133" font-family="Arial, Helvetica, sans-serif" font-weight="800" font-size="86" letter-spacing="-2" fill="#FFFFFF" text-anchor="middle">BS</text>
 </svg>

@@ -105,11 +105,12 @@ async function main() {
   await buildFaviconIco();
 
   // Maskable PWA icons: master logo with a generous safe-zone margin so OS
-  // circular/rounded-square masking never clips the ring or text.
+  // circular/rounded-square masking never clips the mark.
+  const maskableBg = "#1a9d6a";
   for (const size of [192, 512]) {
     const inner = Math.round(size * 0.72);
-    const markBuf = await sharp(path.join(imgDir, master)).resize(inner, inner, { fit: "contain", background: "#090909" }).png().toBuffer();
-    await sharp({ create: { width: size, height: size, channels: 4, background: "#090909" } })
+    const markBuf = await sharp(path.join(imgDir, master)).resize(inner, inner, { fit: "contain", background: maskableBg }).png().toBuffer();
+    await sharp({ create: { width: size, height: size, channels: 4, background: maskableBg } })
       .composite([{ input: markBuf, gravity: "center" }])
       .png()
       .toFile(path.join(imgDir, "icon-maskable-" + size + ".png"));

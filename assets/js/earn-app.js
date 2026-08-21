@@ -271,13 +271,23 @@
   // Earn page
   // ---------------------------------------------------------------------
   function initEarnPage() {
-    if (!isLoggedIn()) return;
-
     // PTC, Shortlinks, Offerwall, Games, and Video Ads are marked "Coming
     // Soon" in earn.html for now — this backend (baloch-sahab-backend) is
     // a separate system from EarnBox's and doesn't have real ad/offer
     // provider integrations wired up yet. Only Daily Check-in and Faucet
     // (pure internal logic, no third party) are real and live below.
+
+    if (!isLoggedIn()) {
+      var guestDailyStatus = document.querySelector("[data-daily-status]");
+      var guestDailyBtn = document.querySelector("[data-daily-claim]");
+      if (guestDailyStatus) { guestDailyStatus.innerHTML = 'Log in to see today\'s bonus — <a href="/login.html">Log In</a>'; }
+      if (guestDailyBtn) guestDailyBtn.hidden = true;
+      var guestFaucetStatus = document.querySelector("[data-faucet-status]");
+      var guestFaucetBtn = document.querySelector("[data-faucet-claim]");
+      if (guestFaucetStatus) { guestFaucetStatus.innerHTML = 'Log in to claim the faucet reward — <a href="/login.html">Log In</a>'; }
+      if (guestFaucetBtn) guestFaucetBtn.hidden = true;
+      return;
+    }
 
     // Daily check-in
     var dailyRoot = document.querySelector("[data-daily-root]");

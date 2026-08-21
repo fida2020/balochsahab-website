@@ -24,7 +24,7 @@
 <meta name="twitter:title" content="Security Policy | Baloch Sahab">
 <meta name="twitter:description" content="Security Policy for Baloch Sahab - HTTPS, access controls, and data protection practices.">
 <meta name="twitter:image" content="https://balochsahab.com/assets/img/og-cover.png">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; img-src 'self' data: https:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; script-src 'self' 'unsafe-inline' https://accounts.google.com; frame-src https://accounts.google.com; connect-src 'self' https:; form-action 'self' mailto: https:; upgrade-insecure-requests">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; img-src 'self' data: https:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; script-src 'self' 'unsafe-inline' https://accounts.google.com https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://www.googletagservices.com https://ep1.adtrafficquality.google https://ep2.adtrafficquality.google; frame-src https://accounts.google.com https://googleads.g.doubleclick.net https://tpc.googlesyndication.com https://ep1.adtrafficquality.google https://ep2.adtrafficquality.google; connect-src 'self' https:; form-action 'self' mailto: https:; upgrade-insecure-requests">
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
 <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
 <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()">
@@ -42,10 +42,12 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Manrope:wght@400;600;700&family=Sora:wght@600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 <noscript><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Manrope:wght@400;600;700&family=Sora:wght@600;700&display=swap" rel="stylesheet"></noscript>
 <style>:root{--bg:#090909;--gold:#D4AF37;--gold-bright:#FFD700;--gold-deep:#B8860B;--text:#fff;--muted:#B8B8B8;--border:rgba(212,175,55,.18);--grad:linear-gradient(135deg,#FFD700 0%,#D4AF37 45%,#B8860B 100%);--glow:0 0 40px rgba(212,175,55,.28),0 0 80px rgba(255,215,0,.12);--radius:20px;--max:1140px;--header-h:78px;--font:Manrope,system-ui,sans-serif;--display:"Cormorant Garamond",Georgia,serif;--ui:Sora,system-ui,sans-serif;--ease:cubic-bezier(.22,1,.36,1)}*,*::before,*::after{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;min-height:100vh;font-family:var(--font);color:var(--text);line-height:1.7;background:radial-gradient(ellipse 80% 50% at 20% -10%,rgba(212,175,55,.14),transparent 55%),radial-gradient(ellipse 60% 40% at 100% 0%,rgba(255,215,0,.08),transparent 50%),var(--bg);-webkit-font-smoothing:antialiased}img,svg{max-width:100%;display:block;height:auto}a{color:var(--gold);text-decoration:none}.skip-link{position:absolute;left:1rem;top:-120px;z-index:2000;background:var(--grad);color:#090909;padding:.65rem 1rem;border-radius:10px;font-weight:700}.skip-link:focus{top:1rem}.container{width:min(100% - 2rem,var(--max));margin-inline:auto}.site-header{position:sticky;top:0;z-index:100;height:var(--header-h);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);background:rgba(9,9,9,.55);border-bottom:1px solid var(--border)}.nav{height:var(--header-h);display:flex;align-items:center;justify-content:space-between;gap:1rem}.brand{display:inline-flex;align-items:center;gap:.7rem;color:var(--text);font-family:var(--ui);font-weight:700;font-size:.92rem}.brand img{width:44px;height:44px;border-radius:12px;object-fit:cover}.brand-text{display:none}@media(min-width:520px){.brand-text{display:inline}}.nav-links{display:none;list-style:none;margin:0;padding:0}.nav-toggle{width:42px;height:42px;border-radius:11px;border:1px solid var(--border);background:rgba(255,255,255,.03);color:var(--text);display:grid;place-items:center;cursor:pointer}.btn{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:.75rem 1.35rem;border-radius:999px;border:1px solid transparent;font-family:var(--font);font-size:.95rem;font-weight:700;cursor:pointer}.btn-primary{background:var(--grad);color:#090909;box-shadow:0 12px 32px rgba(212,175,55,.28)}.btn-secondary{background:transparent;color:var(--gold-bright);border-color:rgba(212,175,55,.45)}.hero{padding:clamp(3rem,8vw,6.5rem) 0 clamp(3rem,6vw,5rem);text-align:center}.hero-logo{width:min(200px,48vw);margin:0 auto 1.6rem;border-radius:28px}.eyebrow{display:inline-block;font-size:.75rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem}.hero h1{font-family:var(--display);font-size:clamp(2.5rem,7vw,4.6rem);font-weight:600;letter-spacing:-.025em;line-height:1.08;margin:0 0 1.1rem;text-wrap:balance}.hero h1 span{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}.hero-lead{font-size:clamp(1.05rem,2.3vw,1.28rem);color:var(--muted);max-width:38rem;margin:0 auto 1.85rem;text-wrap:pretty}.hero-actions{display:flex;flex-wrap:wrap;gap:.75rem;justify-content:center;margin-bottom:1.5rem}.reveal{opacity:0;transform:translateY(26px)}.reveal.visible,.no-js .reveal{opacity:1;transform:none}</style>
-<link rel="stylesheet" href="/assets/css/main.min.css?v=1787353592" media="print" onload="this.media='all'">
-<noscript><link rel="stylesheet" href="/assets/css/main.min.css?v=1787353592"></noscript>
-<script src="/assets/js/app-config.js?v=1787353592"></script>
+<link rel="stylesheet" href="/assets/css/main.min.css?v=1787354010" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="/assets/css/main.min.css?v=1787354010"></noscript>
+<script src="/assets/js/app-config.js?v=1787354010"></script>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6831828383879093" crossorigin="anonymous"></script>
+<script>(adsbygoogle = window.adsbygoogle || []).push({google_ad_client: "ca-pub-6831828383879093", enable_page_level_ads: true});</script>
 
 </head>
 <body class="no-js">
@@ -149,7 +151,7 @@
 </div>
 </div>
 </footer>
-<script src="/assets/js/main.min.js?v=1787353592" defer></script>
-<script src="/assets/js/earn-app.js?v=1787353592" defer></script>
+<script src="/assets/js/main.min.js?v=1787354010" defer></script>
+<script src="/assets/js/earn-app.js?v=1787354010" defer></script>
 </body>
 </html>

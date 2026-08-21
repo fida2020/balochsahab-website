@@ -18,7 +18,7 @@ if (Test-Path $critPath) {
 
 function Head($title,$desc,$canon,[string]$extra="") {
 $og = "https://balochsahab.com$canon"
-$csp = "default-src 'self'; base-uri 'self'; object-src 'none'; img-src 'self' data: https:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; script-src 'self' 'unsafe-inline' https://accounts.google.com; frame-src https://accounts.google.com; connect-src 'self' https:; form-action 'self' mailto: https:; upgrade-insecure-requests"
+$csp = "default-src 'self'; base-uri 'self'; object-src 'none'; img-src 'self' data: https:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; script-src 'self' 'unsafe-inline' https://accounts.google.com https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://www.googletagservices.com https://ep1.adtrafficquality.google https://ep2.adtrafficquality.google; frame-src https://accounts.google.com https://googleads.g.doubleclick.net https://tpc.googlesyndication.com https://ep1.adtrafficquality.google https://ep2.adtrafficquality.google; connect-src 'self' https:; form-action 'self' mailto: https:; upgrade-insecure-requests"
 @"
 <!DOCTYPE html>
 <html lang="en">
@@ -68,6 +68,8 @@ $csp = "default-src 'self'; base-uri 'self'; object-src 'none'; img-src 'self' d
 <noscript><link rel="stylesheet" href="/assets/css/main.min.css?v=$buildVersion"></noscript>
 <script src="/assets/js/app-config.js?v=$buildVersion"></script>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6831828383879093" crossorigin="anonymous"></script>
+<script>(adsbygoogle = window.adsbygoogle || []).push({google_ad_client: "ca-pub-6831828383879093", enable_page_level_ads: true});</script>
 $extra
 </head>
 <body class="no-js">

@@ -1,5 +1,12 @@
 $ErrorActionPreference = "Stop"
 $root = Split-Path -Parent $PSScriptRoot
+# Cache-busting query string appended to every static asset URL below —
+# changes on every build, so Cloudflare/browsers always fetch the new file
+# instead of serving a stale cached copy after a deploy (a real, repeated
+# problem: /assets/* is cached for up to a month per docs/CLOUDFLARE.md,
+# and Cloudflare doesn't know to purge it just because GitHub Pages
+# rebuilt — a differently-named URL sidesteps that entirely).
+$buildVersion = [DateTimeOffset]::UtcNow.ToUnixTimeSeconds()
 $criticalCss = ""
 $critPath = Join-Path $root "assets\css\critical.min.css"
 if (Test-Path $critPath) {
@@ -57,9 +64,9 @@ $csp = "default-src 'self'; base-uri 'self'; object-src 'none'; img-src 'self' d
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Manrope:wght@400;600;700&family=Sora:wght@600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 <noscript><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Manrope:wght@400;600;700&family=Sora:wght@600;700&display=swap" rel="stylesheet"></noscript>
 <style>$criticalCss</style>
-<link rel="stylesheet" href="/assets/css/main.min.css" media="print" onload="this.media='all'">
-<noscript><link rel="stylesheet" href="/assets/css/main.min.css"></noscript>
-<script src="/assets/js/app-config.js"></script>
+<link rel="stylesheet" href="/assets/css/main.min.css?v=$buildVersion" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="/assets/css/main.min.css?v=$buildVersion"></noscript>
+<script src="/assets/js/app-config.js?v=$buildVersion"></script>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 $extra
 </head>
@@ -141,8 +148,8 @@ function Foot {
 </div>
 </div>
 </footer>
-<script src="/assets/js/main.min.js" defer></script>
-<script src="/assets/js/earn-app.js" defer></script>
+<script src="/assets/js/main.min.js?v=$buildVersion" defer></script>
+<script src="/assets/js/earn-app.js?v=$buildVersion" defer></script>
 </body>
 </html>
 "@

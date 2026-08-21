@@ -4,8 +4,6 @@ The public contact form on `/contact.html` validates:
 
 - Name (required, min 2 chars)
 - Email (required, format)
-- Company (optional)
-- Phone (optional, format)
 - Department (routes to professional inbox)
 - Subject
 - Message (required, min 10 chars)
@@ -16,8 +14,6 @@ The public contact form on `/contact.html` validates:
 On submit, the browser opens a `mailto:` to the selected department inbox:
 
 - support@balochsahab.com
-- sales@balochsahab.com
-- billing@balochsahab.com
 - info@balochsahab.com
 - careers@balochsahab.com
 - hello@balochsahab.com
@@ -40,4 +36,4 @@ If the endpoint fails, the script falls back to mailto.
 
 ## DNS mailbox setup
 
-Create mailboxes (or aliases) on balochsahab.com for the six addresses above. Do not use personal Gmail addresses on the public site.
+Create mailboxes (or aliases) on balochsahab.com for the four addresses above. Do not use personal Gmail addresses on the public site.

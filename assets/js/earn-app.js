@@ -1,0 +1,599 @@
+// Real client for the Baloch Sahab earning platform.
+// Every function here calls the real, live EarnBox backend
+// (window.APP_CONFIG.apiBaseUrl) — the exact same REST API the EarnBox
+// mobile app uses. No mock data, no fake completions: every reward shown
+// here only appears after the backend has verified it.
+(function () {
+  "use strict";
+
+  var API_BASE = (window.APP_CONFIG && window.APP_CONFIG.apiBaseUrl) || "";
+  var SESSION_KEY = "bs_session"; // { user, accessToken, refreshToken }
+
+  // ---------------------------------------------------------------------
+  // Session storage
+  // ---------------------------------------------------------------------
+  function getSession() {
+    try {
+      var raw = window.localStorage.getItem(SESSION_KEY);
+      return raw ? JSON.parse(raw) : null;
+    } catch (e) {
+      return null;
+    }
+  }
+  function setSession(session) {
+    window.localStorage.setItem(SESSION_KEY, JSON.stringify(session));
+  }
+  function clearSession() {
+    window.localStorage.removeItem(SESSION_KEY);
+  }
+  function isLoggedIn() {
+    var s = getSession();
+    return !!(s && s.accessToken);
+  }
+
+  // ---------------------------------------------------------------------
+  // API client — real fetch against the real backend, envelope-aware,
+  // with a single automatic refresh-and-retry on a 401.
+  // ---------------------------------------------------------------------
+  function ApiError(status, code, message) {
+    this.status = status;
+    this.code = code;
+    this.message = message;
+  }
+  ApiError.prototype = Object.create(Error.prototype);
+
+  function rawFetch(path, opts) {
+    opts = opts || {};
+    var session = getSession();
+    var headers = { "Content-Type": "application/json" };
+    if (opts.auth !== false && session && session.accessToken) {
+      headers["Authorization"] = "Bearer " + session.accessToken;
+    }
+    return fetch(API_BASE + path, {
+      method: opts.method || "GET",
+      headers: headers,
+      body: opts.body ? JSON.stringify(opts.body) : undefined,
+    }).then(function (res) {
+      return res.json().catch(function () { return null; }).then(function (json) {
+        return { res: res, json: json };
+      });
+    });
+  }
+
+  function refreshSession() {
+    var session = getSession();
+    if (!session || !session.refreshToken) return Promise.reject(new ApiError(401, "NO_SESSION", "Not logged in"));
+    return rawFetch("/auth/refresh", { method: "POST", auth: false, body: { refreshToken: session.refreshToken } }).then(function (r) {
+      if (!r.res.ok || !r.json || !r.json.ok) {
+        clearSession();
+        throw new ApiError(401, "SESSION_EXPIRED", "Your session expired — please log in again");
+      }
+      var next = { user: session.user, accessToken: r.json.data.accessToken, refreshToken: r.json.data.refreshToken };
+      setSession(next);
+      return next;
+    });
+  }
+
+  function api(path, opts) {
+    return rawFetch(path, opts).then(function (r) {
+      if (r.res.status === 401 && opts && opts.auth !== false && getSession()) {
+        return refreshSession().then(function () {
+          return rawFetch(path, opts);
+        }).then(unwrap);
+      }
+      return unwrap(r);
+    });
+    function unwrap(r) {
+      if (!r.res.ok || !r.json || !r.json.ok) {
+        var err = r.json && r.json.error;
+        throw new ApiError(r.res.status, (err && err.code) || "UNKNOWN_ERROR", (err && err.message) || "Request failed");
+      }
+      return r.json.data;
+    }
+  }
+
+  // ---------------------------------------------------------------------
+  // Money formatting — same 4-decimal convention as the EarnBox app/admin.
+  // ---------------------------------------------------------------------
+  function formatMinor(minor, currency) {
+    var major = (minor || 0) / 100;
+    try {
+      return new Intl.NumberFormat("en-US", { style: "currency", currency: currency || "USD", minimumFractionDigits: 4, maximumFractionDigits: 4 }).format(major);
+    } catch (e) {
+      return "$" + major.toFixed(4);
+    }
+  }
+
+  // ---------------------------------------------------------------------
+  // Nav auth-state
+  // ---------------------------------------------------------------------
+  function refreshNavAuthState() {
+    var guestSlots = document.querySelectorAll('[data-auth="guest"]');
+    var userSlots = document.querySelectorAll('[data-auth="user"]');
+    var loggedIn = isLoggedIn();
+    for (var i = 0; i < guestSlots.length; i++) guestSlots[i].hidden = loggedIn;
+    for (var j = 0; j < userSlots.length; j++) userSlots[j].hidden = !loggedIn;
+
+    var earnGuest = document.querySelectorAll("[data-earn-guest]");
+    var earnUser = document.querySelectorAll("[data-earn-user]");
+    for (var k = 0; k < earnGuest.length; k++) earnGuest[k].hidden = loggedIn;
+    for (var m = 0; m < earnUser.length; m++) earnUser[m].hidden = !loggedIn;
+
+    if (loggedIn) {
+      api("/wallet/summary").then(function (summary) {
+        var pills = document.querySelectorAll("[data-balance-pill]");
+        for (var i2 = 0; i2 < pills.length; i2++) pills[i2].textContent = formatMinor(summary.availableBalanceMinor, summary.currency);
+      }).catch(function () {});
+    }
+
+    var logoutBtns = document.querySelectorAll("[data-logout]");
+    for (var n = 0; n < logoutBtns.length; n++) {
+      logoutBtns[n].addEventListener("click", function (e) {
+        e.preventDefault();
+        var session = getSession();
+        if (session && session.refreshToken) {
+          rawFetch("/auth/logout", { method: "POST", auth: false, body: { refreshToken: session.refreshToken } }).catch(function () {});
+        }
+        clearSession();
+        window.location.href = "/index.html";
+      });
+    }
+  }
+
+  // ---------------------------------------------------------------------
+  // Google Sign-In (real Google Identity Services + real /auth/google) —
+  // only initializes when a real Web Client ID is configured.
+  // ---------------------------------------------------------------------
+  function initGoogleSignIn() {
+    var clientId = window.APP_CONFIG && window.APP_CONFIG.googleClientId;
+    var slots = document.querySelectorAll("[data-google-signin-slot]");
+    if (!clientId) {
+      // Not configured yet — stay hidden rather than showing a button
+      // that can't actually authenticate anyone.
+      return;
+    }
+    for (var i = 0; i < slots.length; i++) slots[i].hidden = false;
+
+    function onCredential(response) {
+      var refCode = new URLSearchParams(window.location.search).get("ref") || undefined;
+      api("/auth/google", { method: "POST", auth: false, body: { idToken: response.credential, referredByCode: refCode } })
+        .then(function (data) {
+          setSession({ user: data.user, accessToken: data.accessToken, refreshToken: data.refreshToken });
+          window.location.href = "/earn.html";
+        })
+        .catch(function (err) {
+          showFormError("[data-login-error], [data-signup-error]", err.message || "Google sign-in failed");
+        });
+    }
+
+    function render() {
+      if (!window.google || !window.google.accounts || !window.google.accounts.id) {
+        window.setTimeout(render, 200);
+        return;
+      }
+      window.google.accounts.id.initialize({ client_id: clientId, callback: onCredential });
+      var loginTarget = document.getElementById("google-signin-login");
+      var signupTarget = document.getElementById("google-signin-signup");
+      if (loginTarget) window.google.accounts.id.renderButton(loginTarget, { theme: "outline", size: "large", width: 320, text: "signin_with" });
+      if (signupTarget) window.google.accounts.id.renderButton(signupTarget, { theme: "outline", size: "large", width: 320, text: "signup_with" });
+    }
+    render();
+  }
+
+  function showFormError(selector, message) {
+    var els = document.querySelectorAll(selector);
+    for (var i = 0; i < els.length; i++) {
+      els[i].textContent = message;
+      els[i].hidden = false;
+    }
+  }
+
+  // ---------------------------------------------------------------------
+  // Auth forms
+  // ---------------------------------------------------------------------
+  function initAuthForms() {
+    var loginForm = document.querySelector("[data-login-form]");
+    if (loginForm) {
+      loginForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+        var fd = new FormData(loginForm);
+        api("/auth/login", { method: "POST", auth: false, body: { email: fd.get("email"), password: fd.get("password") } })
+          .then(function (data) {
+            setSession({ user: data.user, accessToken: data.accessToken, refreshToken: data.refreshToken });
+            window.location.href = "/earn.html";
+          })
+          .catch(function (err) { showFormError("[data-login-error]", err.message || "Could not log in"); });
+      });
+    }
+
+    var signupForm = document.querySelector("[data-signup-form]");
+    if (signupForm) {
+      signupForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+        var fd = new FormData(signupForm);
+        var refCode = new URLSearchParams(window.location.search).get("ref") || undefined;
+        api("/auth/register", { method: "POST", auth: false, body: { email: fd.get("email"), password: fd.get("password"), referredByCode: refCode } })
+          .then(function (data) {
+            setSession({ user: data.user, accessToken: data.accessToken, refreshToken: data.refreshToken });
+            window.location.href = "/verify-email.html";
+          })
+          .catch(function (err) { showFormError("[data-signup-error]", err.message || "Could not create account"); });
+      });
+    }
+
+    var forgotForm = document.querySelector("[data-forgot-form]");
+    if (forgotForm) {
+      forgotForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+        var fd = new FormData(forgotForm);
+        api("/auth/password-reset/request", { method: "POST", auth: false, body: { email: fd.get("email") } })
+          .then(function () { document.querySelector("[data-forgot-success]").hidden = false; })
+          .catch(function (err) { showFormError("[data-forgot-error]", err.message || "Could not send reset link"); });
+      });
+    }
+
+    var resetForm = document.querySelector("[data-reset-form]");
+    if (resetForm) {
+      resetForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+        var fd = new FormData(resetForm);
+        var token = new URLSearchParams(window.location.search).get("token");
+        if (!token) { showFormError("[data-reset-error]", "Missing reset token — use the link from your email"); return; }
+        api("/auth/password-reset/confirm", { method: "POST", auth: false, body: { token: token, newPassword: fd.get("newPassword") } })
+          .then(function () { resetForm.hidden = true; document.querySelector("[data-reset-success]").hidden = false; })
+          .catch(function (err) { showFormError("[data-reset-error]", err.message || "Could not reset password"); });
+      });
+    }
+
+    var verifyForm = document.querySelector("[data-verify-form]");
+    if (verifyForm) {
+      verifyForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+        var fd = new FormData(verifyForm);
+        api("/users/me/verify-email", { method: "POST", body: { otp: fd.get("otp") } })
+          .then(function () {
+            verifyForm.hidden = true;
+            document.querySelector("[data-verify-success]").hidden = false;
+            window.setTimeout(function () { window.location.href = "/earn.html"; }, 1500);
+          })
+          .catch(function (err) { showFormError("[data-verify-error]", err.message || "Invalid code"); });
+      });
+      var resendBtn = document.querySelector("[data-resend-verification]");
+      if (resendBtn) {
+        resendBtn.addEventListener("click", function () {
+          api("/users/me/resend-verification-email", { method: "POST" }).catch(function () {});
+        });
+      }
+    }
+  }
+
+  // ---------------------------------------------------------------------
+  // Earn page
+  // ---------------------------------------------------------------------
+  function initEarnPage() {
+    if (!isLoggedIn()) return;
+
+    // PTC
+    var ptcRoot = document.querySelector("[data-ptc-root]");
+    if (ptcRoot) {
+      var ptcStatusEl = document.querySelector("[data-ptc-status]");
+      var ptcStartBtn = document.querySelector("[data-ptc-start]");
+      var ptcClaimBtn = document.querySelector("[data-ptc-claim]");
+      var ptcTimer = null;
+
+      function renderPtc(status) {
+        if (!status.enabled) {
+          ptcStatusEl.textContent = "PTC ads are not currently available.";
+          ptcStartBtn.hidden = true;
+          ptcClaimBtn.hidden = true;
+          return;
+        }
+        if (status.limitReached && !status.activeSession) {
+          ptcStatusEl.textContent = "You've reached today's PTC limit — come back tomorrow.";
+          ptcStartBtn.hidden = true;
+          ptcClaimBtn.hidden = true;
+          return;
+        }
+        if (status.activeSession) {
+          startWaitCountdown(status.activeSession);
+        } else {
+          ptcStatusEl.textContent = "Reward: " + formatMinor(status.rewardMinor) + " per view. " + status.completedToday + " completed today.";
+          ptcStartBtn.hidden = false;
+          ptcClaimBtn.hidden = true;
+        }
+      }
+
+      function startWaitCountdown(session) {
+        ptcStartBtn.hidden = true;
+        ptcClaimBtn.hidden = false;
+        ptcClaimBtn.disabled = true;
+        window.open(session.directLinkUrl, "_blank", "noopener,noreferrer");
+        if (ptcTimer) window.clearInterval(ptcTimer);
+        function tick() {
+          var elapsed = (Date.now() - new Date(session.startedAt).getTime()) / 1000;
+          var remaining = Math.ceil(session.waitSeconds - elapsed);
+          if (remaining <= 0) {
+            ptcStatusEl.textContent = "Ready to claim.";
+            ptcClaimBtn.disabled = false;
+            window.clearInterval(ptcTimer);
+          } else {
+            ptcStatusEl.textContent = "Wait " + remaining + "s, then claim your reward.";
+          }
+        }
+        tick();
+        ptcTimer = window.setInterval(tick, 1000);
+        ptcClaimBtn.setAttribute("data-session-id", session.sessionId);
+      }
+
+      ptcStartBtn.addEventListener("click", function () {
+        ptcStartBtn.disabled = true;
+        api("/ptc/start", { method: "POST" }).then(function (session) {
+          ptcStartBtn.disabled = false;
+          startWaitCountdown(session);
+        }).catch(function (err) {
+          ptcStartBtn.disabled = false;
+          ptcStatusEl.textContent = err.message || "Could not start PTC session";
+        });
+      });
+      ptcClaimBtn.addEventListener("click", function () {
+        var sessionId = ptcClaimBtn.getAttribute("data-session-id");
+        ptcClaimBtn.disabled = true;
+        api("/ptc/" + sessionId + "/claim", { method: "POST" }).then(function (result) {
+          ptcStatusEl.textContent = "Reward credited: " + formatMinor(result.rewardMinor);
+          ptcClaimBtn.hidden = true;
+          refreshNavAuthState();
+          window.setTimeout(function () { api("/ptc/status").then(renderPtc); }, 1500);
+        }).catch(function (err) {
+          ptcStatusEl.textContent = err.message || "Could not claim reward";
+        });
+      });
+
+      api("/ptc/status").then(renderPtc).catch(function (err) { ptcStatusEl.textContent = err.message || "Could not load PTC status"; });
+    }
+
+    // Shortlinks
+    var slRoot = document.querySelector("[data-shortlinks-root]");
+    if (slRoot) {
+      var slStatusEl = document.querySelector("[data-shortlinks-status]");
+      var slListEl = document.querySelector("[data-shortlinks-list]");
+      api("/shortlinks").then(function (tasks) {
+        if (!tasks.length) { slStatusEl.textContent = "No shortlinks available right now — check back soon."; return; }
+        slStatusEl.textContent = tasks.length + " shortlink(s) available.";
+        tasks.forEach(function (task) {
+          var row = document.createElement("div");
+          row.className = "earn-list-row";
+          var label = document.createElement("span");
+          label.textContent = task.title + (task.rewardEligible ? " — " + formatMinor(task.payoutMinor) : "");
+          var btn = document.createElement("button");
+          btn.className = "btn btn-secondary";
+          btn.type = "button";
+          btn.textContent = "Open Shortlinks";
+          btn.addEventListener("click", function () {
+            btn.disabled = true;
+            api("/shortlinks/" + task.id + "/click", { method: "POST" }).then(function (result) {
+              window.open(result.trackingUrl || result.targetUrl, "_blank", "noopener,noreferrer");
+              btn.disabled = false;
+            }).catch(function (err) {
+              btn.disabled = false;
+              window.alert(err.message || "Could not open this shortlink");
+            });
+          });
+          row.appendChild(label);
+          row.appendChild(btn);
+          slListEl.appendChild(row);
+        });
+      }).catch(function (err) { slStatusEl.textContent = err.message || "Could not load shortlinks"; });
+    }
+
+    // Offerwall (AdsLab tasks + Aoyco) + Games (AdGem)
+    var owLinks = document.querySelector("[data-offerwall-links]");
+    if (owLinks) {
+      api("/offer-wall/aoyco/wall-url").then(function (r) {
+        addLinkButton(owLinks, "Open Offerwall", r.url, true);
+      }).catch(function () {});
+    }
+    var gamesLinks = document.querySelector("[data-games-link]");
+    if (gamesLinks) {
+      api("/games/adgem/wall-url").then(function (r) {
+        gamesLinks.href = r.url;
+      }).catch(function (err) {
+        gamesLinks.closest("[data-earn-user]").querySelector(".text-muted").textContent = err.message || "Games are not currently available";
+        gamesLinks.hidden = true;
+      });
+    }
+
+    function addLinkButton(container, label, url, primary) {
+      var a = document.createElement("a");
+      a.className = "btn " + (primary ? "btn-primary" : "btn-secondary");
+      a.href = url;
+      a.target = "_blank";
+      a.rel = "noopener noreferrer";
+      a.textContent = label;
+      container.appendChild(a);
+    }
+
+    // Video ads (AdsLab web SDK trigger page, hosted on the EarnBox admin app)
+    var session = getSession();
+    var uid = session && session.user && session.user.id;
+    if (uid) {
+      var rewardedLink = document.querySelector("[data-video-rewarded]");
+      var interstitialLink = document.querySelector("[data-video-interstitial]");
+      if (rewardedLink) rewardedLink.href = "https://www.balochsahab.com/adslab-ad.html?type=rewarded&uid=" + encodeURIComponent(uid);
+      if (interstitialLink) interstitialLink.href = "https://www.balochsahab.com/adslab-ad.html?type=interstitial&uid=" + encodeURIComponent(uid);
+      if (rewardedLink) rewardedLink.target = "_blank";
+      if (interstitialLink) interstitialLink.target = "_blank";
+    }
+
+    // Daily check-in
+    var dailyRoot = document.querySelector("[data-daily-root]");
+    if (dailyRoot) {
+      var dailyStatusEl = document.querySelector("[data-daily-status]");
+      var dailyClaimBtn = document.querySelector("[data-daily-claim]");
+      function renderDaily(status) {
+        if (!status.enabled) { dailyStatusEl.textContent = "The daily check-in is not currently available."; return; }
+        if (status.claimedToday) {
+          dailyStatusEl.textContent = "Already claimed today. Current streak: " + status.currentStreak + " day(s).";
+          dailyClaimBtn.hidden = true;
+        } else {
+          dailyStatusEl.textContent = "Today's bonus: " + formatMinor(status.nextRewardMinor) + ". Streak: " + status.currentStreak + " day(s).";
+          dailyClaimBtn.hidden = false;
+        }
+      }
+      dailyClaimBtn.addEventListener("click", function () {
+        dailyClaimBtn.disabled = true;
+        api("/daily-bonus/claim", { method: "POST" }).then(function (result) {
+          dailyStatusEl.textContent = "Claimed: " + formatMinor(result.rewardMinor) + " — streak " + result.streakCount + " day(s).";
+          dailyClaimBtn.hidden = true;
+          dailyClaimBtn.disabled = false;
+          refreshNavAuthState();
+        }).catch(function (err) {
+          dailyClaimBtn.disabled = false;
+          dailyStatusEl.textContent = err.message || "Could not claim daily bonus";
+        });
+      });
+      api("/daily-bonus/status").then(renderDaily).catch(function (err) { dailyStatusEl.textContent = err.message || "Could not load daily bonus status"; });
+    }
+
+    // Faucet
+    var faucetRoot = document.querySelector("[data-faucet-root]");
+    if (faucetRoot) {
+      var faucetStatusEl = document.querySelector("[data-faucet-status]");
+      var faucetClaimBtn = document.querySelector("[data-faucet-claim]");
+      function renderFaucet(status) {
+        if (!status.enabled) { faucetStatusEl.textContent = "The faucet is not currently available."; return; }
+        if (status.canClaim) {
+          faucetStatusEl.textContent = "Reward available: " + formatMinor(status.rewardMinor);
+          faucetClaimBtn.hidden = false;
+        } else {
+          faucetStatusEl.textContent = "Next claim available soon — check back later.";
+          faucetClaimBtn.hidden = true;
+        }
+      }
+      faucetClaimBtn.addEventListener("click", function () {
+        faucetClaimBtn.disabled = true;
+        api("/faucet/claim", { method: "POST" }).then(function (result) {
+          faucetStatusEl.textContent = "Claimed: " + formatMinor(result.rewardMinor);
+          faucetClaimBtn.hidden = true;
+          faucetClaimBtn.disabled = false;
+          refreshNavAuthState();
+        }).catch(function (err) {
+          faucetClaimBtn.disabled = false;
+          faucetStatusEl.textContent = err.message || "Could not claim faucet reward";
+        });
+      });
+      api("/faucet/status").then(renderFaucet).catch(function (err) { faucetStatusEl.textContent = err.message || "Could not load faucet status"; });
+    }
+  }
+
+  // ---------------------------------------------------------------------
+  // Withdraw page
+  // ---------------------------------------------------------------------
+  function initWithdrawPage() {
+    var kycBlock = document.querySelector("[data-withdraw-kyc-block]");
+    if (!kycBlock) return;
+    if (!isLoggedIn()) return;
+
+    api("/wallet/summary").then(function (summary) {
+      document.querySelector("[data-withdraw-balance]").textContent = formatMinor(summary.availableBalanceMinor, summary.currency);
+      document.querySelector("[data-withdraw-pending]").textContent = formatMinor(summary.pendingBalanceMinor, summary.currency);
+      document.querySelector("[data-withdraw-lifetime]").textContent = formatMinor(summary.lifetimeEarnedMinor, summary.currency);
+    }).catch(function () {});
+
+    api("/users/me").then(function (me) {
+      var formBlock = document.querySelector("[data-withdraw-form-block]");
+      if (me.kycStatus === "APPROVED") {
+        formBlock.hidden = false;
+      } else {
+        kycBlock.hidden = false;
+        document.querySelector("[data-withdraw-kyc-start]").addEventListener("click", function () {
+          api("/users/me/kyc/session", { method: "POST" }).then(function (r) {
+            if (r && r.url) window.open(r.url, "_blank", "noopener,noreferrer");
+          }).catch(function (err) { window.alert(err.message || "Could not start identity verification"); });
+        });
+      }
+    });
+
+    var withdrawForm = document.querySelector("[data-withdraw-form]");
+    if (withdrawForm) {
+      withdrawForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+        var fd = new FormData(withdrawForm);
+        api("/withdrawals", {
+          method: "POST",
+          body: {
+            amountMinor: parseInt(fd.get("amountMinor"), 10),
+            method: fd.get("method"),
+            destination: { accountTitle: fd.get("accountTitle"), accountNumber: fd.get("accountNumber") },
+          },
+        }).then(function () {
+          document.querySelector("[data-withdraw-success]").hidden = false;
+          document.querySelector("[data-withdraw-error]").hidden = true;
+          withdrawForm.reset();
+          loadHistory();
+        }).catch(function (err) {
+          var errEl = document.querySelector("[data-withdraw-error]");
+          errEl.textContent = err.message || "Could not request withdrawal";
+          errEl.hidden = false;
+        });
+      });
+    }
+
+    function loadHistory() {
+      var statusEl = document.querySelector("[data-withdraw-history-status]");
+      var listEl = document.querySelector("[data-withdraw-history-list]");
+      api("/withdrawals").then(function (result) {
+        listEl.innerHTML = "";
+        if (!result.withdrawals.length) { statusEl.textContent = "No withdrawals yet."; return; }
+        statusEl.textContent = "";
+        result.withdrawals.forEach(function (w) {
+          var row = document.createElement("div");
+          row.className = "earn-list-row";
+          row.innerHTML = "<span>" + formatMinor(w.amountMinor, w.currency) + " via " + w.method + "</span><span class=\"badge-status\">" + w.status + "</span>";
+          listEl.appendChild(row);
+        });
+      }).catch(function (err) { statusEl.textContent = err.message || "Could not load withdrawal history"; });
+    }
+    loadHistory();
+  }
+
+  // ---------------------------------------------------------------------
+  // Referral page
+  // ---------------------------------------------------------------------
+  function initReferralPage() {
+    var linkInput = document.querySelector("[data-referral-link]");
+    if (!linkInput) return;
+    if (!isLoggedIn()) return;
+
+    api("/referrals/stats").then(function (stats) {
+      document.querySelector("[data-referral-total]").textContent = stats.totalReferrals;
+      document.querySelector("[data-referral-active]").textContent = stats.activeReferrals;
+      document.querySelector("[data-referral-earnings]").textContent = formatMinor(stats.referralEarningsMinor);
+      var session = getSession();
+      var friendlyLink = window.location.origin + "/signup.html?ref=" + encodeURIComponent(session.user.referralCode);
+      linkInput.value = friendlyLink;
+    }).catch(function () {});
+
+    var copyBtn = document.querySelector("[data-referral-copy]");
+    if (copyBtn) {
+      copyBtn.addEventListener("click", function () {
+        linkInput.select();
+        navigator.clipboard && navigator.clipboard.writeText(linkInput.value).then(function () {
+          copyBtn.textContent = "Copied!";
+          window.setTimeout(function () { copyBtn.textContent = "Copy"; }, 1500);
+        });
+      });
+    }
+  }
+
+  // ---------------------------------------------------------------------
+  // Boot
+  // ---------------------------------------------------------------------
+  document.addEventListener("DOMContentLoaded", function () {
+    refreshNavAuthState();
+    initGoogleSignIn();
+    initAuthForms();
+    initEarnPage();
+    initWithdrawPage();
+    initReferralPage();
+  });
+})();

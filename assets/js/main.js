@@ -132,8 +132,6 @@
 
       var inboxMap = {
         support: "support@balochsahab.com",
-        sales: "sales@balochsahab.com",
-        billing: "billing@balochsahab.com",
         info: "info@balochsahab.com",
         careers: "careers@balochsahab.com",
         hello: "hello@balochsahab.com"

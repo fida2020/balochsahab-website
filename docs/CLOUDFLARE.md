@@ -23,9 +23,11 @@ Add these headers on `balochsahab.com/*`:
 - X-Frame-Options: DENY
 - Referrer-Policy: strict-origin-when-cross-origin
 - Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()
-- Content-Security-Policy: default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; img-src 'self' data: https:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; script-src 'self' 'unsafe-inline'; connect-src 'self' https:; form-action 'self' mailto: https:; upgrade-insecure-requests
+- Content-Security-Policy: default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; img-src 'self' data: https:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; script-src 'self' 'unsafe-inline' https://accounts.google.com; frame-src https://accounts.google.com; connect-src 'self' https:; form-action 'self' mailto: https:; upgrade-insecure-requests
 
 Note: Meta CSP is also embedded in HTML for defense-in-depth. Prefer Cloudflare headers for frame-ancestors and HSTS (meta cannot set HSTS or frame-ancestors reliably).
+
+**Important (added when the site became an earning platform):** the `script-src`/`frame-src` additions for `https://accounts.google.com` are required for the real Sign-In-with-Google button on `/login.html` and `/signup.html` (see `scripts/chrome.ps1`'s embedded CSP, which already includes them). If a Cloudflare Transform Rule is actively overriding the CSP response header with an older version of this policy, Google Sign-In will be silently blocked even though the HTML meta tag is correct — browsers enforce the intersection of the header CSP and the meta CSP. Update the live Transform Rule to match if one exists.
 
 ## Caching
 

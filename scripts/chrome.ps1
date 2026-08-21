@@ -1,5 +1,5 @@
 $ErrorActionPreference = "Stop"
-$root = "C:\Users\Administrator\tiktok-verification"
+$root = Split-Path -Parent $PSScriptRoot
 $criticalCss = ""
 $critPath = Join-Path $root "assets\css\critical.min.css"
 if (Test-Path $critPath) {
@@ -11,7 +11,7 @@ if (Test-Path $critPath) {
 
 function Head($title,$desc,$canon,[string]$extra="") {
 $og = "https://balochsahab.com$canon"
-$csp = "default-src 'self'; base-uri 'self'; object-src 'none'; img-src 'self' data: https:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; script-src 'self' 'unsafe-inline'; connect-src 'self' https:; form-action 'self' mailto: https:; upgrade-insecure-requests"
+$csp = "default-src 'self'; base-uri 'self'; object-src 'none'; img-src 'self' data: https:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; script-src 'self' 'unsafe-inline' https://accounts.google.com; frame-src https://accounts.google.com; connect-src 'self' https:; form-action 'self' mailto: https:; upgrade-insecure-requests"
 @"
 <!DOCTYPE html>
 <html lang="en">
@@ -22,13 +22,13 @@ $csp = "default-src 'self'; base-uri 'self'; object-src 'none'; img-src 'self' d
 <title>$title</title>
 <meta name="description" content="$desc">
 <meta name="robots" content="index,follow,max-image-preview:large">
-<meta name="author" content="Baloch Sahab Automation">
+<meta name="author" content="Baloch Sahab">
 <meta name="theme-color" content="#090909">
 <meta name="color-scheme" content="dark">
 <link rel="canonical" href="$og">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="en_US">
-<meta property="og:site_name" content="Baloch Sahab Automation">
+<meta property="og:site_name" content="Baloch Sahab">
 <meta property="og:title" content="$title">
 <meta property="og:description" content="$desc">
 <meta property="og:url" content="$og">
@@ -59,6 +59,8 @@ $csp = "default-src 'self'; base-uri 'self'; object-src 'none'; img-src 'self' d
 <style>$criticalCss</style>
 <link rel="stylesheet" href="/assets/css/main.min.css" media="print" onload="this.media='all'">
 <noscript><link rel="stylesheet" href="/assets/css/main.min.css"></noscript>
+<script src="/assets/js/app-config.js"></script>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 $extra
 </head>
 <body class="no-js">
@@ -70,26 +72,35 @@ $extra
 <a class="brand" href="/index.html">
 <picture>
 <source type="image/webp" srcset="/assets/img/logo-128.webp 128w, /assets/img/logo-256.webp 256w" sizes="44px">
-<img src="/assets/img/logo-256.png" srcset="/assets/img/logo-128.png 128w, /assets/img/logo-256.png 256w" sizes="44px" width="44" height="44" alt="Baloch Sahab Automation" decoding="async" fetchpriority="high">
+<img src="/assets/img/logo-256.png" srcset="/assets/img/logo-128.png 128w, /assets/img/logo-256.png 256w" sizes="44px" width="44" height="44" alt="Baloch Sahab" decoding="async" fetchpriority="high">
 </picture>
-<span class="brand-text">Baloch Sahab Automation</span>
+<span class="brand-text">Baloch Sahab</span>
 </a>
 <ul class="nav-links" aria-label="Primary">
 <li><a href="/index.html">Home</a></li>
-<li><a href="/features.html">Features</a></li>
-<li><a href="/solutions.html">Solutions</a></li>
-<li><a href="/pricing.html">Pricing</a></li>
-<li><a href="/about.html">About</a></li>
-<li><a href="/resources.html">Resources</a></li>
-<li><a href="/contact.html">Contact</a></li>
+<li><a href="/earn.html">Earn</a></li>
+<li><a href="/withdraw.html">Withdraw</a></li>
+<li><a href="/referral.html">Referral</a></li>
+<li><a href="/faq.html">FAQ</a></li>
+<li><a href="/about.html">About Us</a></li>
+<li><a href="/contact.html">Contact Us</a></li>
 </ul>
 <div class="nav-actions">
-<a class="btn btn-primary nav-cta" href="/contact.html">Contact</a>
+<span class="auth-slot auth-guest" data-auth="guest">
+<a class="btn btn-secondary nav-cta" href="/login.html">Log In</a>
+<a class="btn btn-primary nav-cta" href="/signup.html">Sign Up</a>
+</span>
+<span class="auth-slot auth-user" data-auth="user" hidden>
+<a class="balance-pill" href="/withdraw.html"><span data-balance-pill>`$0.0000</span></a>
+<button class="btn btn-secondary nav-cta" type="button" data-logout>Log Out</button>
+</span>
 <button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-label="Open menu"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
 </div>
 </div>
 <div class="mobile-panel" data-mobile-nav>
-<a href="/index.html">Home</a><a href="/features.html">Features</a><a href="/solutions.html">Solutions</a><a href="/pricing.html">Pricing</a><a href="/about.html">About</a><a href="/resources.html">Resources</a><a href="/faq.html">FAQ</a><a href="/support.html">Support</a><a href="/contact.html">Contact</a><a href="/help-center.html">Help Center</a>
+<a href="/index.html">Home</a><a href="/earn.html">Earn</a><a href="/withdraw.html">Withdraw</a><a href="/referral.html">Referral</a><a href="/faq.html">FAQ</a><a href="/about.html">About Us</a><a href="/contact.html">Contact Us</a>
+<span class="auth-slot auth-guest" data-auth="guest"><a href="/login.html">Log In</a><a href="/signup.html">Sign Up</a></span>
+<span class="auth-slot auth-user" data-auth="user" hidden><a href="/withdraw.html">Balance: <span data-balance-pill>`$0.0000</span></a><a href="#" data-logout>Log Out</a></span>
 </div>
 </header>
 <main id="main">
@@ -109,28 +120,29 @@ function Foot {
 <a class="brand" href="/index.html">
 <picture>
 <source type="image/webp" srcset="/assets/img/logo-256.webp">
-<img src="/assets/img/logo-256.png" width="52" height="52" alt="Baloch Sahab Automation" loading="lazy" decoding="async">
+<img src="/assets/img/logo-256.png" width="52" height="52" alt="Baloch Sahab" loading="lazy" decoding="async">
 </picture>
-<span class="brand-text">Baloch Sahab Automation</span>
+<span class="brand-text">Baloch Sahab</span>
 </a>
-<p>AI-Powered Social Media Automation Platform for creators and businesses.</p>
+<p>Earn rewards by completing available activities.</p>
 <div class="socials" aria-label="Social links">
-<a href="https://github.com/fida2020" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><svg aria-hidden="true" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
 <a href="https://wa.me/923218818909" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">WA</a>
 <a href="mailto:hello@balochsahab.com" aria-label="Email hello@balochsahab.com">EM</a>
 </div>
 </div>
-<div class="footer-col"><h4>Company</h4><ul><li><a href="/about.html">About</a></li><li><a href="/company.html">Company</a></li><li><a href="/mission.html">Mission</a></li><li><a href="/vision.html">Vision</a></li><li><a href="/services.html">Services</a></li><li><a href="/solutions.html">Solutions</a></li><li><a href="/pricing.html">Pricing</a></li></ul></div>
-<div class="footer-col"><h4>Support</h4><ul><li><a href="/support.html">Support</a></li><li><a href="/help-center.html">Help Center</a></li><li><a href="/faq.html">FAQ</a></li><li><a href="/contact.html">Contact</a></li><li><a href="/docs/index.html">Documentation</a></li><li><a href="/resources.html">Resources</a></li><li><a href="mailto:support@balochsahab.com">support@balochsahab.com</a></li></ul></div>
-<div class="footer-col"><h4>Legal</h4><ul><li><a href="/privacy-policy.html">Privacy Policy</a></li><li><a href="/terms-of-service.html">Terms of Service</a></li><li><a href="/cookie-policy.html">Cookie Policy</a></li><li><a href="/refund-policy.html">Refund Policy</a></li><li><a href="/acceptable-use-policy.html">Acceptable Use</a></li><li><a href="/sla.html">SLA</a></li><li><a href="/security-policy.html">Security</a></li><li><a href="/responsible-disclosure.html">Responsible Disclosure</a></li></ul></div>
+<div class="footer-col"><h4>Company</h4><ul><li><a href="/about.html">About Us</a></li><li><a href="/contact.html">Contact</a></li></ul></div>
+<div class="footer-col"><h4>Earn</h4><ul><li><a href="/earn.html#ptc">PTC Ads</a></li><li><a href="/earn.html#shortlinks">Shortlinks</a></li><li><a href="/earn.html#offerwall">Offerwall</a></li><li><a href="/earn.html#video-ads">Video Ads</a></li></ul></div>
+<div class="footer-col"><h4>Support</h4><ul><li><a href="/faq.html">FAQ</a></li><li><a href="/contact.html">Help</a></li><li><a href="/withdraw.html">Withdraw</a></li></ul></div>
+<div class="footer-col"><h4>Legal</h4><ul><li><a href="/privacy-policy.html">Privacy Policy</a></li><li><a href="/terms-of-service.html">Terms of Service</a></li><li><a href="/cookie-policy.html">Cookie Policy</a></li></ul></div>
 </div>
 <div class="footer-bottom">
-<p>&copy; <span data-year>2026</span> Baloch Sahab Automation. All Rights Reserved.</p>
-<nav aria-label="Legal"><a href="/privacy-policy.html">Privacy</a><a href="/terms-of-service.html">Terms</a><a href="/security-policy.html">Security</a><a href="mailto:support@balochsahab.com">Support</a><a class="back-to-top" href="#top">&uarr; Back to top</a></nav>
+<p>&copy; <span data-year>2026</span> Baloch Sahab. All Rights Reserved.</p>
+<nav aria-label="Legal"><a href="/privacy-policy.html">Privacy</a><a href="/terms-of-service.html">Terms</a><a href="mailto:support@balochsahab.com">Support</a><a class="back-to-top" href="#top">&uarr; Back to top</a></nav>
 </div>
 </div>
 </footer>
 <script src="/assets/js/main.min.js" defer></script>
+<script src="/assets/js/earn-app.js" defer></script>
 </body>
 </html>
 "@

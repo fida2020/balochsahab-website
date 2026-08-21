@@ -1,7 +1,7 @@
 {
-  "name": "Baloch Sahab Automation",
-  "short_name": "BSA",
-  "description": "AI-Powered Social Media Automation Platform",
+  "name": "Baloch Sahab",
+  "short_name": "Baloch Sahab",
+  "description": "Earn rewards by completing available activities.",
   "start_url": "/index.html",
   "display": "standalone",
   "background_color": "#090909",

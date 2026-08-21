@@ -1,0 +1,45 @@
+<section class="page-hero"><div class="container reveal"><nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/index.html">Home</a><span aria-hidden="true">/</span><span aria-current="page">Withdraw</span></nav><span class="eyebrow">Withdraw</span><h1>Withdraw your earnings</h1><p>Request a withdrawal of your verified balance to a supported payment method.</p></div></section>
+
+<section class="section" id="withdraw-guest-notice" data-earn-guest hidden>
+<div class="container"><div class="cta-band reveal"><h2>Sign in to withdraw</h2><p>Log in to see your balance and request a withdrawal.</p><div class="cta-actions"><a class="btn btn-primary" href="/signup.html">Sign Up</a><a class="btn btn-secondary" href="/login.html">Log In</a></div></div></div>
+</section>
+
+<section class="section" data-earn-user hidden>
+<div class="container">
+<div class="grid-3 mt-2">
+<article class="stat-card reveal"><div class="stat-label">Available Balance</div><div class="stat-value" data-withdraw-balance>$0.0000</div></article>
+<article class="stat-card reveal"><div class="stat-label">Pending Balance</div><div class="stat-value" data-withdraw-pending>$0.0000</div></article>
+<article class="stat-card reveal"><div class="stat-label">Lifetime Earned</div><div class="stat-value" data-withdraw-lifetime>$0.0000</div></article>
+</div>
+
+<div class="earn-card reveal mt-2" data-withdraw-kyc-block hidden>
+<h2>Verify your identity to withdraw</h2>
+<p class="text-muted">Withdrawals require identity verification. This is a one-time check.</p>
+<button class="btn btn-primary" type="button" data-withdraw-kyc-start>Verify Identity</button>
+</div>
+
+<div class="earn-card reveal mt-2" data-withdraw-form-block hidden>
+<h2>Request a withdrawal</h2>
+<form data-withdraw-form>
+<label>Amount (in cents, minor units)<input type="number" name="amountMinor" min="1" step="1" required></label>
+<label>Method<select name="method" required>
+<option value="jazzcash">JazzCash</option>
+<option value="easypaisa">Easypaisa</option>
+<option value="bank_transfer">Bank Transfer</option>
+<option value="usdt_trc20">USDT (TRC20)</option>
+</select></label>
+<label>Account Title (must match your verified identity)<input type="text" name="accountTitle" required></label>
+<label>Account Number / Address<input type="text" name="accountNumber" required></label>
+<button class="btn btn-primary" type="submit">Request Withdrawal</button>
+<div class="form-error" data-withdraw-error hidden></div>
+<div class="form-success" data-withdraw-success hidden>Withdrawal requested — track its status below.</div>
+</form>
+</div>
+
+<div class="earn-card reveal mt-2">
+<h2>Withdrawal history</h2>
+<p class="text-muted" data-withdraw-history-status>Loading…</p>
+<div data-withdraw-history-list></div>
+</div>
+</div>
+</section>

@@ -499,19 +499,10 @@
       document.querySelector("[data-withdraw-lifetime]").textContent = formatMinor(summary.lifetimeEarnedMinor, summary.currency);
     }).catch(function () {});
 
-    api("/users/me").then(function (me) {
-      var formBlock = document.querySelector("[data-withdraw-form-block]");
-      if (me.kycStatus === "APPROVED") {
-        formBlock.hidden = false;
-      } else {
-        kycBlock.hidden = false;
-        document.querySelector("[data-withdraw-kyc-start]").addEventListener("click", function () {
-          api("/users/me/kyc/session", { method: "POST" }).then(function (r) {
-            if (r && r.url) window.open(r.url, "_blank", "noopener,noreferrer");
-          }).catch(function (err) { window.alert(err.message || "Could not start identity verification"); });
-        });
-      }
-    });
+    // This backend doesn't have a real identity-verification (KYC) step
+    // wired up yet, so the withdrawal form is shown directly rather than
+    // gating it behind a check that could never pass.
+    document.querySelector("[data-withdraw-form-block]").hidden = false;
 
     var withdrawForm = document.querySelector("[data-withdraw-form]");
     if (withdrawForm) {

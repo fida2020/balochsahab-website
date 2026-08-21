@@ -1,20 +1,37 @@
-<section class="section" style="padding-top:clamp(3rem,8vw,5rem)">
-<div class="container" style="max-width:420px">
-<div class="earn-card reveal">
-<h1 style="margin-top:0">Log In</h1>
-<p class="text-muted">Welcome back — log in to see your balance and earning activity.</p>
+<section class="auth-page">
+<div class="container">
+<div class="auth-grid">
+<div class="auth-pitch reveal">
+<picture>
+<source type="image/webp" srcset="/assets/img/logo-128.webp">
+<img class="brand-logo" src="/assets/img/logo-128.png" alt="Baloch Sahab logo" width="64" height="64" decoding="async">
+</picture>
+<h1>Welcome back to <span style="background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent">Baloch Sahab</span></h1>
+<p class="lead">Log in to see your real balance, today's available earning methods, and your withdrawal history.</p>
+<ul class="auth-benefits">
+<li>Every reward is verified before it's credited — nothing fake</li>
+<li>Multiple ways to earn: PTC, shortlinks, offerwall, games, video ads &amp; more</li>
+<li>Withdraw to JazzCash, Easypaisa, bank transfer, or USDT</li>
+</ul>
+</div>
+<div class="auth-card reveal">
+<h1>Log In</h1>
+<p class="text-muted">Enter your details to access your account.</p>
 <div data-google-signin-slot hidden>
 <div id="google-signin-login"></div>
-<div class="divider"><span>or</span></div>
+<div class="divider"><span>or continue with email</span></div>
 </div>
-<form data-login-form>
-<label>Email<input type="email" name="email" required autocomplete="username"></label>
-<label>Password<input type="password" name="password" required autocomplete="current-password"></label>
-<button class="btn btn-primary btn-block" type="submit">Log In</button>
+<form class="form" data-login-form>
+<label>Email<input type="email" name="email" required autocomplete="username" placeholder="you@example.com"></label>
+<label>Password<input type="password" name="password" required autocomplete="current-password" placeholder="••••••••"></label>
+<button class="btn btn-primary btn-lg btn-block" type="submit">Log In</button>
 <div class="form-error" data-login-error hidden></div>
 </form>
-<p class="text-muted mt-2">Don't have an account? <a href="/signup.html">Sign up</a></p>
-<p class="text-muted"><a href="/forgot-password.html">Forgot your password?</a></p>
+<div class="auth-footer-links">
+<p>Don't have an account? <a href="/signup.html">Sign up for free</a></p>
+<p><a href="/forgot-password.html">Forgot your password?</a></p>
+</div>
+</div>
 </div>
 </div>
 </section>

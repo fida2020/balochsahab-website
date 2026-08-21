@@ -552,6 +552,11 @@ a:hover { color: var(--brand); }
 .form-error { color: #ff6b6b; font-size: 0.88rem; margin-top: 0.5rem; }
 .form-success { color: var(--brand-bright); font-size: 0.88rem; margin-top: 0.5rem; }
 
+/* AdSense placement wrapper — real ad units, not decorative content */
+.ad-slot { padding: 0.5rem 0 2rem; text-align: center; }
+.ad-slot .container { min-height: 90px; overflow: hidden; }
+.ad-slot-label { display: block; font-size: 0.68rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.5rem; opacity: 0.7; }
+
 /* Auth pages (login/signup) — compact centered card */
 .auth-page { padding: clamp(2.5rem, 6vw, 4rem) 0 clamp(3rem, 6vw, 5rem); }
 .auth-card {

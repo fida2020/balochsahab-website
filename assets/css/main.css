@@ -1,14 +1,14 @@
 /* Baloch Sahab — Simple Professional Design System */
 :root {
   --bg: #0e1524;
-  --surface: #161e33;
-  --elevated: #171f38;
+  --surface: #c81e1e;
+  --elevated: #d32f2f;
   --brand: #3b6fd6;
   --brand-bright: #ff5a5a;
   --brand-deep: #1e3a8a;
   --brand-purple: #4c1d95;
-  --text: #eef1f7;
-  --muted: #98a3ba;
+  --text: #ffffff;
+  --muted: #f4f4f4;
   --border: rgba(238, 241, 247, 0.12);
   --glass: rgba(59, 111, 214, 0.08);
   --glass-border: rgba(238, 241, 247, 0.14);
@@ -255,8 +255,8 @@ a:hover { color: var(--brand); }
 }
 .feature-icon, .step-num {
   width: 48px; height: 48px; border-radius: 14px; display: grid; place-items: center;
-  background: var(--grad-soft); color: var(--brand-bright); margin-bottom: 1rem;
-  font-family: var(--ui); font-weight: 700; border: 1px solid rgba(59, 111, 214, 0.25);
+  background: rgba(0, 0, 0, 0.22); color: #ffffff; margin-bottom: 1rem;
+  font-family: var(--ui); font-weight: 700; border: 1px solid rgba(255, 255, 255, 0.22);
   transition: transform 0.32s var(--ease), background 0.32s var(--ease), color 0.32s var(--ease);
 }
 .feature-card:hover .feature-icon {
@@ -273,7 +273,7 @@ a:hover { color: var(--brand); }
 }
 
 .workflow { counter-reset: step; }
-.step-num::before { counter-increment: step; content: counter(step); color: var(--brand-bright); }
+.step-num::before { counter-increment: step; content: counter(step); color: #ffffff; }
 .platform-card { text-align: center; }
 .platform-icon {
   width: 64px; height: 64px; margin: 0 auto 1.15rem; border-radius: 18px;
@@ -318,7 +318,7 @@ a:hover { color: var(--brand); }
 }
 .price-card h3 { font-family: var(--ui); margin: 0 0 0.35rem; font-size: 1.15rem; }
 .price-card .price {
-  font-family: var(--display); font-size: 2.6rem; font-weight: 600; margin: 0.35rem 0; color: var(--brand-bright);
+  font-family: var(--display); font-size: 2.6rem; font-weight: 600; margin: 0.35rem 0; color: #ffffff;
 }
 .price-card .price span { font-size: 0.95rem; font-weight: 500; color: var(--muted); font-family: var(--font); }
 .price-card .desc { color: var(--muted); font-size: 0.92rem; margin: 0 0 1.2rem; }
@@ -326,7 +326,7 @@ a:hover { color: var(--brand); }
 .price-card li {
   position: relative; padding: 0.4rem 0 0.4rem 1.4rem; color: var(--muted); font-size: 0.92rem;
 }
-.price-card li::before { content: "✓"; position: absolute; left: 0; color: var(--brand-bright); font-weight: 700; }
+.price-card li::before { content: "✓"; position: absolute; left: 0; color: #ffffff; font-weight: 700; }
 
 .page-hero { padding: clamp(2.6rem, 6vw, 4.4rem) 0 1.5rem; text-align: center; }
 .page-hero h1 {
@@ -345,9 +345,9 @@ a:hover { color: var(--brand); }
   cursor: pointer; display: flex; justify-content: space-between; gap: 1rem; align-items: center;
   transition: color 0.2s var(--ease);
 }
-.faq-item button:hover { color: var(--brand-bright); }
+.faq-item button:hover { color: #ffffff; }
 .faq-item .chevron { color: var(--muted); transition: transform 0.3s var(--ease), color 0.3s var(--ease); }
-.faq-item.open .chevron { transform: rotate(180deg); color: var(--brand-bright); }
+.faq-item.open .chevron { transform: rotate(180deg); color: #ffffff; }
 .faq-panel {
   display: grid; grid-template-rows: 0fr; overflow: hidden;
   padding: 0 1.25rem; color: var(--muted); font-size: 0.95rem; line-height: 1.7;
@@ -372,10 +372,10 @@ a:hover { color: var(--brand); }
   display: none; padding: 0.9rem 1rem; border-radius: 10px; font-weight: 600;
 }
 .form-success {
-  background: rgba(59, 111, 214, 0.12); color: var(--brand-bright);
+  background: rgba(0, 0, 0, 0.28); color: #ffffff;
 }
 .form-error {
-  background: rgba(180, 40, 40, 0.18); color: #ffb4b4;
+  background: rgba(0, 0, 0, 0.4); color: #ffe1e1;
 }
 .form-success.show, .form-error:not([hidden]) { display: block; }
 .form-success[hidden], .form-error[hidden] { display: none !important; }
@@ -417,7 +417,7 @@ a:hover { color: var(--brand); }
   padding: 1rem 1.1rem; border-radius: 14px; border: 1px solid var(--glass-border);
   background: var(--elevated);
 }
-.email-card strong { display: block; color: var(--brand-bright); margin-bottom: 0.2rem; }
+.email-card strong { display: block; color: #ffffff; margin-bottom: 0.2rem; }
 .email-card span { color: var(--muted); font-size: 0.88rem; }
 .help-list { display: grid; gap: 0.75rem; }
 .help-list a.feature-card { color: inherit; }
@@ -433,7 +433,7 @@ a:hover { color: var(--brand); }
 .prose {
   padding: clamp(1.25rem, 3vw, 2rem); max-width: 800px; margin-inline: auto; text-align: left;
 }
-.prose h2 { font-family: var(--ui); font-size: 1.15rem; margin: 1.75rem 0 0.6rem; color: var(--brand-bright); }
+.prose h2 { font-family: var(--ui); font-size: 1.15rem; margin: 1.75rem 0 0.6rem; color: #ffffff; }
 .prose h2:first-child { margin-top: 0; }
 .prose p, .prose li { color: var(--muted); }
 .prose strong { color: var(--text); }
@@ -541,7 +541,7 @@ a:hover { color: var(--brand); }
   transition: border-color 0.15s var(--ease), color 0.15s var(--ease), background 0.15s var(--ease);
 }
 .earn-sidebar nav a:hover, .earn-sidebar nav a:focus-visible {
-  background: rgba(255, 255, 255, 0.04); border-left-color: var(--brand); color: var(--brand-bright);
+  background: rgba(255, 255, 255, 0.14); border-left-color: #ffffff; color: #ffffff;
 }
 .earn-content { display: flex; flex-direction: column; gap: 1.5rem; min-width: 0; }
 @media (min-width: 860px) {
@@ -556,7 +556,7 @@ a:hover { color: var(--brand); }
 .badge-status {
   display: inline-block; padding: 0.2rem 0.6rem; border-radius: 999px; font-size: 0.72rem;
   font-weight: 700; letter-spacing: 0.03em; text-transform: uppercase;
-  background: var(--grad-soft); color: var(--brand-bright); border: 1px solid var(--glass-border);
+  background: rgba(0, 0, 0, 0.25); color: #ffffff; border: 1px solid rgba(255, 255, 255, 0.22);
   vertical-align: middle; margin-left: 0.5rem;
 }
 .stat-card {
@@ -572,8 +572,8 @@ a:hover { color: var(--brand); }
   flex: 1; padding: 0.7rem 0.9rem; border-radius: 10px; border: 1px solid var(--glass-border);
   background: rgba(255,255,255,0.03); color: var(--text); font-size: 0.88rem;
 }
-.form-error { color: #ff6b6b; font-size: 0.88rem; margin-top: 0.5rem; }
-.form-success { color: var(--brand-bright); font-size: 0.88rem; margin-top: 0.5rem; }
+.form-error { color: #ffffff; font-size: 0.88rem; margin-top: 0.5rem; }
+.form-success { color: #ffffff; font-size: 0.88rem; margin-top: 0.5rem; }
 
 /* AdSense placement wrapper — real ad units, not decorative content */
 .ad-slot { padding: 0.5rem 0 2rem; text-align: center; }

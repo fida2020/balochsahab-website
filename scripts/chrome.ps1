@@ -30,7 +30,7 @@ $csp = "default-src 'self'; base-uri 'self'; object-src 'none'; img-src 'self' d
 <meta name="description" content="$desc">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <meta name="author" content="Baloch Sahab">
-<meta name="theme-color" content="#87ceeb">
+<meta name="theme-color" content="#eaf5fb">
 <meta name="color-scheme" content="dark">
 <link rel="canonical" href="$og">
 <meta property="og:type" content="website">

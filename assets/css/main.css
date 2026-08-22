@@ -1,6 +1,6 @@
 /* Baloch Sahab — Simple Professional Design System */
 :root {
-  --bg: #87ceeb;
+  --bg: #eaf5fb;
   --surface: #ffffff;
   --elevated: #ffffff;
   --brand: #1a9d6a;
@@ -60,7 +60,7 @@ a:hover { color: var(--brand); }
 .site-header {
   position: sticky; top: 0; z-index: 100; height: var(--header-h);
   backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-  background: rgba(135, 206, 235, 0.85);
+  background: rgba(234, 245, 251, 0.85);
   border-bottom: 1px solid var(--border);
 }
 .nav {
@@ -451,7 +451,7 @@ a:hover { color: var(--brand); }
 
 .site-footer {
   position: relative; padding: 3.6rem 0 2.2rem; margin-top: 1rem;
-  background: #9fdaf0;
+  background: #dbeef9;
 }
 .site-footer::before {
   content: ""; position: absolute; top: 0; left: 0; right: 0; height: 1px;

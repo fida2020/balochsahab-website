@@ -4,7 +4,7 @@
   "description": "Earn rewards by completing available activities.",
   "start_url": "/index.html",
   "display": "standalone",
-  "background_color": "#87ceeb",
+  "background_color": "#eaf5fb",
   "theme_color": "#1a9d6a",
   "lang": "en",
   "icons": [

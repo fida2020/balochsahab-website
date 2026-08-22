@@ -18,7 +18,7 @@ if (Test-Path $critPath) {
 
 function Head($title,$desc,$canon,[string]$extra="") {
 $og = "https://balochsahab.com$canon"
-$csp = "default-src 'self'; base-uri 'self'; object-src 'none'; img-src 'self' data: https:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; script-src 'self' 'unsafe-inline' https://accounts.google.com https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://www.googletagservices.com https://ep1.adtrafficquality.google https://ep2.adtrafficquality.google https://*.profitableratecpmnetwork.com https://*.highrevenueformat.com https://adslab.me https://serve.adslab.me; frame-src https://accounts.google.com https://googleads.g.doubleclick.net https://tpc.googlesyndication.com https://ep1.adtrafficquality.google https://ep2.adtrafficquality.google https://*.profitableratecpmnetwork.com https://*.highrevenueformat.com https://adslab.me; connect-src 'self' https:; form-action 'self' mailto: https:; upgrade-insecure-requests"
+$csp = "default-src 'self'; base-uri 'self'; object-src 'none'; img-src 'self' data: https:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; script-src 'self' 'unsafe-inline' https://accounts.google.com https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://www.googletagservices.com https://ep1.adtrafficquality.google https://ep2.adtrafficquality.google https://*.profitableratecpmnetwork.com https://*.highrevenueformat.com https://adslab.me https://serve.adslab.me https://3nbf4.com; worker-src 'self' https://3nbf4.com; frame-src https://accounts.google.com https://googleads.g.doubleclick.net https://tpc.googlesyndication.com https://ep1.adtrafficquality.google https://ep2.adtrafficquality.google https://*.profitableratecpmnetwork.com https://*.highrevenueformat.com https://adslab.me; connect-src 'self' https:; form-action 'self' mailto: https:; upgrade-insecure-requests"
 @"
 <!DOCTYPE html>
 <html lang="en">
@@ -85,6 +85,7 @@ $csp = "default-src 'self'; base-uri 'self'; object-src 'none'; img-src 'self' d
 })();
 </script>
 <script src="https://adslab.me/api/sdk.js" async></script>
+<script>if ("serviceWorker" in navigator) { window.addEventListener("load", function () { navigator.serviceWorker.register("/sw.js").catch(function () {}); }); }</script>
 $extra
 </head>
 <body class="no-js">

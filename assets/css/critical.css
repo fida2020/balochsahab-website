@@ -1,20 +1,20 @@
 /* Critical above-the-fold styles for Baloch Sahab */
 :root {
-  --bg: #1a1714;
-  --surface: #2a2420;
-  --elevated: #2a2420;
-  --brand: #D4AF37;
-  --brand-bright: #e8c458;
-  --brand-deep: #B8860B;
-  --brand-glow: rgba(212, 175, 55, 0.25);
-  --text: #f8fafc;
-  --muted: #999999;
-  --border: rgba(212, 175, 55, 0.15);
-  --border-focus: rgba(232, 196, 88, 0.5);
+  --bg: #000000;
+  --surface: #0a1128;
+  --elevated: #0d1b3a;
+  --brand: #1d4ed8;
+  --brand-bright: #3b82f6;
+  --brand-deep: #1e3a8a;
+  --brand-glow: rgba(29, 78, 216, 0.25);
+  --text: #ffffff;
+  --muted: rgba(255, 255, 255, 0.65);
+  --border: rgba(255, 255, 255, 0.12);
+  --border-focus: rgba(59, 130, 246, 0.5);
   --sidebar-w: 280px;
-  --grad: linear-gradient(135deg, #e8c458 0%, #D4AF37 55%, #B8860B 100%);
-  --grad-soft: linear-gradient(135deg, rgba(232, 196, 88, 0.12), rgba(184, 134, 11, 0.08));
-  --glow: 0 0 24px rgba(212, 175, 55, 0.25), 0 0 48px rgba(232, 196, 88, 0.12);
+  --grad: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 55%, #1e3a8a 100%);
+  --grad-soft: linear-gradient(135deg, rgba(59, 130, 246, 0.12), rgba(30, 58, 138, 0.08));
+  --glow: 0 0 24px rgba(29, 78, 216, 0.25), 0 0 48px rgba(59, 130, 246, 0.12);
   --radius: 16px;
   --radius-sm: 10px;
   --radius-lg: 24px;
@@ -30,17 +30,17 @@ html { scroll-behavior: smooth; }
 body {
   margin: 0; min-height: 100vh; font-family: var(--font); color: var(--text);
   line-height: 1.65; background: var(--bg); -webkit-font-smoothing: antialiased;
-  background-image: radial-gradient(circle at 50% -100px, rgba(212, 175, 55, 0.12), transparent 700px);
+  background-image: radial-gradient(circle at 50% -100px, rgba(29, 78, 216, 0.12), transparent 700px);
   background-repeat: no-repeat;
 }
 img, svg { max-width: 100%; display: block; height: auto; }
 a { color: var(--brand-bright); text-decoration: none; transition: color 0.2s var(--ease); }
-a:hover { color: #e8c458; }
+a:hover { color: #3b82f6; }
 :focus-visible { outline: 2px solid var(--brand); outline-offset: 3px; }
 
 .skip-link {
   position: absolute; left: 1rem; top: -120px; z-index: 2000;
-  background: var(--grad); color: #1a1714; padding: 0.65rem 1.2rem;
+  background: var(--grad); color: #ffffff; padding: 0.65rem 1.2rem;
   border-radius: var(--radius-sm); font-weight: 700; font-size: 0.9rem;
   box-shadow: var(--glow); transition: top 0.2s var(--ease);
 }
@@ -55,8 +55,8 @@ a:hover { color: #e8c458; }
 }
 .brand img {
   width: 40px; height: 40px; border-radius: 12px; object-fit: cover;
-  border: 1px solid rgba(232, 196, 88, 0.35);
-  box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+  border: 1px solid rgba(59, 130, 246, 0.35);
+  box-shadow: 0 0 20px rgba(29, 78, 216, 0.3);
 }
 .brand-text { display: inline; font-size: 1.02rem; font-weight: 800; }
 
@@ -75,13 +75,13 @@ a:hover { color: #e8c458; }
   border-radius: var(--radius-sm); border: 1px solid transparent; transition: all 0.2s var(--ease);
 }
 .sidebar-nav a[aria-current="page"] {
-  color: var(--brand-bright); background: rgba(212, 175, 55, 0.12); border-color: var(--border-focus); font-weight: 700;
+  color: var(--brand-bright); background: rgba(29, 78, 216, 0.12); border-color: var(--border-focus); font-weight: 700;
 }
 
 .mobile-topbar {
   display: flex; align-items: center; justify-content: space-between; gap: 0.75rem;
   position: sticky; top: 0; z-index: 90; height: var(--header-h); padding: 0 1.25rem;
-  background: rgba(26, 23, 20, 0.9); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  background: rgba(0, 0, 0, 0.9); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--border); width: 100%;
 }
 @media (min-width: 980px) { .mobile-topbar { display: none; } }
@@ -112,20 +112,20 @@ a:hover { color: #e8c458; }
 .btn:active { transform: translateY(1px) scale(0.98); }
 
 .btn-primary {
-  background: var(--grad); color: #1a1714;
-  box-shadow: 0 8px 24px rgba(212, 175, 55, 0.28);
+  background: var(--grad); color: #ffffff;
+  box-shadow: 0 8px 24px rgba(29, 78, 216, 0.28);
 }
 .btn-primary:hover {
-  color: #1a1714; transform: translateY(-2px);
-  box-shadow: 0 12px 30px rgba(212, 175, 55, 0.4);
+  color: #ffffff; transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(29, 78, 216, 0.4);
 }
 .btn-secondary {
   background: rgba(255, 255, 255, 0.03); color: var(--text);
   border-color: rgba(255, 255, 255, 0.12);
 }
 .btn-secondary:hover {
-  color: var(--brand-bright); background: rgba(232, 196, 88, 0.08);
-  border-color: rgba(232, 196, 88, 0.4); transform: translateY(-2px);
+  color: var(--brand-bright); background: rgba(59, 130, 246, 0.08);
+  border-color: rgba(59, 130, 246, 0.4); transform: translateY(-2px);
 }
 
 .hero {
@@ -134,13 +134,13 @@ a:hover { color: #e8c458; }
 }
 .hero-logo {
   width: min(180px, 42vw); margin: 0 auto 1.75rem; border-radius: 28px;
-  filter: drop-shadow(0 0 32px rgba(212, 175, 55, 0.35));
+  filter: drop-shadow(0 0 32px rgba(29, 78, 216, 0.35));
 }
 .eyebrow {
   display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.78rem;
   font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
   color: var(--brand-bright); padding: 0.35rem 0.85rem; border-radius: 999px;
-  background: rgba(232, 196, 88, 0.1); border: 1px solid rgba(232, 196, 88, 0.25);
+  background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.25);
   margin-bottom: 1.25rem;
 }
 .hero h1 {

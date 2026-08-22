@@ -296,6 +296,8 @@
       if (guestVideoStatus) { guestVideoStatus.innerHTML = 'Log in to watch video ads — <a href="/login.html">Log In</a>'; }
       var guestInterstitialStatus = document.querySelector("[data-interstitial-status]");
       if (guestInterstitialStatus) { guestInterstitialStatus.innerHTML = 'Log in to view interstitial ads — <a href="/login.html">Log In</a>'; }
+      var guestSpinStatus = document.querySelector("[data-spin-status]");
+      if (guestSpinStatus) { guestSpinStatus.innerHTML = 'Log in to spin — <a href="/login.html">Log In</a>'; }
       return;
     }
 
@@ -357,6 +359,88 @@
         });
       });
       api("/faucet/status").then(renderFaucet).catch(function (err) { faucetStatusEl.textContent = err.message || "Could not load faucet status"; });
+    }
+
+    // Spin & Win — one free spin/day. The backend picks the segment; this
+    // code only animates the wheel to land where the server says it did.
+    var spinRoot = document.querySelector("[data-spin-root]");
+    if (spinRoot) {
+      var spinStatusEl = document.querySelector("[data-spin-status]");
+      var spinWheelWrap = document.querySelector("[data-spin-wheel-wrap]");
+      var spinWheelEl = document.querySelector("[data-spin-wheel]");
+      var spinBtn = document.querySelector("[data-spin-claim]");
+      var spinColors = ["var(--brand)", "#000000", "var(--brand-bright)", "var(--elevated-hover)", "var(--brand-deep)", "#0a1128"];
+      var spinSegments = [];
+      var spinRotation = 0;
+
+      function segmentAngles(segments) {
+        var total = segments.reduce(function (sum, s) { return sum + s.weight; }, 0);
+        var cumulative = 0;
+        return segments.map(function (seg) {
+          var start = (cumulative / total) * 360;
+          cumulative += seg.weight;
+          var end = (cumulative / total) * 360;
+          return { start: start, end: end, mid: (start + end) / 2 };
+        });
+      }
+
+      function renderWheel(segments) {
+        spinSegments = segments;
+        var angles = segmentAngles(segments);
+        var gradientParts = angles.map(function (a, i) {
+          return spinColors[i % spinColors.length] + " " + a.start + "deg " + a.end + "deg";
+        });
+        spinWheelEl.style.background = "conic-gradient(" + gradientParts.join(", ") + ")";
+        spinWheelEl.innerHTML = "";
+        segments.forEach(function (seg, i) {
+          var label = document.createElement("span");
+          label.className = "spin-wheel-label";
+          label.textContent = seg.label;
+          label.style.transform = "rotate(" + angles[i].mid + "deg)";
+          spinWheelEl.appendChild(label);
+        });
+      }
+
+      function renderStatus(status) {
+        if (!status.enabled) { spinStatusEl.textContent = "Spin & Win is not currently available."; return; }
+        renderWheel(status.segments);
+        spinWheelWrap.hidden = false;
+        if (status.canSpin) {
+          spinStatusEl.textContent = "Tap below for your free daily spin.";
+          spinBtn.hidden = false;
+        } else {
+          spinBtn.hidden = true;
+          spinStatusEl.textContent = status.lastResult
+            ? "Already spun today — you won " + status.lastResult.label + ". Come back tomorrow."
+            : "Come back tomorrow for your next free spin.";
+        }
+      }
+
+      spinBtn.addEventListener("click", function () {
+        spinBtn.disabled = true;
+        spinStatusEl.textContent = "Spinning…";
+        api("/spin/claim", { method: "POST" }).then(function (result) {
+          var angles = segmentAngles(spinSegments);
+          var index = spinSegments.findIndex(function (s) { return s.label === result.label; });
+          var mid = index >= 0 ? angles[index].mid : 0;
+          var targetFinal = (360 - mid) % 360;
+          var current = spinRotation % 360;
+          var delta = (targetFinal - current + 360) % 360;
+          spinRotation += 5 * 360 + delta;
+          spinWheelEl.style.transform = "rotate(" + spinRotation + "deg)";
+          window.setTimeout(function () {
+            spinStatusEl.textContent = "You won " + result.label + "! (" + formatMinor(result.rewardMinor) + ")";
+            spinBtn.hidden = true;
+            spinBtn.disabled = false;
+            refreshNavAuthState();
+          }, 4200);
+        }).catch(function (err) {
+          spinBtn.disabled = false;
+          spinStatusEl.textContent = err.message || "Could not spin right now";
+        });
+      });
+
+      api("/spin/status").then(renderStatus).catch(function (err) { spinStatusEl.textContent = err.message || "Could not load spin status"; });
     }
 
     // Task lists (AdsLab PTC/Shortlink/Offer/Telegram/Review) — each

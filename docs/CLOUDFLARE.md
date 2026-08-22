@@ -29,6 +29,12 @@ Note: Meta CSP is also embedded in HTML for defense-in-depth. Prefer Cloudflare 
 
 **Important (added when the site became an earning platform):** the `script-src`/`frame-src` additions for `https://accounts.google.com` are required for the real Sign-In-with-Google button on `/login.html` and `/signup.html` (see `scripts/chrome.ps1`'s embedded CSP, which already includes them). If a Cloudflare Transform Rule is actively overriding the CSP response header with an older version of this policy, Google Sign-In will be silently blocked even though the HTML meta tag is correct — browsers enforce the intersection of the header CSP and the meta CSP. Update the live Transform Rule to match if one exists.
 
+## API proxy Worker (for same-domain postback requirements)
+
+Some ad/offerwall providers (AoyCo.in confirmed 2026-08-23) reject a Postback URL whose domain doesn't match the App/Website URL exactly — the real backend (`baloch-sahab-backend.onrender.com`) can't be used directly as a postback target for those. `workers/api-proxy.js` in this repo is a Cloudflare Worker that proxies `balochsahab.com/api/*` straight through to the backend's `/api/v1/*`, so a same-domain URL like `https://balochsahab.com/api/webhooks/aoyco` can be handed to any such provider.
+
+Deploy: Cloudflare dashboard → Workers & Pages → Create Worker → paste `workers/api-proxy.js` → Deploy. Then Workers Routes → add route `balochsahab.com/api/*` pointed at this worker. Every other path keeps going to GitHub Pages unchanged.
+
 ## Caching
 
 Cache Rules for `/assets/*`:

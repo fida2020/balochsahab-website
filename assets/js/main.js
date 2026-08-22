@@ -19,6 +19,98 @@
     }
   });
 
+  // Priority nav — desktop horizontal bar: items that don't fit the
+  // available width move into the "More" dropdown, in order, starting from
+  // the first one that overflows (never a non-contiguous gap in the bar).
+  (function initPriorityNav() {
+    var nav = document.querySelector("[data-priority-nav]");
+    if (!nav) return;
+    var moreLi = nav.querySelector("[data-nav-more]");
+    var moreBtn = moreLi && moreLi.querySelector("[data-nav-more-toggle]");
+    var overflowList = moreLi && moreLi.querySelector("[data-nav-overflow-list]");
+    var items = Array.prototype.slice.call(nav.querySelectorAll(":scope > li[data-nav-item]"));
+    if (!moreLi || !overflowList || !items.length) return;
+
+    function layout() {
+      items.forEach(function (li) { li.hidden = false; });
+      overflowList.innerHTML = "";
+      moreLi.hidden = true;
+      if (moreBtn) moreBtn.classList.remove("has-active");
+      if (window.innerWidth < 980) return; // bar isn't rendered below this breakpoint
+
+      var available = nav.clientWidth;
+      moreLi.hidden = false;
+      var moreWidth = moreLi.offsetWidth;
+      moreLi.hidden = true;
+
+      var used = 0;
+      var overflow = [];
+      for (var i = 0; i < items.length; i++) {
+        var isLast = i === items.length - 1;
+        var budget = available - (isLast ? 0 : moreWidth);
+        var w = items[i].offsetWidth;
+        if (overflow.length === 0 && used + w <= budget) {
+          used += w;
+        } else {
+          overflow.push(items[i]);
+        }
+      }
+
+      overflow.forEach(function (li) {
+        li.hidden = true;
+        var link = li.querySelector("a");
+        if (!link) return;
+        var clone = link.cloneNode(true);
+        overflowList.appendChild(clone);
+        if (link.getAttribute("aria-current") === "page" && moreBtn) moreBtn.classList.add("has-active");
+      });
+      moreLi.hidden = overflow.length === 0;
+    }
+
+    var resizeTimer;
+    window.addEventListener("resize", function () {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(layout, 120);
+    });
+    layout();
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(layout);
+  })();
+
+  // Dropdown menus (nav "More" + account menu) — click toggle, outside
+  // click closes, ESC closes, opening one closes the other.
+  function closeAllDropdowns(except) {
+    document.querySelectorAll("[data-nav-more-menu].open, [data-account-dropdown].open").forEach(function (menu) {
+      if (menu === except) return;
+      menu.classList.remove("open");
+      var toggle = menu.previousElementSibling;
+      if (toggle && toggle.hasAttribute("aria-expanded")) toggle.setAttribute("aria-expanded", "false");
+    });
+  }
+  document.addEventListener("click", function (e) {
+    var moreToggle = e.target.closest("[data-nav-more-toggle]");
+    if (moreToggle) {
+      var menu = moreToggle.parentElement.querySelector("[data-nav-more-menu]");
+      var willOpen = menu && !menu.classList.contains("open");
+      closeAllDropdowns();
+      if (menu && willOpen) { menu.classList.add("open"); moreToggle.setAttribute("aria-expanded", "true"); }
+      return;
+    }
+    var acctToggle = e.target.closest("[data-account-toggle]");
+    if (acctToggle) {
+      var acctMenu = acctToggle.parentElement.querySelector("[data-account-dropdown]");
+      var acctWillOpen = acctMenu && !acctMenu.classList.contains("open");
+      closeAllDropdowns();
+      if (acctMenu && acctWillOpen) { acctMenu.classList.add("open"); acctToggle.setAttribute("aria-expanded", "true"); }
+      return;
+    }
+    if (!e.target.closest("[data-nav-more-menu], [data-account-dropdown]")) {
+      closeAllDropdowns();
+    }
+  });
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape") closeAllDropdowns();
+  });
+
   // Wire FAQ buttons to their panels for screen readers
   document.querySelectorAll(".faq-item").forEach(function (item, i) {
     var trigger = item.querySelector("[data-faq-trigger]");

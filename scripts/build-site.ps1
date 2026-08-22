@@ -15,6 +15,20 @@ $schema = [IO.File]::ReadAllText((Join-Path $bodies "schema.html"), [Text.Encodi
 
 Build-FromBody "index.html" "Baloch Sahab | Earn Rewards Online" "Baloch Sahab is an online earning and rewards platform. Complete real tasks, ads, and offers and withdraw your verified earnings." "/index.html" "home.html" $schema
 Build-FromBody "earn.html" "Earn | Baloch Sahab" "Earn rewards with PTC ads, shortlinks, offerwall tasks, games, video ads, a daily check-in, and the faucet." "/earn.html" "earn.html"
+Build-FromBody "daily-claim.html" "Daily Claim | Baloch Sahab" "Claim your Baloch Sahab daily streak bonus." "/daily-claim.html" "daily-claim.html"
+Build-FromBody "faucet.html" "Rolling Faucet | Baloch Sahab" "Claim free recurring faucet rewards on Baloch Sahab." "/faucet.html" "faucet.html"
+Build-FromBody "spin-win.html" "Spin & Win | Baloch Sahab" "Spin the daily fortune wheel on Baloch Sahab." "/spin-win.html" "spin-win.html"
+Build-FromBody "offerwall.html" "Offer Wall | Baloch Sahab" "Complete high-paying offers and partner campaigns on Baloch Sahab." "/offerwall.html" "offerwall.html"
+Build-FromBody "shortlinks.html" "Short Links | Baloch Sahab" "Complete shortlink tasks for quick rewards on Baloch Sahab." "/shortlinks.html" "shortlinks.html"
+Build-FromBody "telegram-views.html" "Telegram Views | Baloch Sahab" "Join partner Telegram channels and groups for rewards on Baloch Sahab." "/telegram-views.html" "telegram-views.html"
+Build-FromBody "ptc.html" "PTC | Baloch Sahab" "View sponsored websites for a fixed timer and earn verified rewards on Baloch Sahab." "/ptc.html" "ptc.html"
+Build-FromBody "watch-ads.html" "Watch Ads | Baloch Sahab" "Watch sponsored ad placements for rewards on Baloch Sahab." "/watch-ads.html" "watch-ads.html"
+Build-FromBody "video-ads.html" "Video Ads | Baloch Sahab" "Watch short video ads to completion for rewards on Baloch Sahab." "/video-ads.html" "video-ads.html"
+Build-FromBody "interstitial-ads.html" "Interstitial Ads | Baloch Sahab" "View full-screen interstitial ads for rewards on Baloch Sahab." "/interstitial-ads.html" "interstitial-ads.html"
+Build-FromBody "vip.html" "VIP | Baloch Sahab" "Unlock higher rewards and exclusive perks on Baloch Sahab." "/vip.html" "vip.html"
+Build-FromBody "reviews.html" "Reviews | Baloch Sahab" "Write verified reviews for partner products and services on Baloch Sahab." "/reviews.html" "reviews.html"
+Build-FromBody "profile.html" "Profile | Baloch Sahab" "Manage your Baloch Sahab account profile." "/profile.html" "profile.html"
+Build-FromBody "settings.html" "Settings | Baloch Sahab" "Manage your Baloch Sahab account settings." "/settings.html" "settings.html"
 Build-FromBody "withdraw.html" "Withdraw | Baloch Sahab" "Withdraw your verified Baloch Sahab earnings to a supported payment method." "/withdraw.html" "withdraw.html"
 Build-FromBody "referral.html" "Referral | Baloch Sahab" "Share your Baloch Sahab referral link and earn a bonus for every active friend you refer." "/referral.html" "referral.html"
 $faqExtra = ""
@@ -39,6 +53,9 @@ Build-FromBody "404.html" "Page Not Found | Baloch Sahab" "The page you requeste
 $urls = @(
   "/", "/index.html", "/earn.html", "/withdraw.html", "/referral.html", "/faq.html", "/about.html", "/contact.html",
   "/signup.html", "/login.html",
+  "/daily-claim.html", "/faucet.html", "/spin-win.html", "/offerwall.html", "/shortlinks.html",
+  "/telegram-views.html", "/ptc.html", "/watch-ads.html", "/video-ads.html", "/interstitial-ads.html",
+  "/vip.html", "/reviews.html",
   "/privacy-policy.html", "/terms-of-service.html", "/cookie-policy.html", "/refund-policy.html",
   "/security-policy.html", "/responsible-disclosure.html"
 )

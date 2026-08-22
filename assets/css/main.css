@@ -88,11 +88,15 @@ a:hover { color: #fde047; }
 .brand:hover img { transform: scale(1.04); }
 .brand-text { display: inline; font-size: 1.02rem; font-weight: 800; }
 
-.nav-links { display: none; list-style: none; margin: 0; padding: 0; gap: 0.25rem; align-items: center; }
+.nav-links {
+  display: none; list-style: none; margin: 0; padding: 0; gap: 0.15rem; align-items: center;
+  flex-wrap: nowrap; overflow: hidden; min-width: 0;
+}
 @media (min-width: 980px) { .nav-links { display: flex; } }
+.nav-links > li { flex-shrink: 0; }
 .nav-links a {
-  color: var(--muted); font-size: 0.9rem; font-weight: 600; padding: 0.5rem 0.9rem;
-  border-radius: 999px; transition: all 0.22s var(--ease);
+  display: block; color: var(--muted); font-size: 0.86rem; font-weight: 600; padding: 0.5rem 0.75rem;
+  border-radius: 999px; white-space: nowrap; transition: all 0.22s var(--ease);
 }
 .nav-links a:hover {
   color: var(--text); background: rgba(255, 255, 255, 0.05);
@@ -102,7 +106,40 @@ a:hover { color: #fde047; }
   box-shadow: 0 4px 14px rgba(234, 179, 8, 0.25);
 }
 
+/* "More" overflow menu + Account dropdown share the same panel look */
+.nav-more { position: relative; }
+.nav-more-toggle {
+  display: flex; align-items: center; gap: 0.3rem; color: var(--muted); font-size: 0.86rem; font-weight: 700;
+  padding: 0.5rem 0.75rem; border-radius: 999px; border: none; background: none; cursor: pointer;
+  white-space: nowrap; font-family: var(--font); transition: all 0.22s var(--ease);
+}
+.nav-more-toggle:hover, .nav-more-toggle[aria-expanded="true"] { color: var(--text); background: rgba(255, 255, 255, 0.05); }
+.nav-more-toggle.has-active { color: var(--brand-bright); }
+.nav-dropdown {
+  display: none; position: absolute; top: calc(100% + 0.6rem); right: 0; min-width: 220px;
+  background: rgba(15, 19, 27, 0.98); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border); border-radius: var(--radius-sm); box-shadow: var(--shadow-lg);
+  padding: 0.5rem; z-index: 200;
+}
+.nav-dropdown.open { display: block; }
+.nav-dropdown a, .nav-dropdown button {
+  display: block; width: 100%; text-align: left; color: var(--text-secondary); font-size: 0.9rem; font-weight: 600;
+  padding: 0.65rem 0.85rem; border-radius: var(--radius-sm); border: none; background: none; cursor: pointer;
+  font-family: var(--font); transition: all 0.2s var(--ease);
+}
+.nav-dropdown a:hover, .nav-dropdown button:hover { color: var(--brand-bright); background: rgba(250, 204, 21, 0.08); }
+.nav-dropdown a[aria-current="page"] { color: var(--brand-bright); }
+.nav-dropdown-fixed { border-top: 1px solid var(--border); margin-top: 0.4rem; padding-top: 0.4rem; }
+
 .nav-actions { display: flex; align-items: center; gap: 0.65rem; }
+.account-menu { position: relative; }
+.account-toggle {
+  display: flex; align-items: center; gap: 0.45rem; height: 42px; padding: 0 0.9rem 0 1.1rem;
+  border-radius: 999px; border: 1px solid var(--border); background: rgba(255, 255, 255, 0.03);
+  color: var(--brand-bright); font-family: var(--ui); font-weight: 700; font-size: 0.9rem;
+  cursor: pointer; transition: all 0.2s var(--ease);
+}
+.account-toggle:hover, .account-toggle[aria-expanded="true"] { background: rgba(255, 255, 255, 0.08); border-color: rgba(255, 255, 255, 0.15); }
 .nav-toggle {
   width: 42px; height: 42px; border-radius: 12px; border: 1px solid var(--border);
   background: rgba(255, 255, 255, 0.03); color: var(--text);
@@ -145,6 +182,7 @@ a:hover { color: #fde047; }
 }
 .mobile-panel-close:hover { background: rgba(255, 255, 255, 0.08); border-color: rgba(255, 255, 255, 0.15); }
 .mobile-panel-links { display: grid; gap: 0.35rem; }
+.mobile-panel-links--secondary { margin-top: 0.6rem; padding-top: 0.6rem; border-top: 1px solid var(--border); }
 .mobile-panel a {
   color: var(--text-secondary); padding: 0.75rem 1rem; border-radius: var(--radius-sm);
   font-weight: 600; font-size: 0.95rem; display: flex; align-items: center; justify-content: space-between;

@@ -294,6 +294,8 @@
       }
       var guestVideoStatus = document.querySelector("[data-video-status]");
       if (guestVideoStatus) { guestVideoStatus.innerHTML = 'Log in to watch video ads — <a href="/login.html">Log In</a>'; }
+      var guestInterstitialStatus = document.querySelector("[data-interstitial-status]");
+      if (guestInterstitialStatus) { guestInterstitialStatus.innerHTML = 'Log in to view interstitial ads — <a href="/login.html">Log In</a>'; }
       return;
     }
 
@@ -450,6 +452,32 @@
         }).catch(function () {
           videoStatusEl.textContent = "No ad available right now — try again shortly.";
           videoWatchBtn.disabled = false;
+        });
+      });
+    }
+
+    // Interstitial Ads (AdsLab) — standalone trigger. Display/trigger only;
+    // reward crediting happens via AdsLab's server-to-server postback
+    // straight to the backend, independent of this page.
+    var interstitialRoot = document.querySelector("[data-interstitial-root]");
+    if (interstitialRoot) {
+      var interstitialStatusEl = document.querySelector("[data-interstitial-status]");
+      var interstitialBtn = document.querySelector("[data-interstitial-show]");
+      interstitialStatusEl.textContent = "Tap below to show an interstitial ad.";
+      interstitialBtn.hidden = false;
+      interstitialBtn.addEventListener("click", function () {
+        if (!window.showint_adslab) {
+          interstitialStatusEl.textContent = "Interstitial ads aren't available right now.";
+          return;
+        }
+        interstitialBtn.disabled = true;
+        interstitialStatusEl.textContent = "Loading ad…";
+        window.showint_adslab().then(function () {
+          interstitialStatusEl.textContent = "Ad closed — thanks for your support!";
+          interstitialBtn.disabled = false;
+        }).catch(function () {
+          interstitialStatusEl.textContent = "No ad available right now — try again shortly.";
+          interstitialBtn.disabled = false;
         });
       });
     }

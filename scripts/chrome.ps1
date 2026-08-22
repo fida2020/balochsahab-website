@@ -100,14 +100,28 @@ $extra
 </picture>
 <span class="brand-text">Baloch Sahab</span>
 </a>
-<ul class="nav-links" aria-label="Primary">
-<li><a href="/index.html">Home</a></li>
-<li><a href="/earn.html">Earn</a></li>
-<li><a href="/withdraw.html">Withdraw</a></li>
-<li><a href="/referral.html">Referral</a></li>
-<li><a href="/faq.html">FAQ</a></li>
-<li><a href="/about.html">About Us</a></li>
-<li><a href="/contact.html">Contact Us</a></li>
+<ul class="nav-links" data-priority-nav aria-label="Primary">
+<li data-nav-item><a href="/daily-claim.html">Daily Claim</a></li>
+<li data-nav-item><a href="/spin-win.html">Spin &amp; Win</a></li>
+<li data-nav-item><a href="/offerwall.html">Offer Wall</a></li>
+<li data-nav-item><a href="/shortlinks.html">Short Links</a></li>
+<li data-nav-item><a href="/telegram-views.html">Telegram Views</a></li>
+<li data-nav-item><a href="/ptc.html">PTC</a></li>
+<li data-nav-item><a href="/watch-ads.html">Watch Ads</a></li>
+<li data-nav-item><a href="/video-ads.html">Video Ads</a></li>
+<li data-nav-item><a href="/interstitial-ads.html">Interstitial Ads</a></li>
+<li data-nav-item><a href="/referral.html">Referral</a></li>
+<li data-nav-item><a href="/vip.html">VIP</a></li>
+<li class="nav-more" data-nav-more hidden>
+<button class="nav-more-toggle" type="button" data-nav-more-toggle aria-haspopup="true" aria-expanded="false">More <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
+<div class="nav-dropdown" data-nav-more-menu>
+<div data-nav-overflow-list></div>
+<div class="nav-dropdown-fixed">
+<a href="/faucet.html">Rolling Faucet</a>
+<a href="/reviews.html">Reviews</a>
+</div>
+</div>
+</li>
 </ul>
 <div class="nav-actions">
 <span class="auth-slot auth-guest" data-auth="guest">
@@ -115,8 +129,19 @@ $extra
 <a class="btn btn-primary nav-cta" href="/signup.html">Sign Up</a>
 </span>
 <span class="auth-slot auth-user" data-auth="user" hidden>
-<a class="balance-pill" href="/withdraw.html"><span data-balance-pill>`$0.0000</span></a>
-<button class="btn btn-secondary nav-cta" type="button" data-logout>Log Out</button>
+<div class="account-menu" data-account-menu>
+<button class="account-toggle" type="button" data-account-toggle aria-haspopup="true" aria-expanded="false">
+<span data-balance-pill>`$0.0000</span>
+<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+</button>
+<div class="nav-dropdown" data-account-dropdown>
+<a href="/profile.html">Profile</a>
+<a href="/withdraw.html">Wallet</a>
+<a href="/withdraw.html#request-payout">Withdraw</a>
+<a href="/settings.html">Settings</a>
+<button type="button" data-logout>Log Out</button>
+</div>
+</div>
 </span>
 <button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-label="Open menu"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg></button>
 </div>
@@ -134,10 +159,22 @@ $extra
 <button class="mobile-panel-close" type="button" data-mobile-nav-close aria-label="Close menu"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
 </div>
 <nav class="mobile-panel-links" aria-label="Primary mobile">
-<a href="/index.html"><span>🏠 Home</span></a>
-<a href="/earn.html"><span>⚡ Earn</span></a>
-<a href="/withdraw.html"><span>💳 Withdraw</span></a>
+<a href="/daily-claim.html"><span>🎁 Daily Claim</span></a>
+<a href="/spin-win.html"><span>🎡 Spin &amp; Win</span></a>
+<a href="/offerwall.html"><span>📋 Offer Wall</span></a>
+<a href="/shortlinks.html"><span>🔗 Short Links</span></a>
+<a href="/telegram-views.html"><span>📨 Telegram Views</span></a>
+<a href="/ptc.html"><span>🎯 PTC</span></a>
+<a href="/watch-ads.html"><span>📺 Watch Ads</span></a>
+<a href="/video-ads.html"><span>🎬 Video Ads</span></a>
+<a href="/interstitial-ads.html"><span>🖼️ Interstitial Ads</span></a>
 <a href="/referral.html"><span>👥 Referral</span></a>
+<a href="/vip.html"><span>💎 VIP</span></a>
+<a href="/faucet.html"><span>💧 Rolling Faucet</span></a>
+<a href="/reviews.html"><span>⭐ Reviews</span></a>
+</nav>
+<nav class="mobile-panel-links mobile-panel-links--secondary" aria-label="More">
+<a href="/index.html"><span>🏠 Home</span></a>
 <a href="/about.html"><span>ℹ️ About</span></a>
 <a href="/faq.html"><span>❓ FAQ</span></a>
 <a href="/contact.html"><span>💬 Contact</span></a>
@@ -148,6 +185,9 @@ $extra
 </span>
 <span class="auth-slot auth-user" data-auth="user" hidden>
 <a class="balance-pill" href="/withdraw.html" style="justify-content:center;padding:0.75rem">Wallet: <span data-balance-pill>`$0.0000</span></a>
+<a class="btn btn-secondary" href="/profile.html" style="width:100%">Profile</a>
+<a class="btn btn-secondary" href="/withdraw.html#request-payout" style="width:100%">Withdraw</a>
+<a class="btn btn-secondary" href="/settings.html" style="width:100%">Settings</a>
 <button class="btn btn-secondary" type="button" data-logout style="width:100%">Log Out</button>
 </span>
 </div>
@@ -195,11 +235,11 @@ function Foot {
 <div class="footer-col">
 <h4>Earning</h4>
 <ul>
-<li><a href="/earn.html#daily-checkin">Daily Check-in</a></li>
-<li><a href="/earn.html#faucet">Rolling Faucet</a></li>
-<li><a href="/earn.html#ptc">PTC Ads</a></li>
-<li><a href="/earn.html#shortlinks">Shortlinks</a></li>
-<li><a href="/earn.html#offerwall">Offerwall Tasks</a></li>
+<li><a href="/daily-claim.html">Daily Claim</a></li>
+<li><a href="/faucet.html">Rolling Faucet</a></li>
+<li><a href="/ptc.html">PTC Ads</a></li>
+<li><a href="/shortlinks.html">Shortlinks</a></li>
+<li><a href="/offerwall.html">Offerwall Tasks</a></li>
 <li><a href="/referral.html">Referral Program</a></li>
 </ul>
 </div>

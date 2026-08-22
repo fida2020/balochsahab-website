@@ -60,10 +60,18 @@
     });
   }
 
+  // Refresh tokens are single-use/rotating on the backend, so if two calls
+  // race each other with the same token, only one succeeds and the other
+  // wrongly logs the user out. Sharing one in-flight promise across every
+  // concurrent caller (common on page load, when several widgets fetch
+  // their status at once) means only one /auth/refresh request ever goes
+  // out at a time.
+  var refreshPromise = null;
   function refreshSession() {
+    if (refreshPromise) return refreshPromise;
     var session = getSession();
     if (!session || !session.refreshToken) return Promise.reject(new ApiError(401, "NO_SESSION", "Not logged in"));
-    return rawFetch("/auth/refresh", { method: "POST", auth: false, body: { refreshToken: session.refreshToken } }).then(function (r) {
+    refreshPromise = rawFetch("/auth/refresh", { method: "POST", auth: false, body: { refreshToken: session.refreshToken } }).then(function (r) {
       if (!r.res.ok || !r.json || !r.json.ok) {
         clearSession();
         throw new ApiError(401, "SESSION_EXPIRED", "Your session expired — please log in again");
@@ -71,7 +79,14 @@
       var next = { user: session.user, accessToken: r.json.data.accessToken, refreshToken: r.json.data.refreshToken };
       setSession(next);
       return next;
+    }).then(function (next) {
+      refreshPromise = null;
+      return next;
+    }, function (err) {
+      refreshPromise = null;
+      throw err;
     });
+    return refreshPromise;
   }
 
   function api(path, opts) {
@@ -107,6 +122,41 @@
   }
 
   // ---------------------------------------------------------------------
+  // Countdown helper — used by Daily Check-in, Faucet, and Spin & Win to
+  // show a live "next available" timer and keep the claim button disabled
+  // until it actually expires, instead of a static "come back later".
+  // ---------------------------------------------------------------------
+  function formatCountdown(ms) {
+    if (ms <= 0) return "00:00:00";
+    var totalSeconds = Math.floor(ms / 1000);
+    var h = Math.floor(totalSeconds / 3600);
+    var m = Math.floor((totalSeconds % 3600) / 60);
+    var s = totalSeconds % 60;
+    function pad(n) { return n < 10 ? "0" + n : "" + n; }
+    return pad(h) + ":" + pad(m) + ":" + pad(s);
+  }
+  function nextUtcMidnight() {
+    var now = new Date();
+    return new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + 1));
+  }
+  // Returns the interval id so the caller can clearInterval() it before
+  // starting a new one (e.g. on re-render).
+  function startCountdown(targetDate, onTick, onExpire) {
+    function tick() {
+      var remaining = targetDate.getTime() - Date.now();
+      if (remaining <= 0) {
+        window.clearInterval(intervalId);
+        onExpire();
+        return;
+      }
+      onTick(formatCountdown(remaining));
+    }
+    var intervalId = window.setInterval(tick, 1000);
+    tick();
+    return intervalId;
+  }
+
+  // ---------------------------------------------------------------------
   // Nav auth-state
   // ---------------------------------------------------------------------
   function refreshNavAuthState() {
@@ -122,10 +172,21 @@
     for (var m = 0; m < earnUser.length; m++) earnUser[m].hidden = !loggedIn;
 
     if (loggedIn) {
-      api("/wallet/summary").then(function (summary) {
-        var pills = document.querySelectorAll("[data-balance-pill]");
-        for (var i2 = 0; i2 < pills.length; i2++) pills[i2].textContent = formatMinor(summary.availableBalanceMinor, summary.currency);
-      }).catch(function () {});
+      var loadBalance = function (retriesLeft) {
+        api("/wallet/summary").then(function (summary) {
+          var pills = document.querySelectorAll("[data-balance-pill]");
+          for (var i2 = 0; i2 < pills.length; i2++) pills[i2].textContent = formatMinor(summary.availableBalanceMinor, summary.currency);
+        }).catch(function (err) {
+          // A stale/expired access token that lost the refresh race (see
+          // refreshSession above) can make this fail even though the user
+          // is still legitimately logged in — retry a couple of times
+          // instead of silently leaving the pill at its placeholder value.
+          if (retriesLeft > 0 && err && err.status === 401) {
+            window.setTimeout(function () { loadBalance(retriesLeft - 1); }, 500);
+          }
+        });
+      };
+      loadBalance(2);
     }
 
     var logoutBtns = document.querySelectorAll("[data-logout]");
@@ -308,23 +369,35 @@
     if (dailyRoot) {
       var dailyStatusEl = document.querySelector("[data-daily-status]");
       var dailyClaimBtn = document.querySelector("[data-daily-claim]");
+      var dailyCountdownId = null;
       function renderDaily(status) {
-        if (!status.enabled) { dailyStatusEl.textContent = "The daily check-in is not currently available."; return; }
+        if (dailyCountdownId) { window.clearInterval(dailyCountdownId); dailyCountdownId = null; }
+        if (!status.enabled) { dailyStatusEl.textContent = "The daily check-in is not currently available."; dailyClaimBtn.hidden = true; return; }
         if (status.claimedToday) {
-          dailyStatusEl.textContent = "Already claimed today. Current streak: " + status.currentStreak + " day(s).";
           dailyClaimBtn.hidden = true;
+          dailyClaimBtn.disabled = true;
+          dailyCountdownId = startCountdown(nextUtcMidnight(), function (text) {
+            dailyStatusEl.textContent = "Already claimed today (streak: " + status.currentStreak + " day(s)). Next claim in " + text + ".";
+          }, function () {
+            api("/daily-bonus/status").then(renderDaily).catch(function () {});
+          });
         } else {
           dailyStatusEl.textContent = "Today's bonus: " + formatMinor(status.nextRewardMinor) + ". Streak: " + status.currentStreak + " day(s).";
           dailyClaimBtn.hidden = false;
+          dailyClaimBtn.disabled = false;
         }
       }
       dailyClaimBtn.addEventListener("click", function () {
         dailyClaimBtn.disabled = true;
         api("/daily-bonus/claim", { method: "POST" }).then(function (result) {
-          dailyStatusEl.textContent = "Claimed: " + formatMinor(result.rewardMinor) + " — streak " + result.streakCount + " day(s).";
           dailyClaimBtn.hidden = true;
-          dailyClaimBtn.disabled = false;
           refreshNavAuthState();
+          if (dailyCountdownId) window.clearInterval(dailyCountdownId);
+          dailyCountdownId = startCountdown(nextUtcMidnight(), function (text) {
+            dailyStatusEl.textContent = "Claimed: " + formatMinor(result.rewardMinor) + " — streak " + result.streakCount + " day(s). Next claim in " + text + ".";
+          }, function () {
+            api("/daily-bonus/status").then(renderDaily).catch(function () {});
+          });
         }).catch(function (err) {
           dailyClaimBtn.disabled = false;
           dailyStatusEl.textContent = err.message || "Could not claim daily bonus";
@@ -338,23 +411,37 @@
     if (faucetRoot) {
       var faucetStatusEl = document.querySelector("[data-faucet-status]");
       var faucetClaimBtn = document.querySelector("[data-faucet-claim]");
+      var faucetCountdownId = null;
       function renderFaucet(status) {
-        if (!status.enabled) { faucetStatusEl.textContent = "The faucet is not currently available."; return; }
+        if (faucetCountdownId) { window.clearInterval(faucetCountdownId); faucetCountdownId = null; }
+        if (!status.enabled) { faucetStatusEl.textContent = "The faucet is not currently available."; faucetClaimBtn.hidden = true; return; }
         if (status.canClaim) {
           faucetStatusEl.textContent = "Reward available: " + formatMinor(status.rewardMinor);
           faucetClaimBtn.hidden = false;
+          faucetClaimBtn.disabled = false;
         } else {
-          faucetStatusEl.textContent = "Next claim available soon — check back later.";
           faucetClaimBtn.hidden = true;
+          faucetClaimBtn.disabled = true;
+          var target = status.nextClaimAt ? new Date(status.nextClaimAt) : new Date(Date.now() + 4 * 60 * 60 * 1000);
+          faucetCountdownId = startCountdown(target, function (text) {
+            faucetStatusEl.textContent = "Next claim available in " + text + ".";
+          }, function () {
+            api("/faucet/status").then(renderFaucet).catch(function () {});
+          });
         }
       }
       faucetClaimBtn.addEventListener("click", function () {
         faucetClaimBtn.disabled = true;
         api("/faucet/claim", { method: "POST" }).then(function (result) {
-          faucetStatusEl.textContent = "Claimed: " + formatMinor(result.rewardMinor);
           faucetClaimBtn.hidden = true;
-          faucetClaimBtn.disabled = false;
           refreshNavAuthState();
+          if (faucetCountdownId) window.clearInterval(faucetCountdownId);
+          var target = result.nextClaimAt ? new Date(result.nextClaimAt) : new Date(Date.now() + 4 * 60 * 60 * 1000);
+          faucetCountdownId = startCountdown(target, function (text) {
+            faucetStatusEl.textContent = "Claimed: " + formatMinor(result.rewardMinor) + ". Next claim in " + text + ".";
+          }, function () {
+            api("/faucet/status").then(renderFaucet).catch(function () {});
+          });
         }).catch(function (err) {
           faucetClaimBtn.disabled = false;
           faucetStatusEl.textContent = err.message || "Could not claim faucet reward";
@@ -403,18 +490,25 @@
         });
       }
 
+      var spinCountdownId = null;
       function renderStatus(status) {
-        if (!status.enabled) { spinStatusEl.textContent = "Spin & Win is not currently available."; return; }
+        if (spinCountdownId) { window.clearInterval(spinCountdownId); spinCountdownId = null; }
+        if (!status.enabled) { spinStatusEl.textContent = "Spin & Win is not currently available."; spinBtn.hidden = true; return; }
         renderWheel(status.segments);
         spinWheelWrap.hidden = false;
         if (status.canSpin) {
           spinStatusEl.textContent = "Tap below for your free daily spin.";
           spinBtn.hidden = false;
+          spinBtn.disabled = false;
         } else {
           spinBtn.hidden = true;
-          spinStatusEl.textContent = status.lastResult
-            ? "Already spun today — you won " + status.lastResult.label + ". Come back tomorrow."
-            : "Come back tomorrow for your next free spin.";
+          spinBtn.disabled = true;
+          var prefix = status.lastResult ? "Already spun today — you won " + status.lastResult.label + ". " : "";
+          spinCountdownId = startCountdown(nextUtcMidnight(), function (text) {
+            spinStatusEl.textContent = prefix + "Next spin in " + text + ".";
+          }, function () {
+            api("/spin/status").then(renderStatus).catch(function () {});
+          });
         }
       }
 
@@ -431,10 +525,14 @@
           spinRotation += 5 * 360 + delta;
           spinWheelEl.style.transform = "rotate(" + spinRotation + "deg)";
           window.setTimeout(function () {
-            spinStatusEl.textContent = "You won " + result.label + "! (" + formatMinor(result.rewardMinor) + ")";
             spinBtn.hidden = true;
-            spinBtn.disabled = false;
             refreshNavAuthState();
+            if (spinCountdownId) window.clearInterval(spinCountdownId);
+            spinCountdownId = startCountdown(nextUtcMidnight(), function (text) {
+              spinStatusEl.textContent = "You won " + result.label + "! (" + formatMinor(result.rewardMinor) + "). Next spin in " + text + ".";
+            }, function () {
+              api("/spin/status").then(renderStatus).catch(function () {});
+            });
           }, 4200);
         }).catch(function (err) {
           spinBtn.disabled = false;

@@ -1,19 +1,20 @@
 /* Critical above-the-fold styles for Baloch Sahab */
 :root {
-  --bg: #07090e;
-  --surface: #0e121a;
-  --elevated: #131822;
-  --brand: #eab308;
-  --brand-bright: #facc15;
-  --brand-deep: #ca8a04;
-  --brand-glow: rgba(234, 179, 8, 0.25);
+  --bg: #1a1714;
+  --surface: #2a2420;
+  --elevated: #2a2420;
+  --brand: #D4AF37;
+  --brand-bright: #e8c458;
+  --brand-deep: #B8860B;
+  --brand-glow: rgba(212, 175, 55, 0.25);
   --text: #f8fafc;
-  --muted: #94a3b8;
-  --border: rgba(255, 255, 255, 0.08);
-  --border-focus: rgba(250, 204, 21, 0.5);
-  --grad: linear-gradient(135deg, #fde047 0%, #eab308 55%, #ca8a04 100%);
-  --grad-soft: linear-gradient(135deg, rgba(250, 204, 21, 0.12), rgba(202, 138, 4, 0.08));
-  --glow: 0 0 24px rgba(234, 179, 8, 0.25), 0 0 48px rgba(250, 204, 21, 0.12);
+  --muted: #999999;
+  --border: rgba(212, 175, 55, 0.15);
+  --border-focus: rgba(232, 196, 88, 0.5);
+  --sidebar-w: 280px;
+  --grad: linear-gradient(135deg, #e8c458 0%, #D4AF37 55%, #B8860B 100%);
+  --grad-soft: linear-gradient(135deg, rgba(232, 196, 88, 0.12), rgba(184, 134, 11, 0.08));
+  --glow: 0 0 24px rgba(212, 175, 55, 0.25), 0 0 48px rgba(232, 196, 88, 0.12);
   --radius: 16px;
   --radius-sm: 10px;
   --radius-lg: 24px;
@@ -29,17 +30,17 @@ html { scroll-behavior: smooth; }
 body {
   margin: 0; min-height: 100vh; font-family: var(--font); color: var(--text);
   line-height: 1.65; background: var(--bg); -webkit-font-smoothing: antialiased;
-  background-image: radial-gradient(circle at 50% -100px, rgba(234, 179, 8, 0.12), transparent 700px);
+  background-image: radial-gradient(circle at 50% -100px, rgba(212, 175, 55, 0.12), transparent 700px);
   background-repeat: no-repeat;
 }
 img, svg { max-width: 100%; display: block; height: auto; }
 a { color: var(--brand-bright); text-decoration: none; transition: color 0.2s var(--ease); }
-a:hover { color: #fde047; }
+a:hover { color: #e8c458; }
 :focus-visible { outline: 2px solid var(--brand); outline-offset: 3px; }
 
 .skip-link {
   position: absolute; left: 1rem; top: -120px; z-index: 2000;
-  background: var(--grad); color: #07090e; padding: 0.65rem 1.2rem;
+  background: var(--grad); color: #1a1714; padding: 0.65rem 1.2rem;
   border-radius: var(--radius-sm); font-weight: 700; font-size: 0.9rem;
   box-shadow: var(--glow); transition: top 0.2s var(--ease);
 }
@@ -63,8 +64,8 @@ a:hover { color: #fde047; }
 }
 .brand img {
   width: 40px; height: 40px; border-radius: 12px; object-fit: cover;
-  border: 1px solid rgba(250, 204, 21, 0.35);
-  box-shadow: 0 0 20px rgba(234, 179, 8, 0.3);
+  border: 1px solid rgba(232, 196, 88, 0.35);
+  box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
 }
 .brand-text { display: inline; font-size: 1.02rem; font-weight: 800; }
 
@@ -78,8 +79,8 @@ a:hover { color: #fde047; }
   color: var(--text); background: rgba(255, 255, 255, 0.05);
 }
 .nav-links a[aria-current="page"] {
-  color: #07090e; background: var(--grad); font-weight: 700;
-  box-shadow: 0 4px 14px rgba(234, 179, 8, 0.25);
+  color: #1a1714; background: var(--grad); font-weight: 700;
+  box-shadow: 0 4px 14px rgba(212, 175, 55, 0.25);
 }
 
 .nav-actions { display: flex; align-items: center; gap: 0.65rem; }
@@ -112,20 +113,20 @@ a:hover { color: #fde047; }
 .btn:active { transform: translateY(1px) scale(0.98); }
 
 .btn-primary {
-  background: var(--grad); color: #07090e;
-  box-shadow: 0 8px 24px rgba(234, 179, 8, 0.28);
+  background: var(--grad); color: #1a1714;
+  box-shadow: 0 8px 24px rgba(212, 175, 55, 0.28);
 }
 .btn-primary:hover {
-  color: #07090e; transform: translateY(-2px);
-  box-shadow: 0 12px 30px rgba(234, 179, 8, 0.4);
+  color: #1a1714; transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(212, 175, 55, 0.4);
 }
 .btn-secondary {
   background: rgba(255, 255, 255, 0.03); color: var(--text);
   border-color: rgba(255, 255, 255, 0.12);
 }
 .btn-secondary:hover {
-  color: var(--brand-bright); background: rgba(250, 204, 21, 0.08);
-  border-color: rgba(250, 204, 21, 0.4); transform: translateY(-2px);
+  color: var(--brand-bright); background: rgba(232, 196, 88, 0.08);
+  border-color: rgba(232, 196, 88, 0.4); transform: translateY(-2px);
 }
 
 .hero {
@@ -134,13 +135,13 @@ a:hover { color: #fde047; }
 }
 .hero-logo {
   width: min(180px, 42vw); margin: 0 auto 1.75rem; border-radius: 28px;
-  filter: drop-shadow(0 0 32px rgba(234, 179, 8, 0.35));
+  filter: drop-shadow(0 0 32px rgba(212, 175, 55, 0.35));
 }
 .eyebrow {
   display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.78rem;
   font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
   color: var(--brand-bright); padding: 0.35rem 0.85rem; border-radius: 999px;
-  background: rgba(250, 204, 21, 0.1); border: 1px solid rgba(250, 204, 21, 0.25);
+  background: rgba(232, 196, 88, 0.1); border: 1px solid rgba(232, 196, 88, 0.25);
   margin-bottom: 1.25rem;
 }
 .hero h1 {

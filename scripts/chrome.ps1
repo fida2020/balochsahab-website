@@ -31,7 +31,7 @@ $csp = "default-src 'self'; base-uri 'self'; object-src 'none'; img-src 'self' d
 <meta name="robots" content="index,follow,max-image-preview:large">
 <meta name="author" content="Baloch Sahab">
 <meta name="website-verification" content="6a896bfae2e65e40771d6023">
-<meta name="theme-color" content="#0a0c10">
+<meta name="theme-color" content="#1a1714">
 <meta name="color-scheme" content="dark">
 <link rel="canonical" href="$og">
 <meta property="og:type" content="website">
@@ -56,7 +56,7 @@ $csp = "default-src 'self'; base-uri 'self'; object-src 'none'; img-src 'self' d
 <link rel="icon" href="/assets/img/favicon-16x16.png" sizes="16x16" type="image/png">
 <link rel="icon" href="/assets/img/favicon-32x32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
-<link rel="mask-icon" href="/assets/img/mask-icon.svg" color="#eab308">
+<link rel="mask-icon" href="/assets/img/mask-icon.svg" color="#D4AF37">
 <link rel="manifest" href="/site.webmanifest">
 <link rel="preload" as="image" href="/assets/img/logo-256.webp" type="image/webp" fetchpriority="high">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -91,60 +91,65 @@ $extra
 <script>document.body.classList.remove('no-js');</script>
 <a class="skip-link" href="#main">Skip to content</a>
 <span id="top"></span>
-<header class="site-header">
-<div class="container nav" data-nav>
-<a class="brand" href="/index.html">
+<div class="app-shell">
+<aside class="sidebar">
+<div class="sidebar-top">
+<a class="brand sidebar-brand" href="/index.html">
 <picture>
-<source type="image/webp" srcset="/assets/img/logo-128.webp 128w, /assets/img/logo-256.webp 256w" sizes="44px">
-<img src="/assets/img/logo-256.png" srcset="/assets/img/logo-128.png 128w, /assets/img/logo-256.png 256w" sizes="44px" width="44" height="44" alt="Baloch Sahab" decoding="async" fetchpriority="high">
+<source type="image/webp" srcset="/assets/img/logo-128.webp 128w, /assets/img/logo-256.webp 256w" sizes="40px">
+<img src="/assets/img/logo-256.png" srcset="/assets/img/logo-128.png 128w, /assets/img/logo-256.png 256w" sizes="40px" width="40" height="40" alt="Baloch Sahab" decoding="async" fetchpriority="high">
 </picture>
 <span class="brand-text">Baloch Sahab</span>
 </a>
-<ul class="nav-links" data-priority-nav aria-label="Primary">
-<li data-nav-item><a href="/daily-claim.html">Daily Claim</a></li>
-<li data-nav-item><a href="/spin-win.html">Spin &amp; Win</a></li>
-<li data-nav-item><a href="/offerwall.html">Offer Wall</a></li>
-<li data-nav-item><a href="/shortlinks.html">Short Links</a></li>
-<li data-nav-item><a href="/telegram-views.html">Telegram Views</a></li>
-<li data-nav-item><a href="/ptc.html">PTC</a></li>
-<li data-nav-item><a href="/watch-ads.html">Watch Ads</a></li>
-<li data-nav-item><a href="/video-ads.html">Video Ads</a></li>
-<li data-nav-item><a href="/interstitial-ads.html">Interstitial Ads</a></li>
-<li data-nav-item><a href="/referral.html">Referral</a></li>
-<li data-nav-item><a href="/vip.html">VIP</a></li>
-<li class="nav-more" data-nav-more hidden>
-<button class="nav-more-toggle" type="button" data-nav-more-toggle aria-haspopup="true" aria-expanded="false">More <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
-<div class="nav-dropdown" data-nav-more-menu>
-<div data-nav-overflow-list></div>
-<div class="nav-dropdown-fixed">
-<a href="/faucet.html">Rolling Faucet</a>
-<a href="/reviews.html">Reviews</a>
+<div class="user-profile" data-auth="user" hidden>
+<div class="user-avatar" data-user-avatar>B</div>
+<div class="user-balance"><span data-balance-pill>`$0.0000</span></div>
 </div>
+<nav class="sidebar-nav" data-nav aria-label="Primary">
+<a href="/index.html">🏠 Home</a>
+<a href="/daily-claim.html">🎁 Daily Claim</a>
+<a href="/faucet.html">💧 Rolling Faucet</a>
+<a href="/spin-win.html">🎡 Spin &amp; Win</a>
+<a href="/offerwall.html">📋 Offer Wall</a>
+<a href="/shortlinks.html">🔗 Short Links</a>
+<a href="/telegram-views.html">📨 Telegram Views</a>
+<a href="/ptc.html">🎯 PTC</a>
+<a href="/watch-ads.html">📺 Watch Ads</a>
+<a href="/video-ads.html">🎬 Video Ads</a>
+<a href="/interstitial-ads.html">🖼️ Interstitial Ads</a>
+<a href="/reviews.html">⭐ Reviews</a>
+<a href="/referral.html">👥 Referral</a>
+<a href="/vip.html">💎 VIP</a>
+<a href="/about.html">ℹ️ About</a>
+<a href="/faq.html">❓ FAQ</a>
+<a href="/contact.html">💬 Contact</a>
+</nav>
 </div>
-</li>
-</ul>
-<div class="nav-actions">
+<div class="sidebar-bottom">
 <span class="auth-slot auth-guest" data-auth="guest">
-<a class="btn btn-secondary nav-cta" href="/login.html">Log In</a>
-<a class="btn btn-primary nav-cta" href="/signup.html">Sign Up</a>
+<a class="btn btn-primary" href="/signup.html" style="width:100%;margin-bottom:0.6rem">Sign Up</a>
+<a class="btn btn-secondary" href="/login.html" style="width:100%">Log In</a>
 </span>
 <span class="auth-slot auth-user" data-auth="user" hidden>
-<div class="account-menu" data-account-menu>
-<button class="account-toggle" type="button" data-account-toggle aria-haspopup="true" aria-expanded="false">
-<span data-balance-pill>`$0.0000</span>
-<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
-</button>
-<div class="nav-dropdown" data-account-dropdown>
-<a href="/profile.html">Profile</a>
-<a href="/withdraw.html">Wallet</a>
-<a href="/withdraw.html#request-payout">Withdraw</a>
-<a href="/settings.html">Settings</a>
-<button type="button" data-logout>Log Out</button>
+<a class="btn btn-secondary" href="/profile.html" style="width:100%;margin-bottom:0.5rem">👤 Profile</a>
+<a class="btn btn-secondary" href="/withdraw.html#request-payout" style="width:100%;margin-bottom:0.5rem">💳 Withdraw</a>
+<a class="btn btn-secondary" href="/settings.html" style="width:100%;margin-bottom:0.5rem">⚙️ Settings</a>
+<button class="btn logout-btn" type="button" data-logout style="width:100%">🚪 Log Out</button>
+</span>
 </div>
-</div>
+</aside>
+<div class="mobile-topbar">
+<a class="brand" href="/index.html">
+<picture>
+<source type="image/webp" srcset="/assets/img/logo-128.webp 128w, /assets/img/logo-256.webp 256w" sizes="40px">
+<img src="/assets/img/logo-256.png" srcset="/assets/img/logo-128.png 128w, /assets/img/logo-256.png 256w" sizes="40px" width="40" height="40" alt="Baloch Sahab" decoding="async" fetchpriority="high">
+</picture>
+<span class="brand-text">Baloch Sahab</span>
+</a>
+<span class="auth-slot auth-user" data-auth="user" hidden>
+<a class="balance-pill" href="/withdraw.html"><span data-balance-pill>`$0.0000</span></a>
 </span>
 <button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-label="Open menu"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg></button>
-</div>
 </div>
 <div class="nav-overlay" data-nav-overlay></div>
 <div class="mobile-panel" data-mobile-nav>
@@ -191,14 +196,14 @@ $extra
 <button class="btn btn-secondary" type="button" data-logout style="width:100%">Log Out</button>
 </span>
 </div>
-</header>
-<main id="main">
+<main class="main-content" id="main">
 "@
 }
 
 function Foot {
 @"
 </main>
+</div>
 <a class="wa-float" href="https://wa.me/923218818909" target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp">
 <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.5 3.5A11 11 0 0 0 3.2 17.7L2 22l4.4-1.2A11 11 0 1 0 20.5 3.5zm-8.5 17a9 9 0 0 1-4.6-1.3l-.3-.2-2.6.7.7-2.5-.2-.3A9 9 0 1 1 12 20.5zm5.2-6.7c-.3-.1-1.6-.8-1.9-.9s-.4-.1-.6.2-.7.9-.8 1-.3.2-.6.1a7.3 7.3 0 0 1-2.2-1.4 8.2 8.2 0 0 1-1.5-1.9c-.2-.3 0-.4.1-.6l.4-.5.2-.3a.5.5 0 0 0 0-.5c0-.1-.6-1.5-.8-2s-.5-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.8 11.8 11.8 0 0 0 4.5 4 14 14 0 0 0 1.5.6 3.6 3.6 0 0 0 1.7.1 2.9 2.9 0 0 0 1.9-1.3 2.4 2.4 0 0 0 .2-1.3c-.1-.1-.3-.2-.6-.3z"/></svg>
 </a>

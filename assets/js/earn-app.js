@@ -93,14 +93,16 @@
   }
 
   // ---------------------------------------------------------------------
-  // Money formatting — same 4-decimal convention as the EarnBox app/admin.
+  // Money formatting — 1 minor unit = $0.00001 (backend's ledger.service.ts
+  // is the source of truth for this scale), shown to 5 decimal places so
+  // sub-cent rewards (e.g. AdsLab's $0.001 per view) are visible.
   // ---------------------------------------------------------------------
   function formatMinor(minor, currency) {
-    var major = (minor || 0) / 100;
+    var major = (minor || 0) / 100000;
     try {
-      return new Intl.NumberFormat("en-US", { style: "currency", currency: currency || "USD", minimumFractionDigits: 4, maximumFractionDigits: 4 }).format(major);
+      return new Intl.NumberFormat("en-US", { style: "currency", currency: currency || "USD", minimumFractionDigits: 5, maximumFractionDigits: 5 }).format(major);
     } catch (e) {
-      return "$" + major.toFixed(4);
+      return "$" + major.toFixed(5);
     }
   }
 

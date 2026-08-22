@@ -1,4 +1,15 @@
-<section class="page-hero"><div class="container reveal"><nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/index.html">Home</a><span aria-hidden="true">/</span><span aria-current="page">Withdraw</span></nav><span class="eyebrow">Withdraw</span><h1>Withdraw your earnings</h1><p>Request a withdrawal of your verified balance to a supported payment method.</p></div></section>
+<section class="page-hero">
+<div class="container reveal">
+<nav class="breadcrumbs" aria-label="Breadcrumb">
+<a href="/index.html">Home</a>
+<span aria-hidden="true">/</span>
+<span aria-current="page">Withdraw</span>
+</nav>
+<span class="eyebrow">💳 Wallet &amp; Payouts</span>
+<h1>Withdraw Your Earnings</h1>
+<p>Request a secure withdrawal of your verified balance to your chosen payment method.</p>
+</div>
+</section>
 
 <section class="ad-slot">
 <div class="container">
@@ -17,45 +28,93 @@
 </section>
 
 <section class="section" id="withdraw-guest-notice" data-earn-guest hidden>
-<div class="container"><div class="cta-band reveal"><h2>Sign in to withdraw</h2><p>Log in to see your balance and request a withdrawal.</p><div class="cta-actions"><a class="btn btn-primary" href="/signup.html">Sign Up</a><a class="btn btn-secondary" href="/login.html">Log In</a></div></div></div>
+<div class="container">
+<div class="cta-band reveal">
+<h2>Sign In To Access Your Wallet</h2>
+<p>Log in to your Baloch Sahab account to view your balance breakdown and submit cash-out requests.</p>
+<div class="cta-actions">
+<a class="btn btn-primary btn-lg" href="/signup.html">Create Free Account</a>
+<a class="btn btn-secondary btn-lg" href="/login.html">Sign In</a>
+</div>
+</div>
+</div>
 </section>
 
 <section class="section" data-earn-user hidden>
 <div class="container">
 <div class="grid-3 mt-2">
-<article class="stat-card reveal"><div class="stat-label">Available Balance</div><div class="stat-value" data-withdraw-balance>$0.0000</div></article>
-<article class="stat-card reveal"><div class="stat-label">Pending Balance</div><div class="stat-value" data-withdraw-pending>$0.0000</div></article>
-<article class="stat-card reveal"><div class="stat-label">Lifetime Earned</div><div class="stat-value" data-withdraw-lifetime>$0.0000</div></article>
+<article class="stat-card reveal">
+<div class="stat-label">
+<span>Available Balance</span>
+<span aria-hidden="true">💰</span>
+</div>
+<div class="stat-value" data-withdraw-balance>$0.0000</div>
+</article>
+
+<article class="stat-card reveal">
+<div class="stat-label">
+<span>Pending Review</span>
+<span aria-hidden="true">⏳</span>
+</div>
+<div class="stat-value" data-withdraw-pending>$0.0000</div>
+</article>
+
+<article class="stat-card reveal">
+<div class="stat-label">
+<span>Lifetime Earned</span>
+<span aria-hidden="true">🏆</span>
+</div>
+<div class="stat-value" data-withdraw-lifetime>$0.0000</div>
+</article>
 </div>
 
 <div class="earn-card reveal mt-2" data-withdraw-kyc-block hidden>
-<h2>Verify your identity to withdraw</h2>
-<p class="text-muted">Withdrawals require identity verification. This is a one-time check.</p>
+<h2>Identity Verification Required</h2>
+<p class="text-muted">For fraud prevention and secure payouts, withdrawals require a quick one-time identity verification.</p>
 <button class="btn btn-primary" type="button" data-withdraw-kyc-start>Verify Identity</button>
 </div>
 
 <div class="earn-card reveal mt-2" data-withdraw-form-block hidden>
-<h2>Request a withdrawal</h2>
-<form data-withdraw-form>
-<label>Amount (in cents, minor units)<input type="number" name="amountMinor" min="1" step="1" required></label>
-<label>Method<select name="method" required>
-<option value="jazzcash">JazzCash</option>
-<option value="easypaisa">Easypaisa</option>
-<option value="bank_transfer">Bank Transfer</option>
-<option value="usdt_trc20">USDT (TRC20)</option>
-</select></label>
-<label>Account Title (must match your verified identity)<input type="text" name="accountTitle" required></label>
-<label>Account Number / Address<input type="text" name="accountNumber" required></label>
-<button class="btn btn-primary" type="submit">Request Withdrawal</button>
+<h2>Request Payout</h2>
+<p class="text-muted" style="margin-top:-0.5rem;margin-bottom:1rem">Select your preferred payout method and enter your accurate account details.</p>
+<form class="form" data-withdraw-form style="padding:0;box-shadow:none;border:none;background:none">
+<label>
+Amount (in minor units / cents)
+<input type="number" name="amountMinor" min="1" step="1" placeholder="e.g. 500 for $5.00" required>
+<span class="form-helper">100 units = $1.00 USD • Minimum payout: 500 units ($5.00)</span>
+</label>
+
+<label>
+Payment Method
+<select name="method" required>
+<option value="jazzcash">JazzCash Mobile Account</option>
+<option value="easypaisa">Easypaisa Mobile Account</option>
+<option value="bank_transfer">Pakistan Bank Transfer (IBAN)</option>
+<option value="usdt_trc20">USDT (TRC20 Network)</option>
+</select>
+</label>
+
+<label>
+Account Title
+<input type="text" name="accountTitle" placeholder="Full name registered on this account" required autocomplete="name">
+</label>
+
+<label>
+Account Number / Wallet Address
+<input type="text" name="accountNumber" placeholder="Mobile number, IBAN, or USDT TRC20 address" required>
+</label>
+
+<button class="btn btn-primary btn-lg" type="submit">Submit Withdrawal Request</button>
 <div class="form-error" data-withdraw-error hidden></div>
-<div class="form-success" data-withdraw-success hidden>Withdrawal requested — track its status below.</div>
+<div class="form-success" data-withdraw-success hidden>Withdrawal requested successfully! You can track its processing status below.</div>
 </form>
 </div>
 
 <div class="earn-card reveal mt-2">
-<h2>Withdrawal history</h2>
-<p class="text-muted" data-withdraw-history-status>Loading…</p>
+<h2>Withdrawal History</h2>
+<p class="text-muted" data-withdraw-history-status>Loading transaction history…</p>
 <div data-withdraw-history-list></div>
 </div>
 </div>
 </section>
+

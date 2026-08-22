@@ -3,24 +3,31 @@
 <div class="auth-card reveal">
 <picture>
 <source type="image/webp" srcset="/assets/img/logo-128.webp">
-<img class="brand-logo" src="/assets/img/logo-128.png" alt="Baloch Sahab logo" width="48" height="48" decoding="async">
+<img class="brand-logo" src="/assets/img/logo-128.png" alt="Baloch Sahab logo" width="52" height="52" decoding="async">
 </picture>
-<h1>Sign Up</h1>
-<p class="text-muted">Create your free account and start earning today.</p>
+<h1>Create Your Account</h1>
+<p class="text-muted">Join Baloch Sahab to complete tasks, claim rewards, and build your earnings.</p>
 <div data-google-signin-slot hidden>
-<div id="google-signin-signup"></div>
-<div class="divider"><span>or</span></div>
+<div id="google-signin-signup" style="display:flex;justify-content:center;margin-bottom:0.5rem"></div>
+<div class="divider"><span>or register with email</span></div>
 </div>
 <form class="form" data-signup-form>
-<label>Email<input type="email" name="email" required autocomplete="username" placeholder="you@example.com"></label>
-<label>Password (min 8 characters)<input type="password" name="password" required minlength="8" autocomplete="new-password" placeholder="••••••••"></label>
-<button class="btn btn-primary btn-block" type="submit">Sign Up</button>
+<label>
+Email Address
+<input type="email" name="email" required autocomplete="username" placeholder="name@example.com">
+</label>
+<label>
+Password (min 8 characters)
+<input type="password" name="password" required minlength="8" autocomplete="new-password" placeholder="Create a strong password">
+</label>
+<button class="btn btn-primary btn-block btn-lg" type="submit">Create Free Account</button>
 <div class="form-error" data-signup-error hidden></div>
 <div class="form-success" data-signup-success hidden></div>
 </form>
 <div class="auth-footer-links">
-<p>Already have an account? <a href="/login.html">Log in</a></p>
+<p>Already have an account? <a href="/login.html" style="font-weight:700">Log in here &rarr;</a></p>
 </div>
 </div>
 </div>
 </section>
+

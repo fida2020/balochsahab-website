@@ -1,7 +1,27 @@
-<section class="page-hero"><div class="container reveal"><nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/index.html">Home</a><span aria-hidden="true">/</span><span aria-current="page">Earn</span></nav><span class="eyebrow">Earn</span><h1>Earning methods</h1><p>Earn rewards by completing available activities. Every reward is verified before it's added to your balance.</p></div></section>
+<section class="page-hero">
+<div class="container reveal">
+<nav class="breadcrumbs" aria-label="Breadcrumb">
+<a href="/index.html">Home</a>
+<span aria-hidden="true">/</span>
+<span aria-current="page">Earn</span>
+</nav>
+<span class="eyebrow">⚡ Active Earning Methods</span>
+<h1>Choose How You Want To Earn</h1>
+<p>Complete available activities below. Rewards are verified server-to-server and instantly reflected in your ledger.</p>
+</div>
+</section>
 
 <section class="section" id="earn-guest-notice" data-earn-guest hidden>
-<div class="container"><div class="cta-band reveal"><h2>Sign in to start earning</h2><p>Create a free account or log in to see your available tasks and claim real rewards.</p><div class="cta-actions"><a class="btn btn-primary" href="/signup.html">Sign Up</a><a class="btn btn-secondary" href="/login.html">Log In</a></div></div></div>
+<div class="container">
+<div class="cta-band reveal">
+<h2>Sign In To Start Earning</h2>
+<p>Create a free account or log in to track streaks, claim daily faucet drops, and withdraw verified earnings.</p>
+<div class="cta-actions">
+<a class="btn btn-primary btn-lg" href="/signup.html">Create Free Account</a>
+<a class="btn btn-secondary btn-lg" href="/login.html">Sign In</a>
+</div>
+</div>
+</div>
 </section>
 
 <section class="ad-slot">
@@ -23,74 +43,146 @@
 <section class="section">
 <div class="container earn-layout">
 <aside class="earn-sidebar">
-<p class="earn-sidebar-title">Earning Methods</p>
+<p class="earn-sidebar-title">Categories</p>
 <nav aria-label="Earning methods">
-<a href="#ptc">PTC Ads</a>
-<a href="#shortlinks">Shortlinks</a>
-<a href="#offerwall">Offerwall</a>
-<a href="#games">Games</a>
-<a href="#faucet">Faucet</a>
-<a href="#video-ads">Video Ads</a>
-<a href="#daily-checkin">Daily Check-in</a>
-<a href="#free-spin">Free Spin</a>
+<a href="#daily-checkin"><span>🎁</span> Daily Check-in</a>
+<a href="#faucet"><span>💧</span> Rolling Faucet</a>
+<a href="#ptc"><span>🎯</span> PTC Ads</a>
+<a href="#shortlinks"><span>🔗</span> Shortlinks</a>
+<a href="#offerwall"><span>📋</span> Offerwall</a>
+<a href="#video-ads"><span>🎬</span> Video Ads</a>
+<a href="#games"><span>🎮</span> Games</a>
+<a href="#free-spin"><span>🎡</span> Free Spin</a>
 </nav>
 </aside>
 
 <div class="earn-content">
 
-<div class="earn-card earn-card--gold reveal" id="ptc">
-<div class="earn-card-head"><span class="feature-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4.2"/><circle cx="12" cy="12" r="1" fill="currentColor" stroke="none"/></svg></span><div><h2>PTC Ads <span class="badge-status">Coming Soon</span></h2><p>Watch available advertisements and earn according to the platform's current reward rules.</p></div></div>
-<div class="earn-card-body">
-<button class="btn btn-secondary" type="button" disabled>Start Earning</button>
+<!-- Daily Check-in (Live) -->
+<div class="earn-card earn-card--green reveal" id="daily-checkin">
+<div class="earn-card-head">
+<span class="feature-icon" aria-hidden="true">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><path d="m9 16 2 2 4-4"/></svg>
+</span>
+<div>
+<h2>Daily Check-in <span class="badge-status badge-status--live">Live</span></h2>
+<p>Log in once every 24 hours to claim a streak bonus.</p>
+</div>
+</div>
+<div class="earn-card-body" data-daily-root>
+<p class="text-muted" data-daily-status>Loading status…</p>
+<button class="btn btn-primary" type="button" data-daily-claim hidden>Claim Daily Bonus</button>
 </div>
 </div>
 
-<div class="earn-card earn-card--teal reveal" id="shortlinks">
-<div class="earn-card-head"><span class="feature-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M10 14a4 4 0 0 0 5.66 0l2-2a4 4 0 0 0-5.66-5.66l-1 1"/><path d="M14 10a4 4 0 0 0-5.66 0l-2 2a4 4 0 0 0 5.66 5.66l1-1"/></svg></span><div><h2>Shortlinks <span class="badge-status">Coming Soon</span></h2><p>Complete available shortlink visits and continue to the destination page.</p></div></div>
+<!-- Faucet (Live) -->
+<div class="earn-card earn-card--teal reveal" id="faucet">
+<div class="earn-card-head">
+<span class="feature-icon" aria-hidden="true">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+</span>
+<div>
+<h2>Rolling Faucet <span class="badge-status badge-status--live">Live</span></h2>
+<p>Claim free recurring tokens on a rolling timer throughout the day.</p>
+</div>
+</div>
+<div class="earn-card-body" data-faucet-root>
+<p class="text-muted" data-faucet-status>Loading status…</p>
+<button class="btn btn-primary" type="button" data-faucet-claim hidden>Claim Faucet Reward</button>
+</div>
+</div>
+
+<!-- PTC Ads -->
+<div class="earn-card earn-card--gold reveal" id="ptc">
+<div class="earn-card-head">
+<span class="feature-icon" aria-hidden="true">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="1" fill="currentColor" stroke="none"/></svg>
+</span>
+<div>
+<h2>PTC Ads <span class="badge-status">Coming Soon</span></h2>
+<p>View sponsored websites for a fixed timer and earn verified rewards.</p>
+</div>
+</div>
+<div class="earn-card-body">
+<button class="btn btn-secondary" type="button" disabled>Open PTC Ads</button>
+</div>
+</div>
+
+<!-- Shortlinks -->
+<div class="earn-card earn-card--blue reveal" id="shortlinks">
+<div class="earn-card-head">
+<span class="feature-icon" aria-hidden="true">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+</span>
+<div>
+<h2>Shortlinks <span class="badge-status">Coming Soon</span></h2>
+<p>Complete link challenges and captcha verifications for quick rewards.</p>
+</div>
+</div>
 <div class="earn-card-body">
 <button class="btn btn-secondary" type="button" disabled>Open Shortlinks</button>
 </div>
 </div>
 
+<!-- Offerwall -->
 <div class="earn-card earn-card--purple reveal" id="offerwall">
-<div class="earn-card-head"><span class="feature-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg></span><div><h2>Offerwall <span class="badge-status">Coming Soon</span></h2><p>Complete available offers and tasks from supported providers.</p></div></div>
+<div class="earn-card-head">
+<span class="feature-icon" aria-hidden="true">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="12" y2="14"/></svg>
+</span>
+<div>
+<h2>Offerwall <span class="badge-status">Coming Soon</span></h2>
+<p>Complete high-paying surveys, tasks, and partner offers.</p>
+</div>
+</div>
 <div class="earn-card-body">
 <button class="btn btn-secondary" type="button" disabled>Open Offerwall</button>
 </div>
 </div>
 
-<div class="earn-card earn-card--blue reveal" id="games">
-<div class="earn-card-head"><span class="feature-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="9" rx="4"/><path d="M8 11v3M6.5 12.5h3"/><circle cx="16" cy="11.5" r="1" fill="currentColor" stroke="none"/><circle cx="18" cy="13.5" r="1" fill="currentColor" stroke="none"/></svg></span><div><h2>Games <span class="badge-status">Coming Soon</span></h2><p>Play and complete available game offers from our supported partner.</p></div></div>
-<div class="earn-card-body">
-<button class="btn btn-secondary" type="button" disabled>Open Games</button>
-</div>
-</div>
-
-<div class="earn-card earn-card--green reveal" id="faucet">
-<div class="earn-card-head"><span class="feature-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c3.5 4.2 6 7.6 6 10.5A6 6 0 0 1 6 13.5C6 10.6 8.5 7.2 12 3z"/></svg></span><div><h2>Faucet</h2><p>Claim a small free reward on a rolling schedule.</p></div></div>
-<div class="earn-card-body" data-faucet-root>
-<p class="text-muted" data-faucet-status>Loading…</p>
-<button class="btn btn-primary" type="button" data-faucet-claim hidden>Claim Faucet</button>
-</div>
-</div>
-
+<!-- Video Ads -->
 <div class="earn-card earn-card--red reveal" id="video-ads">
-<div class="earn-card-head"><span class="feature-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M10 9l5 3-5 3V9z" fill="currentColor" stroke="none"/></svg></span><div><h2>Video Ads <span class="badge-status">Coming Soon</span></h2><p>Watch eligible video advertisements.</p></div></div>
+<div class="earn-card-head">
+<span class="feature-icon" aria-hidden="true">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+</span>
+<div>
+<h2>Video Ads <span class="badge-status">Coming Soon</span></h2>
+<p>Watch short video advertisements to completion for instant credits.</p>
+</div>
+</div>
 <div class="earn-card-body">
 <button class="btn btn-secondary" type="button" disabled>Watch Video</button>
 </div>
 </div>
 
-<div class="earn-card earn-card--green reveal" id="daily-checkin">
-<div class="earn-card-head"><span class="feature-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M8 3v4M16 3v4"/><path d="M9 14l2 2 4-4"/></svg></span><div><h2>Daily Check-in</h2><p>Claim the available daily check-in bonus.</p></div></div>
-<div class="earn-card-body" data-daily-root>
-<p class="text-muted" data-daily-status>Loading…</p>
-<button class="btn btn-primary" type="button" data-daily-claim hidden>Claim Daily Bonus</button>
+<!-- Games -->
+<div class="earn-card earn-card--blue reveal" id="games">
+<div class="earn-card-head">
+<span class="feature-icon" aria-hidden="true">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M6 12h4m-2-2v4"/><circle cx="15" cy="11" r="1" fill="currentColor"/><circle cx="18" cy="13" r="1" fill="currentColor"/></svg>
+</span>
+<div>
+<h2>Games <span class="badge-status">Coming Soon</span></h2>
+<p>Play web and mobile game tasks to unlock milestone rewards.</p>
+</div>
+</div>
+<div class="earn-card-body">
+<button class="btn btn-secondary" type="button" disabled>Play Games</button>
 </div>
 </div>
 
+<!-- Free Spin -->
 <div class="earn-card earn-card--pink reveal" id="free-spin">
-<div class="earn-card-head"><span class="feature-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 0 1 13.66-5.66M20 12a8 8 0 0 1-13.66 5.66"/><path d="M18 3v4h-4M6 21v-4h4"/></svg></span><div><h2>Free Spin <span class="badge-status">Coming Soon</span></h2><p>Use your available free spin and receive the applicable reward.</p></div></div>
+<div class="earn-card-head">
+<span class="feature-icon" aria-hidden="true">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><line x1="12" y1="3" x2="12" y2="7"/><line x1="12" y1="17" x2="12" y2="21"/><line x1="3" y1="12" x2="7" y2="12"/><line x1="17" y1="12" x2="21" y2="12"/></svg>
+</span>
+<div>
+<h2>Free Spin <span class="badge-status">Coming Soon</span></h2>
+<p>Spin the daily fortune wheel for a chance at jackpot reward bonuses.</p>
+</div>
+</div>
 <div class="earn-card-body">
 <button class="btn btn-secondary" type="button" disabled>Spin Now</button>
 </div>

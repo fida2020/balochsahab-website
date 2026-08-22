@@ -298,6 +298,8 @@
       if (guestInterstitialStatus) { guestInterstitialStatus.innerHTML = 'Log in to view interstitial ads — <a href="/login.html">Log In</a>'; }
       var guestSpinStatus = document.querySelector("[data-spin-status]");
       if (guestSpinStatus) { guestSpinStatus.innerHTML = 'Log in to spin — <a href="/login.html">Log In</a>'; }
+      var guestVipStatus = document.querySelector("[data-vip-status]");
+      if (guestVipStatus) { guestVipStatus.innerHTML = 'Log in to check your VIP progress — <a href="/login.html">Log In</a>'; }
       return;
     }
 
@@ -441,6 +443,33 @@
       });
 
       api("/spin/status").then(renderStatus).catch(function (err) { spinStatusEl.textContent = err.message || "Could not load spin status"; });
+    }
+
+    // VIP — free milestone tier computed from lifetime earnings; no
+    // separate claim, just a status/progress view against wallet summary.
+    var vipRoot = document.querySelector("[data-vip-root]");
+    if (vipRoot) {
+      var vipStatusEl = document.querySelector("[data-vip-status]");
+      var vipProgressEl = document.querySelector("[data-vip-progress]");
+      var vipProgressFill = document.querySelector("[data-vip-progress-fill]");
+      var vipProgressLabel = document.querySelector("[data-vip-progress-label]");
+      api("/wallet/summary").then(function (summary) {
+        if (!summary.vipThresholdMinor) {
+          vipStatusEl.textContent = "VIP is not currently available.";
+          return;
+        }
+        if (summary.isVip) {
+          vipStatusEl.textContent = "You're VIP! Enjoy " + summary.vipMultiplier + "x rewards and a lower minimum withdrawal.";
+          return;
+        }
+        var pct = Math.min(100, (summary.lifetimeEarnedMinor / summary.vipThresholdMinor) * 100);
+        vipStatusEl.textContent = "Keep earning to unlock VIP.";
+        vipProgressEl.hidden = false;
+        vipProgressFill.style.width = pct + "%";
+        vipProgressLabel.textContent = formatMinor(summary.lifetimeEarnedMinor) + " of " + formatMinor(summary.vipThresholdMinor) + " lifetime earned";
+      }).catch(function (err) {
+        vipStatusEl.textContent = err.message || "Could not load VIP status";
+      });
     }
 
     // Task lists (AdsLab PTC/Shortlink/Offer/Telegram/Review) — each

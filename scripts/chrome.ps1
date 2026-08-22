@@ -18,7 +18,7 @@ if (Test-Path $critPath) {
 
 function Head($title,$desc,$canon,[string]$extra="") {
 $og = "https://balochsahab.com$canon"
-$csp = "default-src 'self'; base-uri 'self'; object-src 'none'; img-src 'self' data: https:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; script-src 'self' 'unsafe-inline' https://accounts.google.com https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://www.googletagservices.com https://ep1.adtrafficquality.google https://ep2.adtrafficquality.google https://*.profitableratecpmnetwork.com https://*.highrevenueformat.com https://adslab.me https://serve.adslab.me https://3nbf4.com https://al5sm.com https://5gvci.com; worker-src 'self' https://3nbf4.com; frame-src https://accounts.google.com https://googleads.g.doubleclick.net https://tpc.googlesyndication.com https://ep1.adtrafficquality.google https://ep2.adtrafficquality.google https://*.profitableratecpmnetwork.com https://*.highrevenueformat.com https://adslab.me; connect-src 'self' https:; form-action 'self' mailto: https:; upgrade-insecure-requests"
+$csp = "default-src 'self'; base-uri 'self'; object-src 'none'; img-src 'self' data: https:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; script-src 'self' 'unsafe-inline' https://accounts.google.com https://*.profitableratecpmnetwork.com https://adslab.me https://serve.adslab.me https://3nbf4.com https://al5sm.com https://5gvci.com; worker-src 'self' https://3nbf4.com; frame-src https://accounts.google.com https://*.profitableratecpmnetwork.com https://adslab.me https://timewall.io; connect-src 'self' https:; form-action 'self' mailto: https:; upgrade-insecure-requests"
 @"
 <!DOCTYPE html>
 <html lang="en">
@@ -69,8 +69,6 @@ $csp = "default-src 'self'; base-uri 'self'; object-src 'none'; img-src 'self' d
 <noscript><link rel="stylesheet" href="/assets/css/main.min.css?v=$buildVersion"></noscript>
 <script src="/assets/js/app-config.js?v=$buildVersion"></script>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6831828383879093" crossorigin="anonymous"></script>
-<script>(adsbygoogle = window.adsbygoogle || []).push({google_ad_client: "ca-pub-6831828383879093", enable_page_level_ads: true, overlays: {bottom: true}});</script>
 <script>
 (function(){
   var uid = "guest";
@@ -203,7 +201,11 @@ $extra
 "@
 }
 
-function Foot {
+function Foot([bool]$IncludeAdsterra = $true) {
+$adsterraScript = ""
+if ($IncludeAdsterra) {
+  $adsterraScript = '<script src="https://pl30954370.profitableratecpmnetwork.com/2e/05/1e/2e051e66dc3a07ce784ca1255ee7069f.js"></script>' + "`n"
+}
 @"
 </main>
 </div>
@@ -276,18 +278,16 @@ function Foot {
 </footer>
 <script src="/assets/js/main.min.js?v=$buildVersion" defer></script>
 <script src="/assets/js/earn-app.js?v=$buildVersion" defer></script>
-<script src="https://pl30954370.profitableratecpmnetwork.com/2e/05/1e/2e051e66dc3a07ce784ca1255ee7069f.js"></script>
-<script src="https://pl30954373.profitableratecpmnetwork.com/6a/65/06/6a650601f495d4f149449001a675f762.js"></script>
-</body>
+$adsterraScript</body>
 </html>
 "@
 }
 
 function Write-SitePage {
-  param([string]$Rel,[string]$Title,[string]$Desc,[string]$Canon,[string]$Body,[string]$Extra="")
+  param([string]$Rel,[string]$Title,[string]$Desc,[string]$Canon,[string]$Body,[string]$Extra="",[bool]$IncludeAdsterra=$true)
   $full = Join-Path $root $Rel
   $dir = Split-Path $full -Parent
   if ($dir -and !(Test-Path $dir)) { New-Item -ItemType Directory -Force -Path $dir | Out-Null }
-  [IO.File]::WriteAllText($full, ((Head $Title $Desc $Canon $Extra) + $Body + (Foot)), [Text.UTF8Encoding]::new($false))
+  [IO.File]::WriteAllText($full, ((Head $Title $Desc $Canon $Extra) + $Body + (Foot $IncludeAdsterra)), [Text.UTF8Encoding]::new($false))
   Write-Output "OK $Rel"
 }

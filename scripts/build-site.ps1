@@ -4,11 +4,11 @@ Set-Location $root
 . ".\scripts\chrome.ps1"
 $bodies = Join-Path $root "scripts\bodies"
 
-function Build-FromBody($rel, $title, $desc, $canon, $bodyFile, $extra = "") {
+function Build-FromBody($rel, $title, $desc, $canon, $bodyFile, $extra = "", [bool]$includeAdsterra = $true) {
   $path = Join-Path $bodies $bodyFile
   if (!(Test-Path $path)) { throw "Missing body: $bodyFile" }
   $body = [IO.File]::ReadAllText($path, [Text.Encoding]::UTF8)
-  Write-SitePage $rel $title $desc $canon $body $extra
+  Write-SitePage $rel $title $desc $canon $body $extra $includeAdsterra
 }
 
 $schema = [IO.File]::ReadAllText((Join-Path $bodies "schema.html"), [Text.Encoding]::UTF8)
@@ -21,7 +21,7 @@ Build-FromBody "spin-win.html" "Spin & Win | Baloch Sahab" "Spin the daily fortu
 Build-FromBody "offerwall.html" "Offer Wall | Baloch Sahab" "Complete high-paying offers and partner campaigns on Baloch Sahab." "/offerwall.html" "offerwall.html"
 Build-FromBody "shortlinks.html" "Short Links | Baloch Sahab" "Complete shortlink tasks for quick rewards on Baloch Sahab." "/shortlinks.html" "shortlinks.html"
 Build-FromBody "telegram-views.html" "Telegram Views | Baloch Sahab" "Join partner Telegram channels and groups for rewards on Baloch Sahab." "/telegram-views.html" "telegram-views.html"
-Build-FromBody "ptc.html" "PTC | Baloch Sahab" "View sponsored websites for a fixed timer and earn verified rewards on Baloch Sahab." "/ptc.html" "ptc.html"
+Build-FromBody "ptc.html" "PTC | Baloch Sahab" "View sponsored websites for a fixed timer and earn verified rewards on Baloch Sahab." "/ptc.html" "ptc.html" "" $false
 Build-FromBody "watch-ads.html" "Watch Ads | Baloch Sahab" "Watch sponsored ad placements for rewards on Baloch Sahab." "/watch-ads.html" "watch-ads.html"
 Build-FromBody "video-ads.html" "Video Ads | Baloch Sahab" "Watch short video ads to completion for rewards on Baloch Sahab." "/video-ads.html" "video-ads.html"
 Build-FromBody "interstitial-ads.html" "Interstitial Ads | Baloch Sahab" "View full-screen interstitial ads for rewards on Baloch Sahab." "/interstitial-ads.html" "interstitial-ads.html"

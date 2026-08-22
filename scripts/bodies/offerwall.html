@@ -26,10 +26,55 @@
 
 <section class="section">
 <div class="container">
+<div class="offerwall-tabs" role="tablist" aria-label="Offer sources" style="display:flex;gap:0.6rem;margin-bottom:1.25rem;flex-wrap:wrap">
+<button class="btn btn-primary" type="button" role="tab" aria-selected="true" data-offerwall-tab="adslab">AdsLab Offers</button>
+<button class="btn btn-secondary" type="button" role="tab" aria-selected="false" data-offerwall-tab="timewall">TimeWall</button>
+</div>
+<div data-offerwall-panel="adslab">
 <div class="earn-card-body" data-tasklist-root data-category="offer">
 <p class="text-muted" data-tasklist-status>Loading…</p>
 <button class="btn btn-primary" type="button" data-tasklist-load hidden>View Offers</button>
 <div class="task-list" data-tasklist-items hidden></div>
 </div>
 </div>
+<div data-offerwall-panel="timewall" hidden>
+<iframe data-timewall-frame title="TimeWall Offers" loading="lazy" style="width:100%;min-height:75vh;border:0;border-radius:16px;background:var(--surface)"></iframe>
+</div>
+</div>
 </section>
+<script>
+(function () {
+  var tabs = document.querySelectorAll("[data-offerwall-tab]");
+  var panels = {
+    adslab: document.querySelector('[data-offerwall-panel="adslab"]'),
+    timewall: document.querySelector('[data-offerwall-panel="timewall"]')
+  };
+  var frame = document.querySelector("[data-timewall-frame]");
+  var frameLoaded = false;
+  function activate(name) {
+    for (var i = 0; i < tabs.length; i++) {
+      var t = tabs[i];
+      var isActive = t.getAttribute("data-offerwall-tab") === name;
+      t.setAttribute("aria-selected", String(isActive));
+      t.className = isActive ? "btn btn-primary" : "btn btn-secondary";
+    }
+    panels.adslab.hidden = name !== "adslab";
+    panels.timewall.hidden = name !== "timewall";
+    if (name === "timewall" && !frameLoaded) {
+      var uid = "guest";
+      try {
+        var raw = window.localStorage.getItem("bs_session");
+        var s = raw ? JSON.parse(raw) : null;
+        if (s && s.user && s.user.id) uid = s.user.id;
+      } catch (e) {}
+      frame.src = "https://timewall.io/offers?pub=c2f8ae2c8c1dcf17&user_id=" + encodeURIComponent(uid);
+      frameLoaded = true;
+    }
+  }
+  for (var j = 0; j < tabs.length; j++) {
+    tabs[j].addEventListener("click", function (e) {
+      activate(e.currentTarget.getAttribute("data-offerwall-tab"));
+    });
+  }
+})();
+</script>

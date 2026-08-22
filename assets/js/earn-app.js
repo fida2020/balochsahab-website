@@ -288,8 +288,10 @@
       var guestFaucetBtn = document.querySelector("[data-faucet-claim]");
       if (guestFaucetStatus) { guestFaucetStatus.innerHTML = 'Log in to claim the faucet reward — <a href="/login.html">Log In</a>'; }
       if (guestFaucetBtn) guestFaucetBtn.hidden = true;
-      var guestOfferwallStatus = document.querySelector("[data-offerwall-status]");
-      if (guestOfferwallStatus) { guestOfferwallStatus.innerHTML = 'Log in to open the offerwall — <a href="/login.html">Log In</a>'; }
+      var guestTaskStatuses = document.querySelectorAll("[data-tasklist-status]");
+      for (var g = 0; g < guestTaskStatuses.length; g++) {
+        guestTaskStatuses[g].innerHTML = 'Log in to view available tasks — <a href="/login.html">Log In</a>';
+      }
       var guestVideoStatus = document.querySelector("[data-video-status]");
       if (guestVideoStatus) { guestVideoStatus.innerHTML = 'Log in to watch video ads — <a href="/login.html">Log In</a>'; }
       return;
@@ -355,33 +357,74 @@
       api("/faucet/status").then(renderFaucet).catch(function (err) { faucetStatusEl.textContent = err.message || "Could not load faucet status"; });
     }
 
-    // Offerwall (AdsLab) — display/trigger only. Reward crediting happens
-    // via AdsLab's server-to-server postback straight to the backend
-    // (/webhooks/adslab/tasks), independent of this page — this code never
-    // credits a balance itself.
-    var offerwallRoot = document.querySelector("[data-offerwall-root]");
-    if (offerwallRoot) {
-      var offerwallStatusEl = document.querySelector("[data-offerwall-status]");
-      var offerwallOpenBtn = document.querySelector("[data-offerwall-open]");
-      var offerwallFrame = document.querySelector("[data-offerwall-frame]");
-      offerwallStatusEl.textContent = "Tap below to open the offerwall.";
-      offerwallOpenBtn.hidden = false;
-      offerwallOpenBtn.addEventListener("click", function () {
-        offerwallOpenBtn.disabled = true;
-        var session = getSession();
-        var uid = (session && session.user && session.user.id) || "guest";
-        function reveal() {
-          offerwallFrame.src = "https://adslab.me/task-49MFRdHJlcYn/" + encodeURIComponent(uid);
-          offerwallFrame.hidden = false;
-          offerwallOpenBtn.hidden = true;
-          offerwallStatusEl.textContent = "";
-        }
-        if (window.showint_adslab) {
-          window.showint_adslab().then(reveal).catch(reveal);
-        } else {
-          reveal();
-        }
-      });
+    // Task lists (AdsLab PTC/Shortlink/Offer/Telegram/Review) — each
+    // category is its own independent card; clicking its button loads that
+    // category's list inline on this page (no popup, no nested feature).
+    // Display/trigger only — reward crediting happens via AdsLab's
+    // server-to-server postback straight to the backend
+    // (/webhooks/adslab/tasks), independent of this page.
+    var taskListRoots = document.querySelectorAll("[data-tasklist-root]");
+    for (var lr = 0; lr < taskListRoots.length; lr++) {
+      (function (root) {
+        var category = root.getAttribute("data-category");
+        var statusEl = root.querySelector("[data-tasklist-status]");
+        var loadBtn = root.querySelector("[data-tasklist-load]");
+        var listEl = root.querySelector("[data-tasklist-items]");
+        statusEl.textContent = "Tap below to view available tasks.";
+        loadBtn.hidden = false;
+        loadBtn.addEventListener("click", function () {
+          loadBtn.disabled = true;
+          statusEl.textContent = "Loading…";
+          api("/tasks/adslab/" + category).then(function (result) {
+            var tasks = (result && result.tasks) || [];
+            loadBtn.hidden = true;
+            if (!tasks.length) {
+              statusEl.textContent = "No tasks available right now — check back later.";
+              return;
+            }
+            statusEl.textContent = "";
+            listEl.innerHTML = "";
+            tasks.forEach(function (task) {
+              var item = document.createElement("a");
+              item.className = "task-item";
+              item.href = task.url;
+              item.target = "_blank";
+              item.rel = "noopener noreferrer nofollow";
+
+              var img = document.createElement("img");
+              img.className = "task-item-icon";
+              img.src = task.image || "/assets/img/favicon-32x32.png";
+              img.alt = "";
+              img.loading = "lazy";
+
+              var body = document.createElement("div");
+              body.className = "task-item-body";
+              var title = document.createElement("p");
+              title.className = "task-item-title";
+              title.textContent = task.title;
+              var desc = document.createElement("p");
+              desc.className = "task-item-desc";
+              desc.textContent = task.description;
+              body.appendChild(title);
+              body.appendChild(desc);
+
+              var reward = document.createElement("span");
+              reward.className = "task-item-reward";
+              reward.textContent = "$" + Number(task.rewardUsd || 0).toFixed(4);
+
+              item.appendChild(img);
+              item.appendChild(body);
+              item.appendChild(reward);
+              listEl.appendChild(item);
+            });
+            listEl.hidden = false;
+          }).catch(function (err) {
+            loadBtn.disabled = false;
+            loadBtn.hidden = false;
+            statusEl.textContent = err.message || "Could not load tasks";
+          });
+        });
+      })(taskListRoots[lr]);
     }
 
     // Video Ads (AdsLab interstitial/rewarded) — display/trigger only.

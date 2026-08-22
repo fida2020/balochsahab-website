@@ -638,6 +638,23 @@ a:hover { color: #fde047; }
   border: 1px dashed var(--border); border-radius: var(--radius-sm); background: rgba(255, 255, 255, 0.01);
 }
 
+/* Task Lists (AdsLab PTC/Shortlink/Offer/Telegram/Review) */
+.task-list { display: grid; gap: 0.6rem; margin-top: 1rem; }
+.task-item {
+  display: flex; align-items: center; gap: 0.85rem; padding: 0.85rem 1rem;
+  border-radius: var(--radius-sm); background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border); transition: all 0.2s var(--ease);
+}
+.task-item:hover { background: rgba(255, 255, 255, 0.05); border-color: rgba(255, 255, 255, 0.15); }
+.task-item-icon { width: 42px; height: 42px; border-radius: 10px; object-fit: cover; flex-shrink: 0; background: rgba(255, 255, 255, 0.05); }
+.task-item-body { flex: 1; min-width: 0; }
+.task-item-title { font-weight: 700; font-size: 0.92rem; margin: 0 0 0.15rem; color: var(--text); }
+.task-item-desc {
+  font-size: 0.82rem; color: var(--muted); margin: 0; overflow: hidden;
+  text-overflow: ellipsis; white-space: nowrap;
+}
+.task-item-reward { font-weight: 800; color: var(--brand-bright); font-size: 0.92rem; flex-shrink: 0; white-space: nowrap; }
+
 /* FAQ Accordion */
 .faq-list { display: grid; gap: 0.85rem; max-width: 800px; margin-inline: auto; }
 .faq-item {

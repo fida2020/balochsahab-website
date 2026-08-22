@@ -59,6 +59,8 @@
 <a href="#ptc"><span>🎯</span> PTC Ads</a>
 <a href="#shortlinks"><span>🔗</span> Shortlinks</a>
 <a href="#offerwall"><span>📋</span> Offerwall</a>
+<a href="#telegram"><span>📨</span> Telegram</a>
+<a href="#reviews"><span>⭐</span> Reviews</a>
 <a href="#video-ads"><span>🎬</span> Video Ads</a>
 <a href="#games"><span>🎮</span> Games</a>
 <a href="#free-spin"><span>🎡</span> Free Spin</a>
@@ -108,12 +110,14 @@
 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="1" fill="currentColor" stroke="none"/></svg>
 </span>
 <div>
-<h2>PTC Ads <span class="badge-status">Coming Soon</span></h2>
+<h2>PTC Ads <span class="badge-status badge-status--live">Live</span></h2>
 <p>View sponsored websites for a fixed timer and earn verified rewards.</p>
 </div>
 </div>
-<div class="earn-card-body">
-<button class="btn btn-secondary" type="button" disabled>Open PTC Ads</button>
+<div class="earn-card-body" data-tasklist-root data-category="ptc">
+<p class="text-muted" data-tasklist-status>Loading…</p>
+<button class="btn btn-primary" type="button" data-tasklist-load hidden>View Tasks</button>
+<div class="task-list" data-tasklist-items hidden></div>
 </div>
 </div>
 
@@ -124,12 +128,14 @@
 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
 </span>
 <div>
-<h2>Shortlinks <span class="badge-status">Coming Soon</span></h2>
+<h2>Shortlinks <span class="badge-status badge-status--live">Live</span></h2>
 <p>Complete link challenges and captcha verifications for quick rewards.</p>
 </div>
 </div>
-<div class="earn-card-body">
-<button class="btn btn-secondary" type="button" disabled>Open Shortlinks</button>
+<div class="earn-card-body" data-tasklist-root data-category="shortlink">
+<p class="text-muted" data-tasklist-status>Loading…</p>
+<button class="btn btn-primary" type="button" data-tasklist-load hidden>View Shortlinks</button>
+<div class="task-list" data-tasklist-items hidden></div>
 </div>
 </div>
 
@@ -141,13 +147,49 @@
 </span>
 <div>
 <h2>Offerwall <span class="badge-status badge-status--live">Live</span></h2>
-<p>Complete high-paying surveys, tasks, and partner offers.</p>
+<p>Complete high-paying offers and partner campaigns.</p>
 </div>
 </div>
-<div class="earn-card-body" data-offerwall-root>
-<p class="text-muted" data-offerwall-status>Loading…</p>
-<button class="btn btn-primary" type="button" data-offerwall-open hidden>Open Offerwall</button>
-<iframe data-offerwall-frame width="100%" height="800" style="border:none;border-radius:12px;box-shadow:0 4px 6px -1px rgb(0 0 0 / 0.1);display:block;margin-top:1rem" hidden></iframe>
+<div class="earn-card-body" data-tasklist-root data-category="offer">
+<p class="text-muted" data-tasklist-status>Loading…</p>
+<button class="btn btn-primary" type="button" data-tasklist-load hidden>View Offers</button>
+<div class="task-list" data-tasklist-items hidden></div>
+</div>
+</div>
+
+<!-- Telegram -->
+<div class="earn-card earn-card--blue reveal" id="telegram">
+<div class="earn-card-head">
+<span class="feature-icon" aria-hidden="true">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+</span>
+<div>
+<h2>Telegram <span class="badge-status badge-status--live">Live</span></h2>
+<p>Join partner Telegram channels and groups for quick rewards.</p>
+</div>
+</div>
+<div class="earn-card-body" data-tasklist-root data-category="telegram">
+<p class="text-muted" data-tasklist-status>Loading…</p>
+<button class="btn btn-primary" type="button" data-tasklist-load hidden>View Telegram Tasks</button>
+<div class="task-list" data-tasklist-items hidden></div>
+</div>
+</div>
+
+<!-- Reviews -->
+<div class="earn-card earn-card--gold reveal" id="reviews">
+<div class="earn-card-head">
+<span class="feature-icon" aria-hidden="true">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+</span>
+<div>
+<h2>Reviews <span class="badge-status badge-status--live">Live</span></h2>
+<p>Write verified reviews for partner products and services.</p>
+</div>
+</div>
+<div class="earn-card-body" data-tasklist-root data-category="review">
+<p class="text-muted" data-tasklist-status>Loading…</p>
+<button class="btn btn-primary" type="button" data-tasklist-load hidden>View Reviews</button>
+<div class="task-list" data-tasklist-items hidden></div>
 </div>
 </div>
 

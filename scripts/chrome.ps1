@@ -1,4 +1,4 @@
-$ErrorActionPreference = "Stop"
+﻿$ErrorActionPreference = "Stop"
 $root = Split-Path -Parent $PSScriptRoot
 # Cache-busting query string appended to every static asset URL below —
 # changes on every build, so Cloudflare/browsers always fetch the new file
@@ -121,14 +121,27 @@ $extra
 <button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-label="Open menu"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg></button>
 </div>
 </div>
+<div class="nav-overlay" data-nav-overlay></div>
 <div class="mobile-panel" data-mobile-nav>
+<div class="mobile-panel-head">
+<a class="brand" href="/index.html">
+<picture>
+<source type="image/webp" srcset="/assets/img/logo-128.webp 128w, /assets/img/logo-256.webp 256w" sizes="36px">
+<img src="/assets/img/logo-256.png" srcset="/assets/img/logo-128.png 128w, /assets/img/logo-256.png 256w" sizes="36px" width="36" height="36" alt="Baloch Sahab" decoding="async">
+</picture>
+<span class="brand-text">Baloch Sahab</span>
+</a>
+<button class="mobile-panel-close" type="button" data-mobile-nav-close aria-label="Close menu"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+</div>
+<nav class="mobile-panel-links" aria-label="Primary mobile">
 <a href="/index.html"><span>🏠 Home</span></a>
-<a href="/earn.html"><span>⚡ Earn Rewards</span></a>
-<a href="/withdraw.html"><span>💳 Withdraw Payouts</span></a>
-<a href="/referral.html"><span>👥 Referral Program</span></a>
+<a href="/earn.html"><span>⚡ Earn</span></a>
+<a href="/withdraw.html"><span>💳 Withdraw</span></a>
+<a href="/referral.html"><span>👥 Referral</span></a>
+<a href="/about.html"><span>ℹ️ About</span></a>
 <a href="/faq.html"><span>❓ FAQ</span></a>
-<a href="/about.html"><span>ℹ️ About Us</span></a>
-<a href="/contact.html"><span>💬 Contact Support</span></a>
+<a href="/contact.html"><span>💬 Contact</span></a>
+</nav>
 <span class="auth-slot auth-guest" data-auth="guest">
 <a class="btn btn-secondary" href="/login.html">Log In</a>
 <a class="btn btn-primary" href="/signup.html">Create Free Account</a>

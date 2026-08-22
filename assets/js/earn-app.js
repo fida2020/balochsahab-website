@@ -355,8 +355,10 @@
       api("/faucet/status").then(renderFaucet).catch(function (err) { faucetStatusEl.textContent = err.message || "Could not load faucet status"; });
     }
 
-    // Offerwall (AdsLab) — display/trigger only; this site's backend has no
-    // AdsLab reward postback wired up yet, so no balance is credited here.
+    // Offerwall (AdsLab) — display/trigger only. Reward crediting happens
+    // via AdsLab's server-to-server postback straight to the backend
+    // (/webhooks/adslab/tasks), independent of this page — this code never
+    // credits a balance itself.
     var offerwallRoot = document.querySelector("[data-offerwall-root]");
     if (offerwallRoot) {
       var offerwallStatusEl = document.querySelector("[data-offerwall-status]");
@@ -382,9 +384,10 @@
       });
     }
 
-    // Video Ads (AdsLab rewarded) — display/trigger only; no reward is
-    // credited client-side since there's no verified server-to-server
-    // postback for this yet.
+    // Video Ads (AdsLab interstitial/rewarded) — display/trigger only.
+    // Reward crediting happens via AdsLab's server-to-server postback
+    // straight to the backend (/webhooks/adslab/interstitial,rewarded),
+    // independent of this page — this code never credits a balance itself.
     var videoRoot = document.querySelector("[data-video-root]");
     if (videoRoot) {
       var videoStatusEl = document.querySelector("[data-video-status]");

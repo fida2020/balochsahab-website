@@ -18,7 +18,7 @@ if (Test-Path $critPath) {
 
 function Head($title,$desc,$canon,[string]$extra="") {
 $og = "https://balochsahab.com$canon"
-$csp = "default-src 'self'; base-uri 'self'; object-src 'none'; img-src 'self' data: https:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; script-src 'self' 'unsafe-inline' https://accounts.google.com https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://www.googletagservices.com https://ep1.adtrafficquality.google https://ep2.adtrafficquality.google https://*.profitableratecpmnetwork.com https://*.highrevenueformat.com; frame-src https://accounts.google.com https://googleads.g.doubleclick.net https://tpc.googlesyndication.com https://ep1.adtrafficquality.google https://ep2.adtrafficquality.google https://*.profitableratecpmnetwork.com https://*.highrevenueformat.com; connect-src 'self' https:; form-action 'self' mailto: https:; upgrade-insecure-requests"
+$csp = "default-src 'self'; base-uri 'self'; object-src 'none'; img-src 'self' data: https:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; script-src 'self' 'unsafe-inline' https://accounts.google.com https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://www.googletagservices.com https://ep1.adtrafficquality.google https://ep2.adtrafficquality.google https://*.profitableratecpmnetwork.com https://*.highrevenueformat.com https://adslab.me https://serve.adslab.me; frame-src https://accounts.google.com https://googleads.g.doubleclick.net https://tpc.googlesyndication.com https://ep1.adtrafficquality.google https://ep2.adtrafficquality.google https://*.profitableratecpmnetwork.com https://*.highrevenueformat.com https://adslab.me; connect-src 'self' https:; form-action 'self' mailto: https:; upgrade-insecure-requests"
 @"
 <!DOCTYPE html>
 <html lang="en">
@@ -71,6 +71,20 @@ $csp = "default-src 'self'; base-uri 'self'; object-src 'none'; img-src 'self' d
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6831828383879093" crossorigin="anonymous"></script>
 <script>(adsbygoogle = window.adsbygoogle || []).push({google_ad_client: "ca-pub-6831828383879093", enable_page_level_ads: true, overlays: {bottom: true}});</script>
+<script>
+(function(){
+  var uid = "guest";
+  try {
+    var raw = window.localStorage.getItem("bs_session");
+    var s = raw ? JSON.parse(raw) : null;
+    if (s && s.user && s.user.id) uid = s.user.id;
+  } catch (e) {}
+  window.ADSLAB_INT = "int-RSTotzmgj6DW";
+  window.ADSLAB_REW = "rew-pN4hQddWvNya";
+  window.ADSLAB_USER = uid;
+})();
+</script>
+<script src="https://adslab.me/api/sdk.js" async></script>
 $extra
 </head>
 <body class="no-js">

@@ -286,6 +286,10 @@
       var guestFaucetBtn = document.querySelector("[data-faucet-claim]");
       if (guestFaucetStatus) { guestFaucetStatus.innerHTML = 'Log in to claim the faucet reward — <a href="/login.html">Log In</a>'; }
       if (guestFaucetBtn) guestFaucetBtn.hidden = true;
+      var guestOfferwallStatus = document.querySelector("[data-offerwall-status]");
+      if (guestOfferwallStatus) { guestOfferwallStatus.innerHTML = 'Log in to open the offerwall — <a href="/login.html">Log In</a>'; }
+      var guestVideoStatus = document.querySelector("[data-video-status]");
+      if (guestVideoStatus) { guestVideoStatus.innerHTML = 'Log in to watch video ads — <a href="/login.html">Log In</a>'; }
       return;
     }
 
@@ -347,6 +351,59 @@
         });
       });
       api("/faucet/status").then(renderFaucet).catch(function (err) { faucetStatusEl.textContent = err.message || "Could not load faucet status"; });
+    }
+
+    // Offerwall (AdsLab) — display/trigger only; this site's backend has no
+    // AdsLab reward postback wired up yet, so no balance is credited here.
+    var offerwallRoot = document.querySelector("[data-offerwall-root]");
+    if (offerwallRoot) {
+      var offerwallStatusEl = document.querySelector("[data-offerwall-status]");
+      var offerwallOpenBtn = document.querySelector("[data-offerwall-open]");
+      var offerwallFrame = document.querySelector("[data-offerwall-frame]");
+      offerwallStatusEl.textContent = "Tap below to open the offerwall.";
+      offerwallOpenBtn.hidden = false;
+      offerwallOpenBtn.addEventListener("click", function () {
+        offerwallOpenBtn.disabled = true;
+        var session = getSession();
+        var uid = (session && session.user && session.user.id) || "guest";
+        function reveal() {
+          offerwallFrame.src = "https://adslab.me/task-49MFRdHJlcYn/" + encodeURIComponent(uid);
+          offerwallFrame.hidden = false;
+          offerwallOpenBtn.hidden = true;
+          offerwallStatusEl.textContent = "";
+        }
+        if (window.showint_adslab) {
+          window.showint_adslab().then(reveal).catch(reveal);
+        } else {
+          reveal();
+        }
+      });
+    }
+
+    // Video Ads (AdsLab rewarded) — display/trigger only; no reward is
+    // credited client-side since there's no verified server-to-server
+    // postback for this yet.
+    var videoRoot = document.querySelector("[data-video-root]");
+    if (videoRoot) {
+      var videoStatusEl = document.querySelector("[data-video-status]");
+      var videoWatchBtn = document.querySelector("[data-video-watch]");
+      videoStatusEl.textContent = "Tap below to watch a video ad.";
+      videoWatchBtn.hidden = false;
+      videoWatchBtn.addEventListener("click", function () {
+        if (!window.showrew_adslab) {
+          videoStatusEl.textContent = "Video ads aren't available right now.";
+          return;
+        }
+        videoWatchBtn.disabled = true;
+        videoStatusEl.textContent = "Loading ad…";
+        window.showrew_adslab().then(function () {
+          videoStatusEl.textContent = "Ad watched — thanks for your support!";
+          videoWatchBtn.disabled = false;
+        }).catch(function () {
+          videoStatusEl.textContent = "No ad available right now — try again shortly.";
+          videoWatchBtn.disabled = false;
+        });
+      });
     }
   }
 

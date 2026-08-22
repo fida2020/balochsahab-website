@@ -40,6 +40,15 @@
 </div>
 </section>
 
+<section class="ad-slot">
+<div class="container">
+<span class="ad-slot-label">Advertisement</span>
+<div id="adslab-banner-unit-mrph4am1m"></div>
+<script>(window.adslab_banners = window.adslab_banners || []).push({id: "unit-mrph4am1m", container: "adslab-banner-unit-mrph4am1m"});</script>
+<script src="https://serve.adslab.me/api/banner/js" async></script>
+</div>
+</section>
+
 <section class="section">
 <div class="container earn-layout">
 <aside class="earn-sidebar">
@@ -131,12 +140,14 @@
 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="12" y2="14"/></svg>
 </span>
 <div>
-<h2>Offerwall <span class="badge-status">Coming Soon</span></h2>
+<h2>Offerwall <span class="badge-status badge-status--live">Live</span></h2>
 <p>Complete high-paying surveys, tasks, and partner offers.</p>
 </div>
 </div>
-<div class="earn-card-body">
-<button class="btn btn-secondary" type="button" disabled>Open Offerwall</button>
+<div class="earn-card-body" data-offerwall-root>
+<p class="text-muted" data-offerwall-status>Loading…</p>
+<button class="btn btn-primary" type="button" data-offerwall-open hidden>Open Offerwall</button>
+<iframe data-offerwall-frame width="100%" height="800" style="border:none;border-radius:12px;box-shadow:0 4px 6px -1px rgb(0 0 0 / 0.1);display:block;margin-top:1rem" hidden></iframe>
 </div>
 </div>
 
@@ -147,12 +158,13 @@
 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
 </span>
 <div>
-<h2>Video Ads <span class="badge-status">Coming Soon</span></h2>
-<p>Watch short video advertisements to completion for instant credits.</p>
+<h2>Video Ads <span class="badge-status badge-status--live">Live</span></h2>
+<p>Watch short video advertisements to completion.</p>
 </div>
 </div>
-<div class="earn-card-body">
-<button class="btn btn-secondary" type="button" disabled>Watch Video</button>
+<div class="earn-card-body" data-video-root>
+<p class="text-muted" data-video-status>Loading…</p>
+<button class="btn btn-primary" type="button" data-video-watch hidden>Watch Video</button>
 </div>
 </div>
 

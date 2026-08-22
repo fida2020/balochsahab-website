@@ -30,7 +30,7 @@ $csp = "default-src 'self'; base-uri 'self'; object-src 'none'; img-src 'self' d
 <meta name="description" content="$desc">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <meta name="author" content="Baloch Sahab">
-<meta name="theme-color" content="#0e1524">
+<meta name="theme-color" content="#0a0c10">
 <meta name="color-scheme" content="dark">
 <link rel="canonical" href="$og">
 <meta property="og:type" content="website">
@@ -55,7 +55,7 @@ $csp = "default-src 'self'; base-uri 'self'; object-src 'none'; img-src 'self' d
 <link rel="icon" href="/assets/img/favicon-16x16.png" sizes="16x16" type="image/png">
 <link rel="icon" href="/assets/img/favicon-32x32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
-<link rel="mask-icon" href="/assets/img/mask-icon.svg" color="#3b6fd6">
+<link rel="mask-icon" href="/assets/img/mask-icon.svg" color="#eab308">
 <link rel="manifest" href="/site.webmanifest">
 <link rel="preload" as="image" href="/assets/img/logo-256.webp" type="image/webp" fetchpriority="high">
 <link rel="preconnect" href="https://fonts.googleapis.com">

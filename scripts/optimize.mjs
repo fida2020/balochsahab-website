@@ -39,23 +39,21 @@ async function toWebp(srcName, outName, width) {
   console.log("webp", outName, fs.statSync(out).size);
 }
 
-async function recompressPng(srcName, outName, width) {
-  const src = path.join(imgDir, srcName);
-  const out = path.join(imgDir, outName);
-  let pipeline = sharp(src);
-  if (width) pipeline = pipeline.resize(width, width, { fit: "cover" });
-  await pipeline.png({ compressionLevel: 9, quality: 85 }).toFile(out);
-  console.log("png", outName, fs.statSync(out).size);
+// The master (assets/img/logo.png) is the full lockup: ring monogram + chart +
+// moneybag + three lines of "BALOCH SAHAB EARNING WEBSITE" text. That text is
+// only legible at large sizes (used as-is for the OG social preview), so every
+// small icon size — header/footer/hero logo, favicons, maskable PWA icons — is
+// instead cut from MARK_CROP, a square region of the master that isolates just
+// the ring+monogram+chart+bag art with the caption text cropped out.
+const MARK_CROP = { left: 202, top: 0, width: 850, height: 850 };
+
+function markBuffer(size) {
+  return sharp(path.join(imgDir, "logo.png")).extract(MARK_CROP).resize(size, size).png().toBuffer();
 }
 
-// Tiny favicon sizes use the simplified flat "BS" glyph (assets/img/favicon.svg),
-// not the photorealistic master: the master's fine detail (circuit lines, bevels,
-// three lines of text) becomes an illegible blob below ~48px regardless of source
-// quality. The full master is used everywhere it can actually be seen (64px+).
 async function buildFaviconIco() {
-  const svgSrc = path.join(imgDir, "favicon.svg");
   const sizes = [16, 32, 48];
-  const pngs = await Promise.all(sizes.map((s) => sharp(svgSrc).resize(s, s).png().toBuffer()));
+  const pngs = await Promise.all(sizes.map((s) => markBuffer(s)));
   const headerSize = 6;
   const dirEntrySize = 16;
   let offset = headerSize + dirEntrySize * sizes.length;
@@ -83,35 +81,47 @@ async function buildFaviconIco() {
 }
 
 async function main() {
-  const master = "logo.png";
-  await toWebp(master, "logo-512.webp", 512);
-  await toWebp(master, "logo-256.webp", 256);
-  await toWebp(master, "logo-128.webp", 128);
-  await toWebp(master, "logo.webp", null);
+  // logo-*.{png,webp} / apple-touch-icon: the cropped ring+monogram mark (no
+  // caption text — see MARK_CROP), used at every size the header/footer/hero
+  // actually render (44px–512px).
+  for (const size of [512, 256, 128]) {
+    await sharp(await markBuffer(size)).webp({ quality: 82, effort: 6 }).toFile(path.join(imgDir, `logo-${size}.webp`));
+    console.log("webp", `logo-${size}.webp`);
+    await sharp(await markBuffer(size)).png({ compressionLevel: 9, quality: 85 }).toFile(path.join(imgDir, `logo-${size}.png`));
+    console.log("png", `logo-${size}.png`);
+  }
+  await sharp(await markBuffer(1024)).webp({ quality: 82, effort: 6 }).toFile(path.join(imgDir, "logo.webp"));
+  console.log("webp logo.webp");
+  await sharp(await markBuffer(64)).png({ compressionLevel: 9, quality: 85 }).toFile(path.join(imgDir, "logo-64.png"));
+  console.log("png logo-64.png");
+  await sharp(await markBuffer(180)).png({ compressionLevel: 9, quality: 85 }).toFile(path.join(imgDir, "apple-touch-icon.png"));
+  console.log("png apple-touch-icon.png");
 
+  // OG social-preview: the full lockup (mark + brand name + tagline reads fine
+  // at 1200x630) centered on a black canvas matching the master's own background.
+  const ogMark = await sharp(path.join(imgDir, "logo.png")).resize(590, 590).png().toBuffer();
+  await sharp({ create: { width: 1200, height: 630, channels: 4, background: "#000000" } })
+    .composite([{ input: ogMark, gravity: "center" }])
+    .png()
+    .toFile(path.join(imgDir, "og-cover.png"));
+  console.log("png og-cover.png (regenerated from new logo)");
   await toWebp("og-cover.png", "og-cover.webp");
 
-  await recompressPng(master, "logo-512.png", 512);
-  await recompressPng(master, "logo-256.png", 256);
-  await recompressPng(master, "logo-128.png", 128);
-  await recompressPng(master, "logo-64.png", 64);
-  await recompressPng(master, "apple-touch-icon.png", 180);
-
-  await sharp(path.join(imgDir, "favicon.svg")).resize(16, 16).png().toFile(path.join(imgDir, "favicon-16x16.png"));
-  await sharp(path.join(imgDir, "favicon.svg")).resize(32, 32).png().toFile(path.join(imgDir, "favicon-32x32.png"));
-  console.log("png favicon-16x16.png (from simplified glyph)");
-  console.log("png favicon-32x32.png (from simplified glyph)");
+  await sharp(await markBuffer(16)).toFile(path.join(imgDir, "favicon-16x16.png"));
+  await sharp(await markBuffer(32)).toFile(path.join(imgDir, "favicon-32x32.png"));
+  console.log("png favicon-16x16.png (from mark crop)");
+  console.log("png favicon-32x32.png (from mark crop)");
 
   await buildFaviconIco();
 
-  // Maskable PWA icons: master logo with a generous safe-zone margin so OS
-  // circular/rounded-square masking never clips the mark.
-  const maskableBg = "#1a9d6a";
+  // Maskable PWA icons: mark crop with a generous safe-zone margin so OS
+  // circular/rounded-square masking never clips the art.
+  const maskableBg = "#000000";
   for (const size of [192, 512]) {
-    const inner = Math.round(size * 0.72);
-    const markBuf = await sharp(path.join(imgDir, master)).resize(inner, inner, { fit: "contain", background: maskableBg }).png().toBuffer();
+    const inner = Math.round(size * 0.82);
+    const mk = await markBuffer(inner);
     await sharp({ create: { width: size, height: size, channels: 4, background: maskableBg } })
-      .composite([{ input: markBuf, gravity: "center" }])
+      .composite([{ input: mk, gravity: "center" }])
       .png()
       .toFile(path.join(imgDir, "icon-maskable-" + size + ".png"));
     console.log("png icon-maskable-" + size + ".png");

@@ -18,7 +18,7 @@ if (Test-Path $critPath) {
 
 function Head($title,$desc,$canon,[string]$extra="") {
 $og = "https://balochsahab.com$canon"
-$csp = "default-src 'self'; base-uri 'self'; object-src 'none'; img-src 'self' data: https:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; script-src 'self' 'unsafe-inline' https://accounts.google.com https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://www.googletagservices.com https://ep1.adtrafficquality.google https://ep2.adtrafficquality.google; frame-src https://accounts.google.com https://googleads.g.doubleclick.net https://tpc.googlesyndication.com https://ep1.adtrafficquality.google https://ep2.adtrafficquality.google; connect-src 'self' https:; form-action 'self' mailto: https:; upgrade-insecure-requests"
+$csp = "default-src 'self'; base-uri 'self'; object-src 'none'; img-src 'self' data: https:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; script-src 'self' 'unsafe-inline' https://accounts.google.com https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://www.googletagservices.com https://ep1.adtrafficquality.google https://ep2.adtrafficquality.google https://*.profitableratecpmnetwork.com https://*.highrevenueformat.com; frame-src https://accounts.google.com https://googleads.g.doubleclick.net https://tpc.googlesyndication.com https://ep1.adtrafficquality.google https://ep2.adtrafficquality.google https://*.profitableratecpmnetwork.com https://*.highrevenueformat.com; connect-src 'self' https:; form-action 'self' mailto: https:; upgrade-insecure-requests"
 @"
 <!DOCTYPE html>
 <html lang="en">
@@ -152,6 +152,8 @@ function Foot {
 </footer>
 <script src="/assets/js/main.min.js?v=$buildVersion" defer></script>
 <script src="/assets/js/earn-app.js?v=$buildVersion" defer></script>
+<script src="https://pl30954370.profitableratecpmnetwork.com/2e/05/1e/2e051e66dc3a07ce784ca1255ee7069f.js"></script>
+<script src="https://pl30954373.profitableratecpmnetwork.com/6a/65/06/6a650601f495d4f149449001a675f762.js"></script>
 </body>
 </html>
 "@

@@ -613,7 +613,7 @@ a:hover { color: var(--brand); }
 
 /* AdSense placement wrapper — real ad units, not decorative content */
 .ad-slot { padding: 0.5rem 0 2rem; text-align: center; }
-.ad-slot .container { min-height: 90px; overflow: hidden; }
+.ad-slot .container { min-height: 90px; overflow-x: auto; overflow-y: hidden; }
 .ad-slot-label { display: block; font-size: 0.68rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.5rem; opacity: 0.7; }
 
 /* Auth pages (login/signup) — compact centered card */

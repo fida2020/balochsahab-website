@@ -31,9 +31,11 @@ Note: Meta CSP is also embedded in HTML for defense-in-depth. Prefer Cloudflare 
 
 ## API proxy Worker (for same-domain postback requirements)
 
-Some ad/offerwall providers (AoyCo.in confirmed 2026-08-23) reject a Postback URL whose domain doesn't match the App/Website URL exactly — the real backend (`baloch-sahab-backend.onrender.com`) can't be used directly as a postback target for those. `workers/api-proxy.js` in this repo is a Cloudflare Worker that proxies `balochsahab.com/api/*` straight through to the backend's `/api/v1/*`, so a same-domain URL like `https://balochsahab.com/api/webhooks/aoyco` can be handed to any such provider.
+Some ad/offerwall providers (AoyCo.in confirmed 2026-08-23) reject a Postback URL whose domain doesn't match the App/Website URL exactly — the real backend (`baloch-sahab-backend.onrender.com`) can't be used directly as a postback target for those. `workers/api-proxy.js` in this repo is a Cloudflare Worker (`balochsahab-api-proxy`) that proxies `balochsahab.com/pb/*` straight through to the backend's `/api/v1/*`, so a same-domain URL like `https://balochsahab.com/pb/webhooks/aoyco` can be handed to any such provider. Live and verified 2026-08-23 (`https://balochsahab.com/pb/health` returns the backend's health check).
 
-Deploy: Cloudflare dashboard → Workers & Pages → Create Worker → paste `workers/api-proxy.js` → Deploy. Then Workers Routes → add route `balochsahab.com/api/*` pointed at this worker. Every other path keeps going to GitHub Pages unchanged.
+**Path is `/pb/*`, not `/api/*`** — `balochsahab.com/api/*` is already routed to a separate, unrelated Worker called `balochsahab-app` (its own D1 database + R2 bucket, ~289 req/day, likely the EarnBox mobile app's backend, not this website's). Don't touch that worker or its routes; it's live production traffic for something else. `balochsahab-app` also owns `balochsahab.com/auth/*` and `balochsahab.com/media/*`, so avoid those prefixes for anything new too.
+
+Deployed via the dashboard's built-in code editor (Workers & Pages → `balochsahab-api-proxy` → Edit code — NOT the GitHub-integrated build, which fails here since this repo has no `npm run build`/wrangler config). Route: Domains tab → `balochsahab.com/pb/*` → this worker. Production `*.workers.dev` URL is also enabled for direct testing. Every other path keeps going to GitHub Pages unchanged.
 
 ## Caching
 

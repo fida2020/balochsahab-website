@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<!--
+  Internal admin tool — intentionally NOT part of the scripts/build-site.ps1
+  pipeline (no public nav/footer/ads, nothing to templatize). Never run
+  build-site.ps1 changes into this file; edit it directly.
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Admin Login | Baloch Sahab</title>
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; object-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; connect-src 'self' https://baloch-sahab-backend.onrender.com; form-action 'self'">
+<script src="/assets/js/app-config.js"></script>
+<style>
+  :root { color-scheme: dark; }
+  * { box-sizing: border-box; }
+  body { margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center; background: #0a0f1a; color: #e8ecf4; font-family: -apple-system, Segoe UI, Roboto, sans-serif; }
+  .card { width: 100%; max-width: 380px; background: #121a2b; border: 1px solid #232f47; border-radius: 12px; padding: 2rem; }
+  h1 { font-size: 1.25rem; margin: 0 0 1.5rem; }
+  label { display: block; font-size: 0.85rem; color: #9aa7bd; margin-bottom: 0.35rem; }
+  input { width: 100%; padding: 0.65rem 0.75rem; margin-bottom: 1rem; background: #0a0f1a; border: 1px solid #2a3651; border-radius: 8px; color: #e8ecf4; font-size: 0.95rem; }
+  input:focus { outline: none; border-color: #4c7cf0; }
+  button { width: 100%; padding: 0.7rem; background: #4c7cf0; color: #fff; border: none; border-radius: 8px; font-size: 0.95rem; cursor: pointer; }
+  button:disabled { opacity: 0.6; cursor: default; }
+  .error { color: #ff6b6b; font-size: 0.85rem; margin: -0.5rem 0 1rem; min-height: 1em; }
+</style>
+</head>
+<body>
+<div class="card">
+  <h1>Baloch Sahab — Admin</h1>
+  <form id="loginForm">
+    <label for="email">Email</label>
+    <input type="email" id="email" required autocomplete="username">
+    <label for="password">Password</label>
+    <input type="password" id="password" required autocomplete="current-password">
+    <div class="error" id="error"></div>
+    <button type="submit" id="submitBtn">Log In</button>
+  </form>
+</div>
+<script>
+(function () {
+  "use strict";
+  var API_BASE = (window.APP_CONFIG && window.APP_CONFIG.apiBaseUrl) || "";
+  var form = document.getElementById("loginForm");
+  var errorEl = document.getElementById("error");
+  var submitBtn = document.getElementById("submitBtn");
+
+  // Already logged in with a still-valid session? Skip straight to the dashboard.
+  try {
+    if (window.localStorage.getItem("bs_admin_session")) {
+      window.location.href = "/admin.html";
+    }
+  } catch (e) {}
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    errorEl.textContent = "";
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Logging in…";
+    fetch(API_BASE + "/admin/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email: document.getElementById("email").value,
+        password: document.getElementById("password").value,
+      }),
+    })
+      .then(function (res) { return res.json().then(function (json) { return { res: res, json: json }; }); })
+      .then(function (r) {
+        if (!r.res.ok || !r.json || !r.json.ok) {
+          throw new Error((r.json && r.json.error && r.json.error.message) || "Login failed");
+        }
+        window.localStorage.setItem("bs_admin_session", JSON.stringify(r.json.data));
+        window.location.href = "/admin.html";
+      })
+      .catch(function (err) {
+        errorEl.textContent = err.message || "Login failed";
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Log In";
+      });
+  });
+})();
+</script>
+</body>
+</html>

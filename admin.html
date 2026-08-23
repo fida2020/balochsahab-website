@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<!--
+  Internal admin tool — intentionally NOT part of the scripts/build-site.ps1
+  pipeline (no public nav/footer/ads, nothing to templatize). Never run
+  build-site.ps1 changes into this file; edit it directly.
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Admin Dashboard | Baloch Sahab</title>
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; object-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; connect-src 'self' https://baloch-sahab-backend.onrender.com; form-action 'self'">
+<script src="/assets/js/app-config.js"></script>
+<style>
+  :root { color-scheme: dark; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #0a0f1a; color: #e8ecf4; font-family: -apple-system, Segoe UI, Roboto, sans-serif; padding: 1.5rem; }
+  header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+  h1 { font-size: 1.1rem; margin: 0; }
+  #logoutBtn { background: none; border: 1px solid #2a3651; color: #9aa7bd; padding: 0.4rem 0.9rem; border-radius: 6px; cursor: pointer; font-size: 0.85rem; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+  .stat { background: #121a2b; border: 1px solid #232f47; border-radius: 10px; padding: 1rem; }
+  .stat .label { font-size: 0.8rem; color: #9aa7bd; margin-bottom: 0.35rem; }
+  .stat .value { font-size: 1.35rem; font-weight: 600; }
+  section { background: #121a2b; border: 1px solid #232f47; border-radius: 10px; padding: 1rem; margin-bottom: 1.5rem; overflow-x: auto; }
+  section h2 { font-size: 0.95rem; margin: 0 0 0.85rem; color: #c9d2e3; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.85rem; white-space: nowrap; }
+  th, td { text-align: left; padding: 0.5rem 0.6rem; border-bottom: 1px solid #1c2740; }
+  th { color: #9aa7bd; font-weight: 500; }
+  #status { color: #9aa7bd; }
+  .neg { color: #ff8080; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Baloch Sahab — Admin Overview</h1>
+  <button id="logoutBtn">Log Out</button>
+</header>
+<div id="status"></div>
+<div id="content" hidden>
+  <div class="grid" id="statGrid"></div>
+  <section>
+    <h2>Revenue by Provider (net of chargebacks)</h2>
+    <table><thead><tr><th>Provider</th><th>Net Credited</th><th>Entries</th></tr></thead><tbody id="providerBody"></tbody></table>
+  </section>
+  <section>
+    <h2>Withdrawals by Status</h2>
+    <table><thead><tr><th>Status</th><th>Count</th><th>Total</th></tr></thead><tbody id="withdrawStatusBody"></tbody></table>
+  </section>
+  <section>
+    <h2>Recent Withdrawals</h2>
+    <table><thead><tr><th>User</th><th>Amount</th><th>Method</th><th>Status</th><th>Requested</th></tr></thead><tbody id="recentWithdrawalsBody"></tbody></table>
+  </section>
+  <section>
+    <h2>Recent Ledger Entries</h2>
+    <table><thead><tr><th>User</th><th>Type</th><th>Amount</th><th>Note</th><th>When</th></tr></thead><tbody id="recentLedgerBody"></tbody></table>
+  </section>
+</div>
+<script>
+(function () {
+  "use strict";
+  var API_BASE = (window.APP_CONFIG && window.APP_CONFIG.apiBaseUrl) || "";
+  var statusEl = document.getElementById("status");
+  var contentEl = document.getElementById("content");
+
+  function getAdminSession() {
+    try {
+      var raw = window.localStorage.getItem("bs_admin_session");
+      return raw ? JSON.parse(raw) : null;
+    } catch (e) { return null; }
+  }
+  function clearAdminSession() { window.localStorage.removeItem("bs_admin_session"); }
+
+  function formatMinor(minor) {
+    var major = (minor || 0) / 100000;
+    var sign = major < 0 ? "-" : "";
+    return sign + "$" + Math.abs(major).toFixed(5);
+  }
+
+  document.getElementById("logoutBtn").addEventListener("click", function () {
+    clearAdminSession();
+    window.location.href = "/admin-login.html";
+  });
+
+  var session = getAdminSession();
+  if (!session || !session.accessToken) {
+    window.location.href = "/admin-login.html";
+    return;
+  }
+
+  statusEl.textContent = "Loading…";
+  fetch(API_BASE + "/admin/overview", {
+    headers: { Authorization: "Bearer " + session.accessToken },
+  })
+    .then(function (res) {
+      if (res.status === 401) {
+        clearAdminSession();
+        window.location.href = "/admin-login.html";
+        throw new Error("Session expired");
+      }
+      return res.json();
+    })
+    .then(function (json) {
+      if (!json || !json.ok) throw new Error((json && json.error && json.error.message) || "Failed to load overview");
+      render(json.data);
+      statusEl.textContent = "";
+      contentEl.hidden = false;
+    })
+    .catch(function (err) {
+      statusEl.textContent = err.message || "Failed to load overview";
+    });
+
+  function render(data) {
+    var stats = [
+      { label: "Total Users", value: data.userCount },
+      { label: "Total Available Balance", value: formatMinor(data.wallet.totalAvailableMinor) },
+      { label: "Total Pending (Withdrawal Holds)", value: formatMinor(data.wallet.totalPendingMinor) },
+      { label: "Total Lifetime Earned", value: formatMinor(data.wallet.totalLifetimeEarnedMinor) },
+      { label: "Total Withdrawn (Paid Out)", value: formatMinor(data.wallet.totalWithdrawnMinor) },
+    ];
+    var statGrid = document.getElementById("statGrid");
+    statGrid.innerHTML = stats.map(function (s) {
+      return '<div class="stat"><div class="label">' + s.label + '</div><div class="value">' + s.value + "</div></div>";
+    }).join("");
+
+    document.getElementById("providerBody").innerHTML = data.revenueByProvider.map(function (p) {
+      var cls = p.netCreditedMinor < 0 ? "neg" : "";
+      return "<tr><td>" + p.provider + "</td><td class=\"" + cls + "\">" + formatMinor(p.netCreditedMinor) + "</td><td>" + p.entryCount + "</td></tr>";
+    }).join("") || "<tr><td colspan=\"3\">No data yet</td></tr>";
+
+    document.getElementById("withdrawStatusBody").innerHTML = data.withdrawalsByStatus.map(function (w) {
+      return "<tr><td>" + w.status + "</td><td>" + w.count + "</td><td>" + formatMinor(w.totalMinor) + "</td></tr>";
+    }).join("") || "<tr><td colspan=\"3\">No withdrawals yet</td></tr>";
+
+    document.getElementById("recentWithdrawalsBody").innerHTML = data.recentWithdrawals.map(function (w) {
+      return "<tr><td>" + escapeHtml(w.userEmail) + "</td><td>" + formatMinor(w.amountMinor) + "</td><td>" + escapeHtml(w.method) + "</td><td>" + w.status + "</td><td>" + new Date(w.requestedAt).toLocaleString() + "</td></tr>";
+    }).join("") || "<tr><td colspan=\"5\">No withdrawals yet</td></tr>";
+
+    document.getElementById("recentLedgerBody").innerHTML = data.recentLedgerEntries.map(function (e) {
+      var cls = e.amountMinor < 0 ? "neg" : "";
+      return "<tr><td>" + escapeHtml(e.userEmail) + "</td><td>" + e.type + "</td><td class=\"" + cls + "\">" + formatMinor(e.amountMinor) + "</td><td>" + escapeHtml(e.note || "") + "</td><td>" + new Date(e.createdAt).toLocaleString() + "</td></tr>";
+    }).join("") || "<tr><td colspan=\"5\">No activity yet</td></tr>";
+  }
+
+  function escapeHtml(s) {
+    return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+})();
+</script>
+</body>
+</html>

@@ -16,12 +16,26 @@
 // through to GitHub Pages), each provider's one-time domain-verification
 // file needs a hardcoded special-case here.
 //
+// /postback/aoyco on www.balochsahab.com: the EarnBox mobile app (a
+// SEPARATE codebase/backend, see Desktop/Earn Box/earnbox) registered its
+// own AoyCo.in app with App URL https://www.balochsahab.com/download —
+// AoyCo's domain-matching rule forced its Postback URL onto that same
+// www.balochsahab.com domain too, but nothing was ever routed there, so
+// every real AoyCo offerwall completion in the EarnBox app 404'd silently
+// and no reward was ever credited (found 2026-08-23). This forwards that
+// exact already-registered URL to EarnBox's real backend
+// (earnbox-idco-ruji.onrender.com) instead of the website's own backend —
+// intentionally a different upstream than /pb/*, which stays wired to this
+// website's backend only.
+//
 // Deploy: Cloudflare dashboard -> Workers & Pages -> balochsahab-api-proxy
-// -> Edit code -> paste this file's content -> Deploy. Routes are already
-// configured: Domains tab -> balochsahab.com/pb/* (Route) and
-// web.balochsahab.com (Custom Domain) -> this worker.
+// -> Edit code -> paste this file's content -> Deploy. Routes: Domains tab
+// -> balochsahab.com/pb/* (Route), web.balochsahab.com (Custom Domain), and
+// www.balochsahab.com/postback/aoyco (Route) -> this worker. All three
+// live and verified 2026-08-23.
 
 const BACKEND_ORIGIN = "https://baloch-sahab-backend.onrender.com/api/v1";
+const EARNBOX_BACKEND_ORIGIN = "https://earnbox-idco-ruji.onrender.com/api/v1";
 
 // AoyCo.in domain-verification file for web.balochsahab.com (one-time proof
 // of ownership during app registration; safe to leave in place afterward).
@@ -37,8 +51,18 @@ export default {
       return new Response(VERIFICATION_FILES[url.pathname], { headers: { "content-type": "text/plain" } });
     }
 
-    const backendPath = url.pathname.replace(/^\/pb/, "");
-    const backendUrl = BACKEND_ORIGIN + backendPath + url.search;
+    let backendUrl;
+    if (url.pathname === "/postback/aoyco") {
+      // Already the exact URL sitting in AoyCo's dashboard for the EarnBox
+      // app (see comment above) — rewritten to EarnBox's real webhook path
+      // (backend/src/routes/webhook.routes.ts: GET /webhooks/aoyco/postback)
+      // rather than changed at the source, since AoyCo requires the
+      // postback domain to keep matching that app's registered App URL.
+      backendUrl = EARNBOX_BACKEND_ORIGIN + "/webhooks/aoyco/postback" + url.search;
+    } else {
+      const backendPath = url.pathname.replace(/^\/pb/, "");
+      backendUrl = BACKEND_ORIGIN + backendPath + url.search;
+    }
 
     const init = {
       method: request.method,

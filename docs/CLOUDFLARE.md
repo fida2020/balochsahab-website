@@ -37,6 +37,8 @@ Some ad/offerwall providers (AoyCo.in confirmed 2026-08-23) reject a Postback UR
 
 Deployed via the dashboard's built-in code editor (Workers & Pages → `balochsahab-api-proxy` → Edit code — NOT the GitHub-integrated build, which fails here since this repo has no `npm run build`/wrangler config). Route: Domains tab → `balochsahab.com/pb/*` → this worker. Production `*.workers.dev` URL is also enabled for direct testing. Every other path keeps going to GitHub Pages unchanged.
 
+**`www.balochsahab.com/postback/aoyco` (added + deployed 2026-08-23):** this one path forwards to a *different* upstream — EarnBox mobile app's own real backend (`earnbox-idco-ruji.onrender.com`, a separate Render service/codebase from this website's `baloch-sahab-backend`), not this site's backend. EarnBox registered its own AoyCo.in app with App URL `https://www.balochsahab.com/download`, and AoyCo's domain-matching rule forced the Postback URL onto that same domain — but nothing was ever routed there, so every real AoyCo offerwall completion in the EarnBox app 404'd and no user was ever credited. See the comment in `workers/api-proxy.js` for the exact rewrite. Route added (Domains tab → `www.balochsahab.com/postback/aoyco` → `balochsahab-api-proxy`) and verified live: `curl https://www.balochsahab.com/postback/aoyco?test=1` returns `200 ok` (was a GitHub Pages 404 before).
+
 ## Caching
 
 Cache Rules for `/assets/*`:

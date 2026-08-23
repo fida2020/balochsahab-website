@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<!--
+  Internal admin tool — intentionally NOT part of the scripts/build-site.ps1
+  pipeline. Never run build-site.ps1 changes into this file; edit it directly.
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Admin Users | Baloch Sahab</title>
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; object-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; connect-src 'self' https://baloch-sahab-backend.onrender.com; form-action 'self'">
+<script src="/assets/js/app-config.js"></script>
+<script src="/assets/js/admin-common.js"></script>
+<style>
+  :root { color-scheme: dark; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #0a0f1a; color: #e8ecf4; font-family: -apple-system, Segoe UI, Roboto, sans-serif; padding: 1.5rem; }
+  .admin-nav { display: flex; align-items: center; gap: 1.25rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+  .admin-nav a { color: #9aa7bd; text-decoration: none; font-size: 0.9rem; }
+  .admin-nav a.active { color: #e8ecf4; font-weight: 600; }
+  .admin-nav a:hover { color: #e8ecf4; }
+  .admin-nav .spacer { flex: 1; }
+  #logoutBtn { background: none; border: 1px solid #2a3651; color: #9aa7bd; padding: 0.4rem 0.9rem; border-radius: 6px; cursor: pointer; font-size: 0.85rem; }
+  h1 { font-size: 1.1rem; margin: 0 0 1rem; }
+  .toolbar { display: flex; gap: 0.75rem; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; }
+  select, input, button { background: #0a0f1a; border: 1px solid #2a3651; color: #e8ecf4; border-radius: 6px; padding: 0.45rem 0.6rem; font-size: 0.85rem; }
+  button { cursor: pointer; }
+  section { background: #121a2b; border: 1px solid #232f47; border-radius: 10px; padding: 1rem; overflow-x: auto; margin-bottom: 1.5rem; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+  th, td { text-align: left; padding: 0.5rem 0.6rem; border-bottom: 1px solid #1c2740; white-space: nowrap; }
+  th { color: #9aa7bd; font-weight: 500; }
+  tr.userRow { cursor: pointer; }
+  tr.userRow:hover { background: #16203590; }
+  .status-pill { padding: 0.15rem 0.5rem; border-radius: 999px; font-size: 0.75rem; }
+  .status-ACTIVE { background: #1c3a24; color: #7fe0a0; }
+  .status-SUSPENDED { background: #3a3418; color: #e0c96a; }
+  .status-BANNED, .status-PENDING_DELETION { background: #3a1f1f; color: #ff9a9a; }
+  #status { color: #9aa7bd; margin-bottom: 1rem; }
+  .pager { display: flex; gap: 0.75rem; align-items: center; margin-bottom: 1.5rem; }
+  #detail { display: none; }
+  #detail h2 { font-size: 1rem; margin: 0 0 0.5rem; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1rem; margin-bottom: 1rem; }
+  .stat { background: #0d1424; border: 1px solid #1c2740; border-radius: 8px; padding: 0.75rem; }
+  .stat .label { font-size: 0.75rem; color: #9aa7bd; margin-bottom: 0.25rem; }
+  .stat .value { font-size: 1.1rem; font-weight: 600; }
+  .status-actions { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
+  .btn-active { border-color: #2f7d4a; color: #7fe0a0; }
+  .btn-suspend { border-color: #7d6f2f; color: #e0c96a; }
+  .btn-ban { border-color: #7d2f2f; color: #ff9a9a; }
+  .neg { color: #ff8080; }
+</style>
+</head>
+<body>
+<nav class="admin-nav">
+  <a href="/admin.html">Overview</a>
+  <a href="/admin-withdrawals.html">Withdrawals</a>
+  <a href="/admin-users.html" class="active">Users</a>
+  <a href="/admin-settings.html">Settings</a>
+  <span class="spacer"></span>
+  <button id="logoutBtn">Log Out</button>
+</nav>
+<h1>Users</h1>
+<div class="toolbar">
+  <input id="searchInput" type="text" placeholder="Search email…">
+  <select id="statusFilter">
+    <option value="">All statuses</option>
+    <option value="ACTIVE">Active</option>
+    <option value="SUSPENDED">Suspended</option>
+    <option value="BANNED">Banned</option>
+    <option value="PENDING_DELETION">Pending Deletion</option>
+  </select>
+  <button id="searchBtn">Search</button>
+</div>
+<div id="status"></div>
+<section>
+  <table>
+    <thead><tr><th>Email</th><th>Status</th><th>Lifetime Earned</th><th>Available</th><th>Joined</th></tr></thead>
+    <tbody id="rowsBody"></tbody>
+  </table>
+</section>
+<div class="pager">
+  <button id="prevBtn">Prev</button>
+  <span id="pageLabel"></span>
+  <button id="nextBtn">Next</button>
+</div>
+
+<section id="detail">
+  <h2 id="detailEmail"></h2>
+  <div class="status-actions" id="statusActions"></div>
+  <div class="grid" id="detailGrid"></div>
+  <h3>Ads Watched by Provider</h3>
+  <table><thead><tr><th>Provider</th><th>Net Credited</th><th>Entries</th></tr></thead><tbody id="adsBody"></tbody></table>
+  <h3>Referrals Made</h3>
+  <table><thead><tr><th>Referred User</th><th>Status</th><th>Reward</th><th>Reward Status</th><th>When</th></tr></thead><tbody id="referralsBody"></tbody></table>
+  <h3>Recent Ledger Entries</h3>
+  <table><thead><tr><th>Type</th><th>Amount</th><th>Note</th><th>When</th></tr></thead><tbody id="ledgerBody"></tbody></table>
+  <h3>Recent Withdrawals</h3>
+  <table><thead><tr><th>Amount</th><th>Method</th><th>Status</th><th>Requested</th></tr></thead><tbody id="withdrawalsBody"></tbody></table>
+</section>
+
+<script>
+(function () {
+  "use strict";
+  AdminApp.wireLogoutButton();
+  if (!AdminApp.requireSession()) return;
+  var formatMinor = AdminApp.formatMinor;
+  var escapeHtml = AdminApp.escapeHtml;
+
+  var statusEl = document.getElementById("status");
+  var rowsBody = document.getElementById("rowsBody");
+  var pageLabel = document.getElementById("pageLabel");
+  var detail = document.getElementById("detail");
+  var page = 1;
+  var limit = 20;
+  var lastTotal = 0;
+
+  function loadList() {
+    statusEl.textContent = "Loading…";
+    var search = document.getElementById("searchInput").value.trim();
+    var statusFilter = document.getElementById("statusFilter").value;
+    var qs = "?page=" + page + "&limit=" + limit + (search ? "&search=" + encodeURIComponent(search) : "") + (statusFilter ? "&status=" + statusFilter : "");
+    AdminApp.apiFetch("/admin/users" + qs)
+      .then(function (data) {
+        statusEl.textContent = "";
+        lastTotal = data.total;
+        renderList(data.users);
+        pageLabel.textContent = "Page " + data.page + " of " + Math.max(1, Math.ceil(data.total / data.limit)) + " (" + data.total + " total)";
+      })
+      .catch(function (err) { statusEl.textContent = err.message || "Failed to load users"; });
+  }
+
+  function renderList(users) {
+    rowsBody.innerHTML = users.map(function (u) {
+      return (
+        '<tr class="userRow" data-id="' + u.id + '">' +
+        "<td>" + escapeHtml(u.email) + "</td>" +
+        '<td><span class="status-pill status-' + u.status + '">' + u.status + "</span></td>" +
+        "<td>" + formatMinor(u.lifetimeEarnedMinor) + "</td>" +
+        "<td>" + formatMinor(u.availableBalanceMinor) + "</td>" +
+        "<td>" + new Date(u.createdAt).toLocaleDateString() + "</td>" +
+        "</tr>"
+      );
+    }).join("") || '<tr><td colspan="5">No users found</td></tr>';
+  }
+
+  rowsBody.addEventListener("click", function (e) {
+    var row = e.target.closest("tr.userRow");
+    if (!row) return;
+    loadDetail(row.getAttribute("data-id"));
+  });
+
+  function statusButton(label, status, cls) {
+    return '<button class="' + cls + '" data-set-status="' + status + '">' + label + "</button>";
+  }
+
+  function loadDetail(userId) {
+    detail.style.display = "none";
+    statusEl.textContent = "Loading user…";
+    AdminApp.apiFetch("/admin/users/" + userId)
+      .then(function (data) {
+        statusEl.textContent = "";
+        renderDetail(userId, data);
+        detail.style.display = "block";
+        detail.scrollIntoView({ behavior: "smooth" });
+      })
+      .catch(function (err) { statusEl.textContent = err.message || "Failed to load user detail"; });
+  }
+
+  function renderDetail(userId, data) {
+    document.getElementById("detailEmail").textContent = data.user.email + " (" + data.user.status + ")";
+
+    document.getElementById("statusActions").innerHTML = [
+      statusButton("Reactivate", "ACTIVE", "btn-active"),
+      statusButton("Suspend", "SUSPENDED", "btn-suspend"),
+      statusButton("Ban", "BANNED", "btn-ban"),
+    ].join("");
+    document.getElementById("statusActions").querySelectorAll("button").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var status = btn.getAttribute("data-set-status");
+        btn.disabled = true;
+        AdminApp.apiFetch("/admin/users/" + userId + "/status", { method: "POST", body: { status: status } })
+          .then(function () { loadDetail(userId); loadList(); })
+          .catch(function (err) { statusEl.textContent = err.message || "Failed to update status"; btn.disabled = false; });
+      });
+    });
+
+    var w = data.wallet || { availableBalanceMinor: 0, pendingBalanceMinor: 0, lifetimeEarnedMinor: 0, withdrawnAmountMinor: 0, referralEarningsMinor: 0 };
+    document.getElementById("detailGrid").innerHTML = [
+      { label: "Available Balance", value: formatMinor(w.availableBalanceMinor) },
+      { label: "Lifetime Earned", value: formatMinor(w.lifetimeEarnedMinor) },
+      { label: "Withdrawn", value: formatMinor(w.withdrawnAmountMinor) },
+      { label: "Referral Commission", value: formatMinor(w.referralEarningsMinor) },
+      { label: "Referrals Made", value: data.referrals.count },
+      { label: "Last Login", value: data.user.lastLoginAt ? new Date(data.user.lastLoginAt).toLocaleString() : "Never" },
+    ].map(function (s) {
+      return '<div class="stat"><div class="label">' + s.label + '</div><div class="value">' + s.value + "</div></div>";
+    }).join("");
+
+    document.getElementById("adsBody").innerHTML = data.adsWatchedByProvider.map(function (p) {
+      var cls = p.netCreditedMinor < 0 ? "neg" : "";
+      return "<tr><td>" + p.provider + "</td><td class=\"" + cls + "\">" + formatMinor(p.netCreditedMinor) + "</td><td>" + p.entryCount + "</td></tr>";
+    }).join("") || '<tr><td colspan="3">No ad activity</td></tr>';
+
+    document.getElementById("referralsBody").innerHTML = data.referrals.list.map(function (r) {
+      return "<tr><td>" + escapeHtml(r.referredUserEmail) + "</td><td>" + r.referredUserStatus + "</td><td>" + formatMinor(r.rewardMinor) + "</td><td>" + r.status + "</td><td>" + new Date(r.createdAt).toLocaleString() + "</td></tr>";
+    }).join("") || '<tr><td colspan="5">No referrals yet</td></tr>';
+
+    document.getElementById("ledgerBody").innerHTML = data.recentLedgerEntries.map(function (e) {
+      var cls = e.amountMinor < 0 ? "neg" : "";
+      return "<tr><td>" + e.type + "</td><td class=\"" + cls + "\">" + formatMinor(e.amountMinor) + "</td><td>" + escapeHtml(e.note || "") + "</td><td>" + new Date(e.createdAt).toLocaleString() + "</td></tr>";
+    }).join("") || '<tr><td colspan="4">No activity yet</td></tr>';
+
+    document.getElementById("withdrawalsBody").innerHTML = data.recentWithdrawals.map(function (w2) {
+      return "<tr><td>" + formatMinor(w2.amountMinor) + "</td><td>" + escapeHtml(w2.method) + "</td><td>" + w2.status + "</td><td>" + new Date(w2.requestedAt).toLocaleString() + "</td></tr>";
+    }).join("") || '<tr><td colspan="4">No withdrawals yet</td></tr>';
+  }
+
+  document.getElementById("searchBtn").addEventListener("click", function () { page = 1; loadList(); });
+  document.getElementById("searchInput").addEventListener("keydown", function (e) { if (e.key === "Enter") { page = 1; loadList(); } });
+  document.getElementById("statusFilter").addEventListener("change", function () { page = 1; loadList(); });
+  document.getElementById("prevBtn").addEventListener("click", function () { if (page > 1) { page--; loadList(); } });
+  document.getElementById("nextBtn").addEventListener("click", function () { if (page * limit < lastTotal) { page++; loadList(); } });
+
+  loadList();
+})();
+</script>
+</body>
+</html>

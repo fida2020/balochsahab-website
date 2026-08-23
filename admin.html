@@ -12,12 +12,17 @@
 <title>Admin Dashboard | Baloch Sahab</title>
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; object-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; connect-src 'self' https://baloch-sahab-backend.onrender.com; form-action 'self'">
 <script src="/assets/js/app-config.js"></script>
+<script src="/assets/js/admin-common.js"></script>
 <style>
   :root { color-scheme: dark; }
   * { box-sizing: border-box; }
   body { margin: 0; background: #0a0f1a; color: #e8ecf4; font-family: -apple-system, Segoe UI, Roboto, sans-serif; padding: 1.5rem; }
-  header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
-  h1 { font-size: 1.1rem; margin: 0; }
+  .admin-nav { display: flex; align-items: center; gap: 1.25rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+  .admin-nav a { color: #9aa7bd; text-decoration: none; font-size: 0.9rem; }
+  .admin-nav a.active { color: #e8ecf4; font-weight: 600; }
+  .admin-nav a:hover { color: #e8ecf4; }
+  .admin-nav .spacer { flex: 1; }
+  h1 { font-size: 1.1rem; margin: 0 0 1rem; }
   #logoutBtn { background: none; border: 1px solid #2a3651; color: #9aa7bd; padding: 0.4rem 0.9rem; border-radius: 6px; cursor: pointer; font-size: 0.85rem; }
   .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
   .stat { background: #121a2b; border: 1px solid #232f47; border-radius: 10px; padding: 1rem; }
@@ -33,10 +38,15 @@
 </style>
 </head>
 <body>
-<header>
-  <h1>Baloch Sahab — Admin Overview</h1>
+<nav class="admin-nav">
+  <a href="/admin.html" class="active">Overview</a>
+  <a href="/admin-withdrawals.html">Withdrawals</a>
+  <a href="/admin-users.html">Users</a>
+  <a href="/admin-settings.html">Settings</a>
+  <span class="spacer"></span>
   <button id="logoutBtn">Log Out</button>
-</header>
+</nav>
+<h1>Admin Overview</h1>
 <div id="status"></div>
 <div id="content" hidden>
   <div class="grid" id="statGrid"></div>
@@ -60,50 +70,18 @@
 <script>
 (function () {
   "use strict";
-  var API_BASE = (window.APP_CONFIG && window.APP_CONFIG.apiBaseUrl) || "";
   var statusEl = document.getElementById("status");
   var contentEl = document.getElementById("content");
+  AdminApp.wireLogoutButton();
+  if (!AdminApp.requireSession()) return;
 
-  function getAdminSession() {
-    try {
-      var raw = window.localStorage.getItem("bs_admin_session");
-      return raw ? JSON.parse(raw) : null;
-    } catch (e) { return null; }
-  }
-  function clearAdminSession() { window.localStorage.removeItem("bs_admin_session"); }
-
-  function formatMinor(minor) {
-    var major = (minor || 0) / 100000;
-    var sign = major < 0 ? "-" : "";
-    return sign + "$" + Math.abs(major).toFixed(5);
-  }
-
-  document.getElementById("logoutBtn").addEventListener("click", function () {
-    clearAdminSession();
-    window.location.href = "/admin-login.html";
-  });
-
-  var session = getAdminSession();
-  if (!session || !session.accessToken) {
-    window.location.href = "/admin-login.html";
-    return;
-  }
+  var formatMinor = AdminApp.formatMinor;
+  var escapeHtml = AdminApp.escapeHtml;
 
   statusEl.textContent = "Loading…";
-  fetch(API_BASE + "/admin/overview", {
-    headers: { Authorization: "Bearer " + session.accessToken },
-  })
-    .then(function (res) {
-      if (res.status === 401) {
-        clearAdminSession();
-        window.location.href = "/admin-login.html";
-        throw new Error("Session expired");
-      }
-      return res.json();
-    })
-    .then(function (json) {
-      if (!json || !json.ok) throw new Error((json && json.error && json.error.message) || "Failed to load overview");
-      render(json.data);
+  AdminApp.apiFetch("/admin/overview")
+    .then(function (data) {
+      render(data);
       statusEl.textContent = "";
       contentEl.hidden = false;
     })
@@ -141,12 +119,6 @@
       var cls = e.amountMinor < 0 ? "neg" : "";
       return "<tr><td>" + escapeHtml(e.userEmail) + "</td><td>" + e.type + "</td><td class=\"" + cls + "\">" + formatMinor(e.amountMinor) + "</td><td>" + escapeHtml(e.note || "") + "</td><td>" + new Date(e.createdAt).toLocaleString() + "</td></tr>";
     }).join("") || "<tr><td colspan=\"5\">No activity yet</td></tr>";
-  }
-
-  function escapeHtml(s) {
-    return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
-      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
-    });
   }
 })();
 </script>

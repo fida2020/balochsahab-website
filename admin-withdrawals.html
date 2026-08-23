@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<!--
+  Internal admin tool — intentionally NOT part of the scripts/build-site.ps1
+  pipeline. Never run build-site.ps1 changes into this file; edit it directly.
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Admin Withdrawals | Baloch Sahab</title>
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; object-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; connect-src 'self' https://baloch-sahab-backend.onrender.com; form-action 'self'">
+<script src="/assets/js/app-config.js"></script>
+<script src="/assets/js/admin-common.js"></script>
+<style>
+  :root { color-scheme: dark; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #0a0f1a; color: #e8ecf4; font-family: -apple-system, Segoe UI, Roboto, sans-serif; padding: 1.5rem; }
+  .admin-nav { display: flex; align-items: center; gap: 1.25rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+  .admin-nav a { color: #9aa7bd; text-decoration: none; font-size: 0.9rem; }
+  .admin-nav a.active { color: #e8ecf4; font-weight: 600; }
+  .admin-nav a:hover { color: #e8ecf4; }
+  .admin-nav .spacer { flex: 1; }
+  #logoutBtn { background: none; border: 1px solid #2a3651; color: #9aa7bd; padding: 0.4rem 0.9rem; border-radius: 6px; cursor: pointer; font-size: 0.85rem; }
+  h1 { font-size: 1.1rem; margin: 0 0 1rem; }
+  .toolbar { display: flex; gap: 0.75rem; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; }
+  select, input, button, textarea { background: #0a0f1a; border: 1px solid #2a3651; color: #e8ecf4; border-radius: 6px; padding: 0.45rem 0.6rem; font-size: 0.85rem; }
+  button { cursor: pointer; }
+  .btn-approve { border-color: #2f7d4a; color: #7fe0a0; }
+  .btn-reject { border-color: #7d2f2f; color: #ff9a9a; }
+  .btn-paid { border-color: #2f5c7d; color: #8fc2ff; }
+  section { background: #121a2b; border: 1px solid #232f47; border-radius: 10px; padding: 1rem; overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+  th, td { text-align: left; padding: 0.5rem 0.6rem; border-bottom: 1px solid #1c2740; white-space: nowrap; }
+  th { color: #9aa7bd; font-weight: 500; }
+  .actions { display: flex; gap: 0.4rem; align-items: center; flex-wrap: wrap; }
+  .reject-reason { width: 140px; }
+  #status { color: #9aa7bd; margin-bottom: 1rem; }
+  .pager { display: flex; gap: 0.75rem; align-items: center; margin-top: 1rem; }
+  .status-pill { padding: 0.15rem 0.5rem; border-radius: 999px; font-size: 0.75rem; }
+  .status-REQUESTED, .status-UNDER_REVIEW { background: #3a3418; color: #e0c96a; }
+  .status-APPROVED { background: #1f3a52; color: #8fc2ff; }
+  .status-PAID { background: #1c3a24; color: #7fe0a0; }
+  .status-REJECTED, .status-CANCELLED { background: #3a1f1f; color: #ff9a9a; }
+</style>
+</head>
+<body>
+<nav class="admin-nav">
+  <a href="/admin.html">Overview</a>
+  <a href="/admin-withdrawals.html" class="active">Withdrawals</a>
+  <a href="/admin-users.html">Users</a>
+  <a href="/admin-settings.html">Settings</a>
+  <span class="spacer"></span>
+  <button id="logoutBtn">Log Out</button>
+</nav>
+<h1>Withdrawals</h1>
+<div class="toolbar">
+  <label>Status:
+    <select id="statusFilter">
+      <option value="">All</option>
+      <option value="REQUESTED">Requested</option>
+      <option value="UNDER_REVIEW">Under Review</option>
+      <option value="APPROVED">Approved</option>
+      <option value="PAID">Paid</option>
+      <option value="REJECTED">Rejected</option>
+      <option value="CANCELLED">Cancelled</option>
+    </select>
+  </label>
+</div>
+<div id="status"></div>
+<section>
+  <table>
+    <thead><tr><th>User</th><th>Amount</th><th>Method</th><th>Status</th><th>Requested</th><th>Actions</th></tr></thead>
+    <tbody id="rowsBody"></tbody>
+  </table>
+</section>
+<div class="pager">
+  <button id="prevBtn">Prev</button>
+  <span id="pageLabel"></span>
+  <button id="nextBtn">Next</button>
+</div>
+<script>
+(function () {
+  "use strict";
+  AdminApp.wireLogoutButton();
+  if (!AdminApp.requireSession()) return;
+  var formatMinor = AdminApp.formatMinor;
+  var escapeHtml = AdminApp.escapeHtml;
+
+  var statusEl = document.getElementById("status");
+  var rowsBody = document.getElementById("rowsBody");
+  var statusFilter = document.getElementById("statusFilter");
+  var pageLabel = document.getElementById("pageLabel");
+  var page = 1;
+  var limit = 20;
+  var lastTotal = 0;
+
+  function load() {
+    statusEl.textContent = "Loading…";
+    var qs = "?page=" + page + "&limit=" + limit + (statusFilter.value ? "&status=" + statusFilter.value : "");
+    AdminApp.apiFetch("/admin/withdrawals" + qs)
+      .then(function (data) {
+        statusEl.textContent = "";
+        lastTotal = data.total;
+        render(data.withdrawals);
+        pageLabel.textContent = "Page " + data.page + " of " + Math.max(1, Math.ceil(data.total / data.limit)) + " (" + data.total + " total)";
+      })
+      .catch(function (err) {
+        statusEl.textContent = err.message || "Failed to load withdrawals";
+      });
+  }
+
+  function actionButtons(w) {
+    if (w.status === "REQUESTED" || w.status === "UNDER_REVIEW") {
+      return (
+        '<div class="actions">' +
+        '<button class="btn-approve" data-action="approve" data-id="' + w.id + '">Approve</button>' +
+        '<input class="reject-reason" type="text" placeholder="Reject reason" data-reason-for="' + w.id + '">' +
+        '<button class="btn-reject" data-action="reject" data-id="' + w.id + '">Reject</button>' +
+        "</div>"
+      );
+    }
+    if (w.status === "APPROVED") {
+      return '<button class="btn-paid" data-action="mark-paid" data-id="' + w.id + '">Mark Paid</button>';
+    }
+    return "";
+  }
+
+  function render(withdrawals) {
+    rowsBody.innerHTML = withdrawals.map(function (w) {
+      return (
+        "<tr>" +
+        "<td>" + escapeHtml(w.userEmail) + "</td>" +
+        "<td>" + formatMinor(w.amountMinor) + "</td>" +
+        "<td>" + escapeHtml(w.method) + "</td>" +
+        '<td><span class="status-pill status-' + w.status + '">' + w.status + "</span></td>" +
+        "<td>" + new Date(w.requestedAt).toLocaleString() + "</td>" +
+        "<td>" + actionButtons(w) + "</td>" +
+        "</tr>"
+      );
+    }).join("") || '<tr><td colspan="6">No withdrawals</td></tr>';
+  }
+
+  rowsBody.addEventListener("click", function (e) {
+    var btn = e.target.closest("button[data-action]");
+    if (!btn) return;
+    var action = btn.getAttribute("data-action");
+    var id = btn.getAttribute("data-id");
+    btn.disabled = true;
+
+    var req;
+    if (action === "approve") {
+      req = AdminApp.apiFetch("/admin/withdrawals/" + id + "/approve", { method: "POST" });
+    } else if (action === "reject") {
+      var reasonInput = document.querySelector('[data-reason-for="' + id + '"]');
+      var reason = (reasonInput && reasonInput.value.trim()) || "";
+      if (!reason) {
+        statusEl.textContent = "A reject reason is required.";
+        btn.disabled = false;
+        return;
+      }
+      req = AdminApp.apiFetch("/admin/withdrawals/" + id + "/reject", { method: "POST", body: { reason: reason } });
+    } else if (action === "mark-paid") {
+      req = AdminApp.apiFetch("/admin/withdrawals/" + id + "/mark-paid", { method: "POST" });
+    }
+
+    req
+      .then(function () {
+        statusEl.textContent = "";
+        load();
+      })
+      .catch(function (err) {
+        statusEl.textContent = err.message || "Action failed";
+        btn.disabled = false;
+      });
+  });
+
+  statusFilter.addEventListener("change", function () { page = 1; load(); });
+  document.getElementById("prevBtn").addEventListener("click", function () { if (page > 1) { page--; load(); } });
+  document.getElementById("nextBtn").addEventListener("click", function () { if (page * limit < lastTotal) { page++; load(); } });
+
+  load();
+})();
+</script>
+</body>
+</html>

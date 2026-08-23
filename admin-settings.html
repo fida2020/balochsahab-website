@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<!--
+  Internal admin tool — intentionally NOT part of the scripts/build-site.ps1
+  pipeline. Never run build-site.ps1 changes into this file; edit it directly.
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Admin Settings | Baloch Sahab</title>
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; object-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; connect-src 'self' https://baloch-sahab-backend.onrender.com; form-action 'self'">
+<script src="/assets/js/app-config.js"></script>
+<script src="/assets/js/admin-common.js"></script>
+<style>
+  :root { color-scheme: dark; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #0a0f1a; color: #e8ecf4; font-family: -apple-system, Segoe UI, Roboto, sans-serif; padding: 1.5rem; }
+  .admin-nav { display: flex; align-items: center; gap: 1.25rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+  .admin-nav a { color: #9aa7bd; text-decoration: none; font-size: 0.9rem; }
+  .admin-nav a.active { color: #e8ecf4; font-weight: 600; }
+  .admin-nav a:hover { color: #e8ecf4; }
+  .admin-nav .spacer { flex: 1; }
+  #logoutBtn { background: none; border: 1px solid #2a3651; color: #9aa7bd; padding: 0.4rem 0.9rem; border-radius: 6px; cursor: pointer; font-size: 0.85rem; }
+  h1 { font-size: 1.1rem; margin: 0 0 1rem; }
+  section { background: #121a2b; border: 1px solid #232f47; border-radius: 10px; padding: 1.1rem; margin-bottom: 1.25rem; }
+  section h2 { font-size: 0.95rem; margin: 0 0 1rem; color: #c9d2e3; }
+  .row { display: flex; align-items: center; gap: 1rem; padding: 0.6rem 0; border-bottom: 1px solid #1c2740; flex-wrap: wrap; }
+  .row:last-child { border-bottom: none; }
+  .row .name { flex: 1; min-width: 160px; font-size: 0.9rem; }
+  .row .field { display: flex; align-items: center; gap: 0.4rem; font-size: 0.85rem; color: #9aa7bd; }
+  input[type="number"] { width: 110px; background: #0a0f1a; border: 1px solid #2a3651; color: #e8ecf4; border-radius: 6px; padding: 0.35rem 0.5rem; }
+  input[type="checkbox"] { width: 18px; height: 18px; }
+  #saveBtn { background: #3a5cf0; color: #fff; border: none; padding: 0.6rem 1.2rem; border-radius: 8px; cursor: pointer; font-size: 0.9rem; }
+  #saveBtn:disabled { opacity: 0.6; cursor: default; }
+  #status { color: #9aa7bd; margin-bottom: 1rem; min-height: 1.2em; }
+  .hint { color: #6b7690; font-size: 0.78rem; margin-top: -0.5rem; margin-bottom: 0.75rem; }
+</style>
+</head>
+<body>
+<nav class="admin-nav">
+  <a href="/admin.html">Overview</a>
+  <a href="/admin-withdrawals.html">Withdrawals</a>
+  <a href="/admin-users.html">Users</a>
+  <a href="/admin-settings.html" class="active">Settings</a>
+  <span class="spacer"></span>
+  <button id="logoutBtn">Log Out</button>
+</nav>
+<h1>Provider &amp; Feature Settings</h1>
+<div id="status">Loading…</div>
+<div id="form" hidden>
+  <section>
+    <h2>AdsLab — Tasks (Offers / PTC / Shortlinks / Telegram / Reviews)</h2>
+    <p class="hint">AdsLab sets the actual reward per task on their own dashboard — this multiplier scales whatever they send us before crediting the user.</p>
+    <div class="row">
+      <div class="name">Enabled</div>
+      <div class="field"><input type="checkbox" id="adslabTasksEnabled"></div>
+    </div>
+    <div class="row">
+      <div class="name">Payout multiplier (0.1–3.0)</div>
+      <div class="field"><input type="number" id="adslabTasksMultiplier" step="0.05" min="0.1" max="3"></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>AdsLab — Interstitial &amp; Rewarded Ads (Watch Ads / Video Ads / Interstitial Ads)</h2>
+    <p class="hint">Fixed per-view reward we set directly — amounts are in minor units (1 unit = $0.00001, so 100 = $0.001).</p>
+    <div class="row">
+      <div class="name">Enabled</div>
+      <div class="field"><input type="checkbox" id="adslabAdsEnabled"></div>
+    </div>
+    <div class="row">
+      <div class="name">Interstitial reward (minor units)</div>
+      <div class="field"><input type="number" id="adslabInterstitialReward" step="1" min="0"></div>
+    </div>
+    <div class="row">
+      <div class="name">Rewarded reward (minor units)</div>
+      <div class="field"><input type="number" id="adslabRewardedReward" step="1" min="0"></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>TimeWall</h2>
+    <p class="hint">TimeWall's own Conversion Rate is set on their dashboard — this multiplier scales what they send us.</p>
+    <div class="row">
+      <div class="name">Enabled</div>
+      <div class="field"><input type="checkbox" id="timewallEnabled"></div>
+    </div>
+    <div class="row">
+      <div class="name">Payout multiplier (0.1–3.0)</div>
+      <div class="field"><input type="number" id="timewallMultiplier" step="0.05" min="0.1" max="3"></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>AoyCo</h2>
+    <p class="hint">AoyCo's own Exchange Rate is set on their dashboard — this multiplier scales what they send us.</p>
+    <div class="row">
+      <div class="name">Enabled</div>
+      <div class="field"><input type="checkbox" id="aoycoEnabled"></div>
+    </div>
+    <div class="row">
+      <div class="name">Payout multiplier (0.1–3.0)</div>
+      <div class="field"><input type="number" id="aoycoMultiplier" step="0.05" min="0.1" max="3"></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Daily Check-in / Faucet / Spin &amp; Win / VIP</h2>
+    <div class="row">
+      <div class="name">Daily Check-in enabled</div>
+      <div class="field"><input type="checkbox" id="dailyEnabled"></div>
+    </div>
+    <div class="row">
+      <div class="name">Daily Check-in base reward (minor units)</div>
+      <div class="field"><input type="number" id="dailyAmount" step="1" min="0"></div>
+    </div>
+    <div class="row">
+      <div class="name">Faucet enabled</div>
+      <div class="field"><input type="checkbox" id="faucetEnabled"></div>
+    </div>
+    <div class="row">
+      <div class="name">Faucet reward per claim (minor units)</div>
+      <div class="field"><input type="number" id="faucetAmount" step="1" min="0"></div>
+    </div>
+    <div class="row">
+      <div class="name">Spin &amp; Win enabled</div>
+      <div class="field"><input type="checkbox" id="spinEnabled"></div>
+    </div>
+    <div class="row">
+      <div class="name">VIP lifetime-earned threshold (minor units)</div>
+      <div class="field"><input type="number" id="vipThreshold" step="1" min="0"></div>
+    </div>
+    <div class="row">
+      <div class="name">VIP reward multiplier</div>
+      <div class="field"><input type="number" id="vipMultiplier" step="0.1" min="1" max="10"></div>
+    </div>
+    <div class="row">
+      <div class="name">VIP minimum withdrawal (minor units)</div>
+      <div class="field"><input type="number" id="vipMinWithdrawal" step="1" min="0"></div>
+    </div>
+  </section>
+
+  <button id="saveBtn">Save Settings</button>
+</div>
+<script>
+(function () {
+  "use strict";
+  AdminApp.wireLogoutButton();
+  if (!AdminApp.requireSession()) return;
+
+  var statusEl = document.getElementById("status");
+  var formEl = document.getElementById("form");
+  var saveBtn = document.getElementById("saveBtn");
+
+  function el(id) { return document.getElementById(id); }
+
+  function load() {
+    statusEl.textContent = "Loading…";
+    AdminApp.apiFetch("/admin/settings")
+      .then(function (data) {
+        el("adslabTasksEnabled").checked = data.providers.adslabTasks.enabled;
+        el("adslabTasksMultiplier").value = data.providers.adslabTasks.payoutMultiplier;
+        el("adslabAdsEnabled").checked = data.providers.adslabAds.enabled;
+        el("adslabInterstitialReward").value = data.providers.adslabAds.interstitialRewardMinor;
+        el("adslabRewardedReward").value = data.providers.adslabAds.rewardedRewardMinor;
+        el("timewallEnabled").checked = data.providers.timewall.enabled;
+        el("timewallMultiplier").value = data.providers.timewall.payoutMultiplier;
+        el("aoycoEnabled").checked = data.providers.aoyco.enabled;
+        el("aoycoMultiplier").value = data.providers.aoyco.payoutMultiplier;
+
+        el("dailyEnabled").checked = data.features.dailyBonus.enabled;
+        el("dailyAmount").value = data.features.dailyBonus.baseAmountMinor;
+        el("faucetEnabled").checked = data.features.faucet.enabled;
+        el("faucetAmount").value = data.features.faucet.amountMinor;
+        el("spinEnabled").checked = data.features.spin.enabled;
+        el("vipThreshold").value = data.features.vip.thresholdMinor;
+        el("vipMultiplier").value = data.features.vip.rewardMultiplier;
+        el("vipMinWithdrawal").value = data.features.vip.minWithdrawalMinor;
+
+        statusEl.textContent = "";
+        formEl.hidden = false;
+      })
+      .catch(function (err) { statusEl.textContent = err.message || "Failed to load settings"; });
+  }
+
+  saveBtn.addEventListener("click", function () {
+    saveBtn.disabled = true;
+    statusEl.textContent = "Saving…";
+    var body = {
+      providers: {
+        adslabTasks: { enabled: el("adslabTasksEnabled").checked, payoutMultiplier: Number(el("adslabTasksMultiplier").value) },
+        adslabAds: {
+          enabled: el("adslabAdsEnabled").checked,
+          interstitialRewardMinor: Number(el("adslabInterstitialReward").value),
+          rewardedRewardMinor: Number(el("adslabRewardedReward").value),
+        },
+        timewall: { enabled: el("timewallEnabled").checked, payoutMultiplier: Number(el("timewallMultiplier").value) },
+        aoyco: { enabled: el("aoycoEnabled").checked, payoutMultiplier: Number(el("aoycoMultiplier").value) },
+      },
+      features: {
+        dailyBonus: { enabled: el("dailyEnabled").checked, baseAmountMinor: Number(el("dailyAmount").value) },
+        faucet: { enabled: el("faucetEnabled").checked, amountMinor: Number(el("faucetAmount").value) },
+        spin: { enabled: el("spinEnabled").checked },
+        vip: {
+          thresholdMinor: Number(el("vipThreshold").value),
+          rewardMultiplier: Number(el("vipMultiplier").value),
+          minWithdrawalMinor: Number(el("vipMinWithdrawal").value),
+        },
+      },
+    };
+    AdminApp.apiFetch("/admin/settings", { method: "PUT", body: body })
+      .then(function () {
+        statusEl.textContent = "Saved.";
+        saveBtn.disabled = false;
+      })
+      .catch(function (err) {
+        statusEl.textContent = err.message || "Failed to save settings";
+        saveBtn.disabled = false;
+      });
+  });
+
+  load();
+})();
+</script>
+</body>
+</html>

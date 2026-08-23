@@ -101,7 +101,7 @@ $extra
 </a>
 <div class="user-profile" data-auth="user" hidden>
 <div class="user-avatar" data-user-avatar>B</div>
-<div class="user-balance"><span data-balance-pill>`$0.0000</span></div>
+<div class="user-balance"><span data-balance-pill>`$0.00000</span></div>
 </div>
 <nav class="sidebar-nav" data-nav aria-label="Primary">
 <a href="/index.html">🏠 Home</a>
@@ -145,7 +145,7 @@ $extra
 <span class="brand-text">Baloch Sahab</span>
 </a>
 <span class="auth-slot auth-user" data-auth="user" hidden>
-<a class="balance-pill" href="/withdraw.html"><span data-balance-pill>`$0.0000</span></a>
+<a class="balance-pill" href="/withdraw.html"><span data-balance-pill>`$0.00000</span></a>
 </span>
 <button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-label="Open menu"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg></button>
 </div>
@@ -187,7 +187,7 @@ $extra
 <a class="btn btn-primary" href="/signup.html">Create Free Account</a>
 </span>
 <span class="auth-slot auth-user" data-auth="user" hidden>
-<a class="balance-pill" href="/withdraw.html" style="justify-content:center;padding:0.75rem">Wallet: <span data-balance-pill>`$0.0000</span></a>
+<a class="balance-pill" href="/withdraw.html" style="justify-content:center;padding:0.75rem">Wallet: <span data-balance-pill>`$0.00000</span></a>
 <a class="btn btn-secondary" href="/profile.html" style="width:100%">Profile</a>
 <a class="btn btn-secondary" href="/withdraw.html#request-payout" style="width:100%">Withdraw</a>
 <a class="btn btn-secondary" href="/settings.html" style="width:100%">Settings</a>

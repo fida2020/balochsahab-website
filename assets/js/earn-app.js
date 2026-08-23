@@ -156,6 +156,19 @@
     return intervalId;
   }
 
+  // A stale/expired access token that lost the refresh race (see
+  // refreshSession above) can make a GET fail even though the user is
+  // still legitimately logged in — retry a couple of times on 401 instead
+  // of silently leaving the caller's UI at its placeholder value.
+  function apiWithRetry(path, onSuccess, retriesLeft) {
+    if (retriesLeft === undefined) retriesLeft = 2;
+    api(path).then(onSuccess).catch(function (err) {
+      if (retriesLeft > 0 && err && err.status === 401) {
+        window.setTimeout(function () { apiWithRetry(path, onSuccess, retriesLeft - 1); }, 500);
+      }
+    });
+  }
+
   // ---------------------------------------------------------------------
   // Nav auth-state
   // ---------------------------------------------------------------------
@@ -172,21 +185,10 @@
     for (var m = 0; m < earnUser.length; m++) earnUser[m].hidden = !loggedIn;
 
     if (loggedIn) {
-      var loadBalance = function (retriesLeft) {
-        api("/wallet/summary").then(function (summary) {
-          var pills = document.querySelectorAll("[data-balance-pill]");
-          for (var i2 = 0; i2 < pills.length; i2++) pills[i2].textContent = formatMinor(summary.availableBalanceMinor, summary.currency);
-        }).catch(function (err) {
-          // A stale/expired access token that lost the refresh race (see
-          // refreshSession above) can make this fail even though the user
-          // is still legitimately logged in — retry a couple of times
-          // instead of silently leaving the pill at its placeholder value.
-          if (retriesLeft > 0 && err && err.status === 401) {
-            window.setTimeout(function () { loadBalance(retriesLeft - 1); }, 500);
-          }
-        });
-      };
-      loadBalance(2);
+      apiWithRetry("/wallet/summary", function (summary) {
+        var pills = document.querySelectorAll("[data-balance-pill]");
+        for (var i2 = 0; i2 < pills.length; i2++) pills[i2].textContent = formatMinor(summary.availableBalanceMinor, summary.currency);
+      });
     }
 
     var logoutBtns = document.querySelectorAll("[data-logout]");
@@ -702,11 +704,11 @@
     if (!kycBlock) return;
     if (!isLoggedIn()) return;
 
-    api("/wallet/summary").then(function (summary) {
+    apiWithRetry("/wallet/summary", function (summary) {
       document.querySelector("[data-withdraw-balance]").textContent = formatMinor(summary.availableBalanceMinor, summary.currency);
       document.querySelector("[data-withdraw-pending]").textContent = formatMinor(summary.pendingBalanceMinor, summary.currency);
       document.querySelector("[data-withdraw-lifetime]").textContent = formatMinor(summary.lifetimeEarnedMinor, summary.currency);
-    }).catch(function () {});
+    });
 
     // This backend doesn't have a real identity-verification (KYC) step
     // wired up yet, so the withdrawal form is shown directly rather than
@@ -764,14 +766,14 @@
     if (!linkInput) return;
     if (!isLoggedIn()) return;
 
-    api("/referrals/stats").then(function (stats) {
+    apiWithRetry("/referrals/stats", function (stats) {
       document.querySelector("[data-referral-total]").textContent = stats.totalReferrals;
       document.querySelector("[data-referral-active]").textContent = stats.activeReferrals;
       document.querySelector("[data-referral-earnings]").textContent = formatMinor(stats.referralEarningsMinor);
       var session = getSession();
       var friendlyLink = window.location.origin + "/signup.html?ref=" + encodeURIComponent(session.user.referralCode);
       linkInput.value = friendlyLink;
-    }).catch(function () {});
+    });
 
     var copyBtn = document.querySelector("[data-referral-copy]");
     if (copyBtn) {

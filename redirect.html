@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Redirecting… | Baloch Sahab</title>
+<meta name="robots" content="noindex,nofollow">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; object-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src 'self'; frame-src 'none'; connect-src 'none'; form-action 'none'">
+<meta http-equiv="X-Content-Type-Options" content="nosniff">
+<meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+<style>
+body{background:#000;color:#e5e7eb;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0;text-align:center;padding:24px}
+a{color:#60a5fa}
+</style>
+</head>
+<body>
+<div id="msg">Redirecting…</div>
+<script>
+// Purpose: some partner ad networks (e.g. AoyCo's PTC Direct Link) refuse
+// requests carrying no Referer header, which is what happens when the
+// EarnBox mobile app opens their link straight from an external-browser
+// Intent (a fresh navigation with no originating page). Loading this real
+// page on the verified publisher domain first, then navigating onward from
+// here, makes the follow-up request carry a Referer of balochsahab.com —
+// only a real page load followed by a client-side navigation can produce
+// that; a server-side redirect cannot.
+//
+// ALLOWLIST is intentionally small and hostname-exact/suffix-matched — this
+// page must never become a general-purpose open redirect (a public
+// redirector on a trusted domain is a phishing/spam vector), so an
+// unlisted destination is refused outright rather than redirected.
+var ALLOWLIST_SUFFIXES = ['aoyco.in'];
+
+function isAllowed(url) {
+  var host;
+  try { host = new URL(url).hostname.toLowerCase(); } catch (e) { return false; }
+  for (var i = 0; i < ALLOWLIST_SUFFIXES.length; i++) {
+    var suffix = ALLOWLIST_SUFFIXES[i];
+    if (host === suffix || host.endsWith('.' + suffix)) return true;
+  }
+  return false;
+}
+
+(function () {
+  var params = new URLSearchParams(window.location.search);
+  var to = params.get('to');
+  var msg = document.getElementById('msg');
+  if (!to || !/^https:\/\//i.test(to) || !isAllowed(to)) {
+    msg.textContent = 'This redirect link is not valid.';
+    return;
+  }
+  window.location.replace(to);
+})();
+</script>
+<noscript>JavaScript is required to continue.</noscript>
+</body>
+</html>

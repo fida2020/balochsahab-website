@@ -193,6 +193,8 @@
       { label: "Referral Commission", value: formatMinor(w.referralEarningsMinor) },
       { label: "Referrals Made", value: data.referrals.count },
       { label: "Last Login", value: data.user.lastLoginAt ? new Date(data.user.lastLoginAt).toLocaleString() : "Never" },
+      { label: "Identity Verification", value: data.user.kycStatus },
+      { label: "Verified Name", value: data.user.kycVerifiedName ? escapeHtml(data.user.kycVerifiedName) : "—" },
     ].map(function (s) {
       return '<div class="stat"><div class="label">' + s.label + '</div><div class="value">' + s.value + "</div></div>";
     }).join("");

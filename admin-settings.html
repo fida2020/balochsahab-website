@@ -106,6 +106,15 @@
   </section>
 
   <section>
+    <h2>Withdrawals</h2>
+    <p class="hint">Applies to every user unless their VIP minimum (below) is lower. Leave at 0 to fall back to the backend's env default (<span id="envDefaultMinWithdrawal">…</span> minor units).</p>
+    <div class="row">
+      <div class="name">Minimum withdrawal (minor units)</div>
+      <div class="field"><input type="number" id="minWithdrawal" step="1" min="0"></div>
+    </div>
+  </section>
+
+  <section>
     <h2>Daily Check-in / Faucet / Spin &amp; Win / VIP</h2>
     <div class="row">
       <div class="name">Daily Check-in enabled</div>
@@ -178,6 +187,9 @@
         el("vipMultiplier").value = data.features.vip.rewardMultiplier;
         el("vipMinWithdrawal").value = data.features.vip.minWithdrawalMinor;
 
+        el("minWithdrawal").value = data.withdrawal.minMinor;
+        el("envDefaultMinWithdrawal").textContent = data.withdrawal.envDefaultMinMinor;
+
         statusEl.textContent = "";
         formEl.hidden = false;
       })
@@ -188,6 +200,7 @@
     saveBtn.disabled = true;
     statusEl.textContent = "Saving…";
     var body = {
+      withdrawal: { minMinor: Number(el("minWithdrawal").value) },
       providers: {
         adslabTasks: { enabled: el("adslabTasksEnabled").checked, payoutMultiplier: Number(el("adslabTasksMultiplier").value) },
         adslabAds: {

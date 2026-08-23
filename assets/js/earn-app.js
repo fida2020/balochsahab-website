@@ -704,36 +704,111 @@
     if (!kycBlock) return;
     if (!isLoggedIn()) return;
 
+    var minWithdrawalMinor = null;
+
     apiWithRetry("/wallet/summary", function (summary) {
       document.querySelector("[data-withdraw-balance]").textContent = formatMinor(summary.availableBalanceMinor, summary.currency);
       document.querySelector("[data-withdraw-pending]").textContent = formatMinor(summary.pendingBalanceMinor, summary.currency);
       document.querySelector("[data-withdraw-lifetime]").textContent = formatMinor(summary.lifetimeEarnedMinor, summary.currency);
+      minWithdrawalMinor = summary.minWithdrawalMinor;
+      var helperEl = document.querySelector("[data-withdraw-min-helper]");
+      if (helperEl) {
+        helperEl.textContent = "100,000 units = $1.00 USD • Minimum payout: " + minWithdrawalMinor.toLocaleString() + " units (" + formatMinor(minWithdrawalMinor, summary.currency) + ")";
+      }
     });
 
-    // This backend doesn't have a real identity-verification (KYC) step
-    // wired up yet, so the withdrawal form is shown directly rather than
-    // gating it behind a check that could never pass.
-    document.querySelector("[data-withdraw-form-block]").hidden = false;
+    // Didit's hosted verification page redirects the browser back here with
+    // ?status=Approved|Declined|In Review as an UNTRUSTED UI hint only — the
+    // real result comes from the webhook, which may still be a few seconds
+    // behind this redirect. Strip the params so a refresh doesn't re-show
+    // this transient message, then poll /users/me briefly for the real status.
+    var returnedStatus = new URLSearchParams(window.location.search).get("status");
+    if (returnedStatus) {
+      window.history.replaceState({}, "", window.location.pathname);
+    }
+
+    var kycMessageEl = document.querySelector("[data-withdraw-kyc-message]");
+    var kycStartBtn = document.querySelector("[data-withdraw-kyc-start]");
+    var formBlock = document.querySelector("[data-withdraw-form-block]");
+    var accountTitleInput = document.querySelector('[data-withdraw-form] input[name="accountTitle"]');
+    var verifiedName = null;
+
+    function renderKycState(user, pollsLeft) {
+      var status = user.kycStatus;
+      if (status === "APPROVED") {
+        kycBlock.hidden = true;
+        formBlock.hidden = false;
+        if (accountTitleInput && user.kycVerifiedName) {
+          verifiedName = user.kycVerifiedName;
+          accountTitleInput.value = verifiedName;
+          accountTitleInput.readOnly = true;
+        }
+        return;
+      }
+
+      formBlock.hidden = true;
+      kycBlock.hidden = false;
+      if (status === "PENDING" || status === "IN_REVIEW") {
+        kycMessageEl.textContent = returnedStatus
+          ? "Your documents were submitted and are being reviewed. This page will update automatically once it's done."
+          : "Your identity verification is in progress. Check back shortly.";
+        kycStartBtn.hidden = true;
+        // The webhook can lag a couple of seconds behind Didit's redirect —
+        // poll a few times so a user landing back here right after finishing
+        // sees APPROVED without needing to manually refresh.
+        if (pollsLeft > 0) {
+          window.setTimeout(function () {
+            api("/users/me").then(function (fresh) { renderKycState(fresh, pollsLeft - 1); }).catch(function () {});
+          }, 3000);
+        }
+      } else {
+        kycMessageEl.textContent = status === "DECLINED"
+          ? "Your last identity verification attempt was declined. Please try again."
+          : "For fraud prevention and secure payouts, withdrawals require a quick one-time identity verification.";
+        kycStartBtn.hidden = false;
+      }
+    }
+
+    api("/users/me").then(function (user) { renderKycState(user, returnedStatus ? 5 : 0); }).catch(function () {});
+
+    if (kycStartBtn) {
+      kycStartBtn.addEventListener("click", function () {
+        kycStartBtn.disabled = true;
+        api("/users/me/kyc/session", { method: "POST" }).then(function (result) {
+          window.location.href = result.url;
+        }).catch(function (err) {
+          kycMessageEl.textContent = err.message || "Could not start identity verification — please try again.";
+          kycStartBtn.disabled = false;
+        });
+      });
+    }
 
     var withdrawForm = document.querySelector("[data-withdraw-form]");
     if (withdrawForm) {
       withdrawForm.addEventListener("submit", function (e) {
         e.preventDefault();
         var fd = new FormData(withdrawForm);
+        var amountMinor = parseInt(fd.get("amountMinor"), 10);
+        var errEl = document.querySelector("[data-withdraw-error]");
+        if (minWithdrawalMinor !== null && amountMinor < minWithdrawalMinor) {
+          errEl.textContent = "Minimum withdrawal is " + minWithdrawalMinor.toLocaleString() + " units.";
+          errEl.hidden = false;
+          return;
+        }
         api("/withdrawals", {
           method: "POST",
           body: {
-            amountMinor: parseInt(fd.get("amountMinor"), 10),
+            amountMinor: amountMinor,
             method: fd.get("method"),
             destination: { accountTitle: fd.get("accountTitle"), accountNumber: fd.get("accountNumber") },
           },
         }).then(function () {
           document.querySelector("[data-withdraw-success]").hidden = false;
-          document.querySelector("[data-withdraw-error]").hidden = true;
+          errEl.hidden = true;
           withdrawForm.reset();
+          if (accountTitleInput && verifiedName) accountTitleInput.value = verifiedName;
           loadHistory();
         }).catch(function (err) {
-          var errEl = document.querySelector("[data-withdraw-error]");
           errEl.textContent = err.message || "Could not request withdrawal";
           errEl.hidden = false;
         });

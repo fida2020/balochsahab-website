@@ -18,7 +18,7 @@ Build-FromBody "earn.html" "Earn | Baloch Sahab" "Earn rewards with PTC ads, sho
 Build-FromBody "daily-claim.html" "Daily Claim | Baloch Sahab" "Claim your Baloch Sahab daily streak bonus." "/daily-claim.html" "daily-claim.html"
 Build-FromBody "faucet.html" "Rolling Faucet | Baloch Sahab" "Claim free recurring faucet rewards on Baloch Sahab." "/faucet.html" "faucet.html"
 Build-FromBody "spin-win.html" "Spin & Win | Baloch Sahab" "Spin the daily fortune wheel on Baloch Sahab." "/spin-win.html" "spin-win.html"
-Build-FromBody "offerwall.html" "Offer Wall | Baloch Sahab" "Complete high-paying offers and partner campaigns on Baloch Sahab." "/offerwall.html" "offerwall.html"
+Build-FromBody "offerwall.html" "Offer Wall | Baloch Sahab" "Complete high-paying offers and partner campaigns on Baloch Sahab." "/offerwall.html" "offerwall.html" "" $false
 Build-FromBody "shortlinks.html" "Short Links | Baloch Sahab" "Complete shortlink tasks for quick rewards on Baloch Sahab." "/shortlinks.html" "shortlinks.html"
 Build-FromBody "telegram-views.html" "Telegram Views | Baloch Sahab" "Join partner Telegram channels and groups for rewards on Baloch Sahab." "/telegram-views.html" "telegram-views.html"
 Build-FromBody "ptc.html" "PTC | Baloch Sahab" "View sponsored websites for a fixed timer and earn verified rewards on Baloch Sahab." "/ptc.html" "ptc.html" "" $false

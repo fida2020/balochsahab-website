@@ -17,13 +17,13 @@ if (Test-Path $critPath) {
 }
 
 function Head($title,$desc,$canon,[string]$extra="") {
-$og = "https://balochsahab.com$canon"
+$og = "https://earn.balochsahab.com$canon"
 $csp = "default-src 'self'; base-uri 'self'; object-src 'none'; img-src 'self' data: https:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; script-src 'self' 'unsafe-inline' https://accounts.google.com https://*.profitableratecpmnetwork.com https://adslab.me https://serve.adslab.me; frame-src https://accounts.google.com https://*.profitableratecpmnetwork.com https://adslab.me https://timewall.io https://aoyco.in; connect-src 'self' https:; form-action 'self' mailto: https:; upgrade-insecure-requests"
 @"
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<script>(function(){var h=location.hostname;if(h==="www.balochsahab.com"||location.protocol==="http:"){location.replace("https://balochsahab.com"+location.pathname+location.search+location.hash);}})();</script><!-- apex-https-redirect -->
+<script>(function(){var h=location.hostname;if(h==="www.earn.balochsahab.com"||location.protocol==="http:"){location.replace("https://earn.balochsahab.com"+location.pathname+location.search+location.hash);}})();</script><!-- apex-https-redirect -->
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>$title</title>
@@ -40,13 +40,13 @@ $csp = "default-src 'self'; base-uri 'self'; object-src 'none'; img-src 'self' d
 <meta property="og:title" content="$title">
 <meta property="og:description" content="$desc">
 <meta property="og:url" content="$og">
-<meta property="og:image" content="https://balochsahab.com/assets/img/og-cover.png">
+<meta property="og:image" content="https://earn.balochsahab.com/assets/img/og-cover.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="$title">
 <meta name="twitter:description" content="$desc">
-<meta name="twitter:image" content="https://balochsahab.com/assets/img/og-cover.png">
+<meta name="twitter:image" content="https://earn.balochsahab.com/assets/img/og-cover.png">
 <meta http-equiv="Content-Security-Policy" content="$csp">
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
 <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">

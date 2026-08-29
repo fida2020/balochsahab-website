@@ -1,4 +1,12 @@
-# Cloudflare configuration for balochsahab.com (GitHub Pages origin)
+# Cloudflare configuration for earn.balochsahab.com (GitHub Pages origin)
+
+**Domain migration in progress (started 2026-08-28):** this earning site is moving from the apex `balochsahab.com` to `earn.balochsahab.com`. The apex will instead host a separate company site for Baloch Sahab Technologies (SMC-Private) Limited (a different repo/project). Code in this repo (CNAME, canonical URLs, sitemap.xml, robots.txt, JSON-LD schema) has already been updated to `earn.balochsahab.com`. Still required, manually, before/at cutover:
+- Cloudflare DNS: add `earn` CNAME → GitHub Pages, proxied.
+- GitHub Pages: move this repo's custom domain from `balochsahab.com` to `earn.balochsahab.com`; set the company site's repo custom domain to `balochsahab.com`.
+- Google Cloud Console: add `https://earn.balochsahab.com` as an Authorized JavaScript origin on the Sign-In-with-Google OAuth Client (see `assets/js/app-config.js`).
+- Render (`baloch-sahab-backend`): add `https://earn.balochsahab.com` to `CORS_ORIGINS`.
+- AoyCo/TimeWall dashboards: this site's own postback/App URL registration may need updating from `balochsahab.com` to `earn.balochsahab.com` (domain-matching rules) — verify before/after cutover.
+- `www.balochsahab.com/download` (EarnBox's separately-registered AoyCo App URL, see `workers/api-proxy.js`) is untouched by this migration — decide separately whether it should keep resolving once the apex is repointed.
 
 ## Recommended dashboard settings
 

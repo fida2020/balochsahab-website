@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://balochsahab.com/sitemap.xml
+Sitemap: https://earn.balochsahab.com/sitemap.xml

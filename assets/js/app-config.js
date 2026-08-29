@@ -6,6 +6,11 @@
 //
 // googleClientId is a real Google OAuth 2.0 "Web application" Client ID
 // (created 2026-08-22, Authorized JavaScript origin: https://balochsahab.com).
+// NOTE: this site is moving to https://earn.balochsahab.com (apex domain will
+// host the separate Baloch Sahab Technologies company site instead) — add
+// https://earn.balochsahab.com as an additional Authorized JavaScript origin
+// on this OAuth Client in Google Cloud Console before/when the DNS switches,
+// or Sign-In-with-Google will fail on the new domain.
 // Client IDs are not secret (Google's own convention — safe in client code).
 // The SAME value must also be set as GOOGLE_OAUTH_CLIENT_ID on the
 // website's OWN backend (Render service baloch-sahab-backend), since the

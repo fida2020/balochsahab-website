@@ -64,9 +64,9 @@ $sb = New-Object System.Text.StringBuilder
 [void]$sb.AppendLine('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">')
 foreach ($u in $urls) {
   $prio = if ($u -eq "/" -or $u -eq "/index.html") { "1.0" } elseif ($u -match "privacy|terms|cookie|refund|security|responsible") { "0.5" } else { "0.8" }
-  [void]$sb.AppendLine("  <url><loc>https://balochsahab.com$u</loc><changefreq>weekly</changefreq><priority>$prio</priority></url>")
+  [void]$sb.AppendLine("  <url><loc>https://earn.balochsahab.com$u</loc><changefreq>weekly</changefreq><priority>$prio</priority></url>")
 }
 [void]$sb.AppendLine('</urlset>')
 [IO.File]::WriteAllText((Join-Path $root "sitemap.xml"), $sb.ToString(), [Text.UTF8Encoding]::new($false))
-[IO.File]::WriteAllText((Join-Path $root "robots.txt"), "User-agent: *`nAllow: /`n`nSitemap: https://balochsahab.com/sitemap.xml`n", [Text.UTF8Encoding]::new($false))
+[IO.File]::WriteAllText((Join-Path $root "robots.txt"), "User-agent: *`nAllow: /`n`nSitemap: https://earn.balochsahab.com/sitemap.xml`n", [Text.UTF8Encoding]::new($false))
 Write-Output "BUILD COMPLETE"

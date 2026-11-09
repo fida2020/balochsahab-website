@@ -801,30 +801,50 @@
       easypaisa: ["Easypaisa Mobile Number", "03XXXXXXXXX"],
       bank_transfer: ["IBAN", "PK36SCBL0000001123456702"],
       usdt_trc20: ["USDT TRC20 Wallet Address", "T..."],
-      payoneer: ["Payoneer Account Email", "you@example.com"],
-      intl_bank: ["IBAN / Account Number", "GB29NWBK60161331926819"]
+      stripe: ["", ""]
     };
     function payoutDestination(fd) {
       var d = { accountTitle: fd.get("accountTitle"), accountNumber: fd.get("accountNumber") };
-      if (fd.get("method") === "intl_bank") { d.country = fd.get("country"); d.bankName = fd.get("bankName"); d.swift = fd.get("swift"); }
       return d;
     }
     if (withdrawForm) {
       var methodSel = withdrawForm.querySelector('select[name="method"]');
-      var intlBox = withdrawForm.querySelector("[data-intl-fields]");
       var acctLabel = withdrawForm.querySelector("[data-acct-label]");
       var acctInput = withdrawForm.querySelector('input[name="accountNumber"]');
+      var stripeBox = withdrawForm.querySelector("[data-stripe-box]");
+      var acctWrap = acctInput ? acctInput.closest("label") : null;
+      var stripeChecked = false;
+      var checkStripe = function () {
+        if (stripeChecked || !stripeBox) return;
+        stripeChecked = true;
+        var st = stripeBox.querySelector("[data-stripe-status]"), cn = stripeBox.querySelector("[data-stripe-connect]");
+        api("/payouts/stripe/status").then(function (r) {
+          if (!r.configured) { st.textContent = "Automatic bank payouts are not available yet."; return; }
+          if (r.ready) { st.textContent = "Bank connected \u2713 (" + (r.country || "") + ") \u2014 withdrawals are paid automatically."; return; }
+          st.textContent = r.connected ? "Finish connecting your bank on Stripe." : "Connect your bank once to get paid automatically.";
+          cn.hidden = false;
+        }).catch(function (e) { st.textContent = e.message || "Could not check your bank connection."; stripeChecked = false; });
+        var go = stripeBox.querySelector("[data-stripe-go]");
+        go.addEventListener("click", function () {
+          go.disabled = true; st.textContent = "Opening Stripe\u2026";
+          api("/payouts/stripe/onboard", { method: "POST", body: { country: stripeBox.querySelector("[data-stripe-country]").value } })
+            .then(function (r) { window.location.href = r.url; })
+            .catch(function (e) { st.textContent = e.message || "Could not open Stripe."; go.disabled = false; });
+        });
+      };
       var syncMethod = function () {
         var m = methodSel.value, h = METHOD_HINTS[m] || METHOD_HINTS.jazzcash;
+        var isStripe = m === "stripe";
         if (acctLabel) acctLabel.textContent = h[0];
-        if (acctInput) { acctInput.placeholder = h[1]; acctInput.type = m === "payoneer" ? "email" : "text"; }
-        var intl = m === "intl_bank";
-        if (intlBox) {
-          intlBox.hidden = !intl;
-          intlBox.querySelectorAll("input").forEach(function (i) { i.required = intl; });
-        }
+        if (acctInput) { acctInput.placeholder = h[1]; acctInput.required = !isStripe; }
+        if (acctWrap) acctWrap.hidden = isStripe;
+        if (stripeBox) { stripeBox.hidden = !isStripe; if (isStripe) checkStripe(); }
       };
-      if (methodSel) { methodSel.addEventListener("change", syncMethod); syncMethod(); }
+      if (methodSel) {
+        // Back from Stripe onboarding -> show the Stripe option with its fresh status.
+        if (new URLSearchParams(window.location.search).get("stripe")) methodSel.value = "stripe";
+        methodSel.addEventListener("change", syncMethod); syncMethod();
+      }
       withdrawForm.addEventListener("submit", function (e) {
         e.preventDefault();
         var fd = new FormData(withdrawForm);

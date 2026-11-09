@@ -74,8 +74,8 @@ Payment Method
 <option value="jazzcash">JazzCash Mobile Account</option>
 <option value="easypaisa">Easypaisa Mobile Account</option>
 <option value="bank_transfer">Pakistan Bank Transfer (IBAN)</option>
-<option value="usdt_trc20">USDT (TRC20 Network)</option>
-<option value="intl_bank">International Bank Transfer (outside Pakistan)</option>
+<option value="usdt_trc20">USDT (TRC20) — automatic</option>
+<option value="stripe">Bank outside Pakistan — automatic (Stripe)</option>
 </select>
 </label>
 
@@ -90,19 +90,15 @@ Account Title
 <input type="text" name="accountNumber" placeholder="Mobile number, IBAN, or USDT TRC20 address" required>
 </label>
 
-<div data-intl-fields hidden>
-<label>
-Country
-<input type="text" name="country" placeholder="e.g. United Kingdom, UAE, Saudi Arabia">
+<div data-stripe-box hidden style="margin:0 0 1rem">
+<p class="text-muted" data-stripe-status>Checking your bank connection…</p>
+<div data-stripe-connect hidden>
+<label>Bank country
+<select data-stripe-country><option value="GB">United Kingdom</option><option value="US">United States</option><option value="CA">Canada</option><option value="AU">Australia</option><option value="NZ">New Zealand</option><option value="IE">Ireland</option><option value="DE">Germany</option><option value="FR">France</option><option value="IT">Italy</option><option value="ES">Spain</option><option value="NL">Netherlands</option><option value="BE">Belgium</option><option value="AT">Austria</option><option value="PT">Portugal</option><option value="SE">Sweden</option><option value="DK">Denmark</option><option value="NO">Norway</option><option value="FI">Finland</option><option value="CH">Switzerland</option><option value="PL">Poland</option><option value="AE">United Arab Emirates</option><option value="SG">Singapore</option><option value="HK">Hong Kong</option><option value="JP">Japan</option><option value="MY">Malaysia</option></select>
 </label>
-<label>
-Bank Name
-<input type="text" name="bankName" placeholder="Your bank's name">
-</label>
-<label>
-SWIFT / BIC Code
-<input type="text" name="swift" placeholder="e.g. HBUKGB4B">
-</label>
+<button class="btn btn-secondary" type="button" data-stripe-go>🏦 Connect bank with Stripe</button>
+<span class="form-helper">You add your bank details on Stripe's secure page once. After that, withdrawals are paid to your bank automatically.</span>
+</div>
 </div>
 
 <button class="btn btn-primary btn-lg" type="submit">Submit Withdrawal Request</button>

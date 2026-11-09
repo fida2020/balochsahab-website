@@ -102,14 +102,14 @@ $extra
 </div>
 <nav class="sidebar-nav drawer-nav" data-nav aria-label="Account">
 <span class="auth-slot auth-guest" data-auth="guest">
-<a href="/login.html">🔑 Log In</a>
-<a href="/signup.html">✨ Sign Up</a>
+<a href="/login.html"><span class="di">🔑</span>Log In</a>
+<a href="/signup.html"><span class="di">✨</span>Sign Up</a>
 </span>
 <span class="auth-slot auth-user" data-auth="user" hidden>
-<a href="/profile.html">👤 Profile</a>
-<a href="/settings.html">⚙️ Settings</a>
-<a href="/withdraw.html#request-payout">💳 Withdraw</a>
-<button class="drawer-logout" type="button" data-logout>🚪 Log Out</button>
+<a href="/profile.html"><span class="di">👤</span>Profile</a>
+<a href="/settings.html"><span class="di">⚙️</span>Settings</a>
+<a href="/withdraw.html#request-payout"><span class="di">💳</span>Withdraw</a>
+<button class="drawer-logout" type="button" data-logout><span class="di">🚪</span>Log Out</button>
 </span>
 </nav>
 </aside>
@@ -150,7 +150,7 @@ $extra
 </span>
 </div>
 <main class="main-content" id="main">
-<style>:root{--sidebar-w:168px}.sidebar{padding-top:1rem;justify-content:flex-start;gap:.5rem}.drawer-nav{padding:0 .6rem}@media (min-width:1500px){.main-content{padding-right:184px}}.sidebar-top{padding:0 .6rem}.sidebar-brand{padding:.25rem 0 1rem;gap:.4rem}.sidebar .brand-text{font-size:.9rem}.drawer-nav .auth-slot{display:flex;flex-direction:column;gap:.25rem}.drawer-nav .auth-slot[hidden]{display:none}.drawer-nav a,.drawer-logout{display:block;width:100%;text-align:left;padding:.6rem .7rem;border-radius:10px;font:inherit;font-size:.88rem;font-weight:600;color:var(--text-muted,#aab);background:none;border:1px solid transparent;cursor:pointer;text-decoration:none}.drawer-nav a:hover,.drawer-logout:hover{color:var(--text,#fff);background:rgba(255,255,255,.05);border-color:var(--border,#334)}.drawer-logout{color:#f87171}.mobile-panel{max-width:240px}</style><style>.bs-ad{display:flex;justify-content:center;margin:14px auto;max-width:100%;overflow:hidden}.bs-ad-rail{position:fixed;right:12px;top:110px;width:160px;height:600px;z-index:5;display:none}@media (min-width:1500px){.bs-ad-rail{display:block}}</style><div class="bs-ad bs-ad-top" aria-label="Advertisement"><script data-cfasync="false">(function(){var w=window.innerWidth>=780,k=w?"3a76785af92c6d5596ed665170c05bba":"6145e2355db4998f2556010a89f70bfb";atOptions={key:k,format:"iframe",height:w?90:50,width:w?728:320,params:{}};document.write('<scr'+'ipt data-cfasync="false" src="https://www.highrevenueformat.com/'+k+'/invoke.js"></scr'+'ipt>');})();</script></div>
+<style>:root{--sidebar-w:80px}.sidebar{padding-top:1rem;justify-content:flex-start;gap:.5rem}.drawer-nav{padding:0 .3rem}@media (min-width:1500px){.main-content{padding-right:184px}}.sidebar-top{padding:0 .3rem}.sidebar-brand{padding:.25rem 0 1rem;gap:.4rem}.sidebar .brand-text{display:none}.sidebar-brand{justify-content:center}.drawer-nav .auth-slot{display:flex;flex-direction:column;gap:.25rem}.drawer-nav .auth-slot[hidden]{display:none}.drawer-nav a,.drawer-logout{display:flex;flex-direction:column;align-items:center;gap:.2rem;width:100%;text-align:center;padding:.55rem .1rem;border-radius:10px;font:inherit;font-size:.62rem;font-weight:600;line-height:1.1;color:var(--text-muted,#aab);background:none;border:1px solid transparent;cursor:pointer;text-decoration:none}.drawer-nav .di{font-size:1.25rem;line-height:1}.drawer-nav a:hover,.drawer-logout:hover{color:var(--text,#fff);background:rgba(255,255,255,.05);border-color:var(--border,#334)}.drawer-logout{color:#f87171}.mobile-panel{max-width:240px}</style><style>.bs-ad{display:flex;justify-content:center;margin:14px auto;max-width:100%;overflow:hidden}.bs-ad-rail{position:fixed;right:12px;top:110px;width:160px;height:600px;z-index:5;display:none}@media (min-width:1500px){.bs-ad-rail{display:block}}</style><div class="bs-ad bs-ad-top" aria-label="Advertisement"><script data-cfasync="false">(function(){var w=window.innerWidth>=780,k=w?"3a76785af92c6d5596ed665170c05bba":"6145e2355db4998f2556010a89f70bfb";atOptions={key:k,format:"iframe",height:w?90:50,width:w?728:320,params:{}};document.write('<scr'+'ipt data-cfasync="false" src="https://www.highrevenueformat.com/'+k+'/invoke.js"></scr'+'ipt>');})();</script></div>
 "@
 }
 

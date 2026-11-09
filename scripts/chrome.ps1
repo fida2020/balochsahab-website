@@ -18,7 +18,7 @@ if (Test-Path $critPath) {
 
 function Head($title,$desc,$canon,[string]$extra="") {
 $og = "https://earn.balochsahab.com$canon"
-$csp = "default-src 'self'; base-uri 'self'; object-src 'none'; img-src 'self' data: https:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; script-src 'self' 'unsafe-inline' https://accounts.google.com https://*.profitableratecpmnetwork.com https://adslab.me https://serve.adslab.me https://www.highrevenueformat.com https://*.highrevenueformat.com; frame-src https://accounts.google.com https://*.profitableratecpmnetwork.com https://www.highrevenueformat.com https://*.highrevenueformat.com https://adslab.me https://timewall.io https://aoyco.in; connect-src 'self' https:; form-action 'self' mailto: https:; upgrade-insecure-requests"
+$csp = "default-src 'self'; base-uri 'self'; object-src 'none'; img-src 'self' data: https:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; script-src 'self' 'unsafe-inline' https://accounts.google.com https://*.profitableratecpmnetwork.com https://adslab.me https://serve.adslab.me https://www.highrevenueformat.com https://*.highrevenueformat.com https://5gvci.com; frame-src https://accounts.google.com https://*.profitableratecpmnetwork.com https://www.highrevenueformat.com https://*.highrevenueformat.com https://adslab.me https://timewall.io https://aoyco.in; connect-src 'self' https:; form-action 'self' mailto: https:; upgrade-insecure-requests"
 @"
 <!DOCTYPE html>
 <html lang="en">
@@ -32,6 +32,7 @@ $csp = "default-src 'self'; base-uri 'self'; object-src 'none'; img-src 'self' d
 <meta name="author" content="Baloch Sahab">
 <meta name="website-verification" content="6a896bfae2e65e40771d6023">
 <meta name="monetag" content="e0896a523029fa19d2add81bf06c9536">
+<script src="https://5gvci.com/act/files/tag.min.js?z=12227327" data-cfasync="false" async></script>
 <meta name="theme-color" content="#000000">
 <meta name="color-scheme" content="dark">
 <link rel="canonical" href="$og">

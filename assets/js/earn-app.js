@@ -91,12 +91,22 @@
 
   function api(path, opts) {
     return rawFetch(path, opts).then(function (r) {
-      if (r.res.status === 401 && opts && opts.auth !== false && getSession()) {
+      // Owner 10 Nov fix: calls without opts (e.g. api("/users/me")) also refresh an expired token.
+      if (r.res.status === 401 && (!opts || opts.auth !== false) && getSession()) {
         return refreshSession().then(function () {
           return rawFetch(path, opts);
         }).then(unwrap);
       }
       return unwrap(r);
+    }).catch(function (err) {
+      // Session really gone (refresh token expired/used): sign out cleanly and go to the login page.
+      if (err && err.status === 401 && (!opts || opts.auth !== false)) {
+        clearSession();
+        if (!/\/(login|signup|forgot-password|reset-password)\.html$/.test(window.location.pathname)) {
+          window.location.href = "/login.html?expired=1";
+        }
+      }
+      throw err;
     });
     function unwrap(r) {
       if (!r.res.ok || !r.json || !r.json.ok) {

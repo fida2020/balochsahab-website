@@ -11,22 +11,29 @@ function Build-FromBody($rel, $title, $desc, $canon, $bodyFile, $extra = "", [bo
   Write-SitePage $rel $title $desc $canon $body $extra $includeAdsterra
 }
 
+function Write-Redirect($rel) {
+  # Owner 10 Nov: only video + banner ads on the earning site; old task pages forward to /earn.html.
+  $html = "<!doctype html><html lang=`"en`"><head><meta charset=`"utf-8`"><meta name=`"robots`" content=`"noindex`"><meta http-equiv=`"refresh`" content=`"0; url=/earn.html`"><link rel=`"canonical`" href=`"https://earn.balochsahab.com/earn.html`"><title>Moved | Baloch Sahab</title></head><body><a href=`"/earn.html`">Continue to Earn</a></body></html>"
+  [IO.File]::WriteAllText((Join-Path $root $rel), $html, [Text.UTF8Encoding]::new($false))
+  Write-Output "REDIRECT $rel"
+}
+
 $schema = [IO.File]::ReadAllText((Join-Path $bodies "schema.html"), [Text.Encoding]::UTF8)
 
 Build-FromBody "index.html" "Baloch Sahab | Earn Rewards Online" "Baloch Sahab is an online earning and rewards platform. Complete real tasks, ads, and offers and withdraw your verified earnings." "/index.html" "home.html" $schema
 Build-FromBody "earn.html" "Earn | Baloch Sahab" "Earn rewards with PTC ads, shortlinks, offerwall tasks, games, video ads, a daily check-in, and the faucet." "/earn.html" "earn.html"
-Build-FromBody "daily-claim.html" "Daily Claim | Baloch Sahab" "Claim your Baloch Sahab daily streak bonus." "/daily-claim.html" "daily-claim.html" "" $false
-Build-FromBody "faucet.html" "Rolling Faucet | Baloch Sahab" "Claim free recurring faucet rewards on Baloch Sahab." "/faucet.html" "faucet.html" "" $false
-Build-FromBody "spin-win.html" "Spin & Win | Baloch Sahab" "Spin the daily fortune wheel on Baloch Sahab." "/spin-win.html" "spin-win.html" "" $false
-Build-FromBody "offerwall.html" "Offer Wall | Baloch Sahab" "Complete high-paying offers and partner campaigns on Baloch Sahab." "/offerwall.html" "offerwall.html" "" $false
-Build-FromBody "shortlinks.html" "Short Links | Baloch Sahab" "Complete shortlink tasks for quick rewards on Baloch Sahab." "/shortlinks.html" "shortlinks.html" "" $false
-Build-FromBody "telegram-views.html" "Telegram Views | Baloch Sahab" "Join partner Telegram channels and groups for rewards on Baloch Sahab." "/telegram-views.html" "telegram-views.html" "" $false
-Build-FromBody "ptc.html" "PTC | Baloch Sahab" "View sponsored websites for a fixed timer and earn verified rewards on Baloch Sahab." "/ptc.html" "ptc.html" "" $false
+Write-Redirect "daily-claim.html"
+Write-Redirect "faucet.html"
+Write-Redirect "spin-win.html"
+Write-Redirect "offerwall.html"
+Write-Redirect "shortlinks.html"
+Write-Redirect "telegram-views.html"
+Write-Redirect "ptc.html"
 Build-FromBody "watch-ads.html" "Watch Ads | Baloch Sahab" "Watch sponsored ad placements for rewards on Baloch Sahab." "/watch-ads.html" "watch-ads.html" "" $false
 Build-FromBody "video-ads.html" "Video Ads | Baloch Sahab" "Watch short video ads to completion for rewards on Baloch Sahab." "/video-ads.html" "video-ads.html" "" $false
-Build-FromBody "interstitial-ads.html" "Interstitial Ads | Baloch Sahab" "View full-screen interstitial ads for rewards on Baloch Sahab." "/interstitial-ads.html" "interstitial-ads.html" "" $false
+Write-Redirect "interstitial-ads.html"
 Build-FromBody "vip.html" "VIP | Baloch Sahab" "Unlock higher rewards and exclusive perks on Baloch Sahab." "/vip.html" "vip.html" "" $false
-Build-FromBody "reviews.html" "Reviews | Baloch Sahab" "Write verified reviews for partner products and services on Baloch Sahab." "/reviews.html" "reviews.html" "" $false
+Write-Redirect "reviews.html"
 Build-FromBody "profile.html" "Profile | Baloch Sahab" "Manage your Baloch Sahab account profile." "/profile.html" "profile.html"
 Build-FromBody "settings.html" "Settings | Baloch Sahab" "Manage your Baloch Sahab account settings." "/settings.html" "settings.html"
 Build-FromBody "withdraw.html" "Withdraw | Baloch Sahab" "Withdraw your verified Baloch Sahab earnings to a supported payment method." "/withdraw.html" "withdraw.html" "" $false
@@ -53,9 +60,8 @@ Build-FromBody "404.html" "Page Not Found | Baloch Sahab" "The page you requeste
 $urls = @(
   "/", "/index.html", "/earn.html", "/withdraw.html", "/referral.html", "/faq.html", "/about.html", "/contact.html",
   "/signup.html", "/login.html",
-  "/daily-claim.html", "/faucet.html", "/spin-win.html", "/offerwall.html", "/shortlinks.html",
-  "/telegram-views.html", "/ptc.html", "/watch-ads.html", "/video-ads.html", "/interstitial-ads.html",
-  "/vip.html", "/reviews.html",
+  "/watch-ads.html", "/video-ads.html",
+  "/vip.html",
   "/privacy-policy.html", "/terms-of-service.html", "/cookie-policy.html", "/refund-policy.html",
   "/security-policy.html", "/responsible-disclosure.html"
 )

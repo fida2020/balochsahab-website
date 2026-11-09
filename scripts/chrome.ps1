@@ -105,17 +105,8 @@ $extra
 </div>
 <nav class="sidebar-nav" data-nav aria-label="Primary">
 <a href="/index.html">🏠 Home</a>
-<a href="/daily-claim.html">🎁 Daily Claim</a>
-<a href="/faucet.html">💧 Rolling Faucet</a>
-<a href="/spin-win.html">🎡 Spin &amp; Win</a>
-<a href="/offerwall.html">📋 Offer Wall</a>
-<a href="/shortlinks.html">🔗 Short Links</a>
-<a href="/telegram-views.html">📨 Telegram Views</a>
-<a href="/ptc.html">🎯 PTC</a>
 <a href="/watch-ads.html">📺 Watch Ads</a>
 <a href="/video-ads.html">🎬 Video Ads</a>
-<a href="/interstitial-ads.html">🖼️ Interstitial Ads</a>
-<a href="/reviews.html">⭐ Reviews</a>
 <a href="/referral.html">👥 Referral</a>
 <a href="/vip.html">💎 VIP</a>
 <a href="/about.html">ℹ️ About</a>
@@ -162,19 +153,10 @@ $extra
 <button class="mobile-panel-close" type="button" data-mobile-nav-close aria-label="Close menu"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
 </div>
 <nav class="mobile-panel-links" aria-label="Primary mobile">
-<a href="/daily-claim.html"><span>🎁 Daily Claim</span></a>
-<a href="/spin-win.html"><span>🎡 Spin &amp; Win</span></a>
-<a href="/offerwall.html"><span>📋 Offer Wall</span></a>
-<a href="/shortlinks.html"><span>🔗 Short Links</span></a>
-<a href="/telegram-views.html"><span>📨 Telegram Views</span></a>
-<a href="/ptc.html"><span>🎯 PTC</span></a>
 <a href="/watch-ads.html"><span>📺 Watch Ads</span></a>
 <a href="/video-ads.html"><span>🎬 Video Ads</span></a>
-<a href="/interstitial-ads.html"><span>🖼️ Interstitial Ads</span></a>
 <a href="/referral.html"><span>👥 Referral</span></a>
 <a href="/vip.html"><span>💎 VIP</span></a>
-<a href="/faucet.html"><span>💧 Rolling Faucet</span></a>
-<a href="/reviews.html"><span>⭐ Reviews</span></a>
 </nav>
 <nav class="mobile-panel-links mobile-panel-links--secondary" aria-label="More">
 <a href="/index.html"><span>🏠 Home</span></a>
@@ -195,15 +177,18 @@ $extra
 </span>
 </div>
 <main class="main-content" id="main">
+<style>.bs-ad{display:flex;justify-content:center;margin:14px auto;max-width:100%;overflow:hidden}.bs-ad-rail{position:fixed;right:12px;top:110px;width:160px;height:600px;z-index:5;display:none}@media (min-width:1500px){.bs-ad-rail{display:block}}</style><div class="bs-ad bs-ad-top" aria-label="Advertisement"><script data-cfasync="false">(function(){var w=window.innerWidth>=780,k=w?"3a76785af92c6d5596ed665170c05bba":"6145e2355db4998f2556010a89f70bfb";atOptions={key:k,format:"iframe",height:w?90:50,width:w?728:320,params:{}};document.write('<scr'+'ipt data-cfasync="false" src="https://www.highrevenueformat.com/'+k+'/invoke.js"></scr'+'ipt>');})();</script></div>
 "@
 }
 
 function Foot([bool]$IncludeAdsterra = $true) {
 $adsterraScript = ""
 if ($IncludeAdsterra) {
-  $adsterraScript = '<script src="https://pl30954370.profitableratecpmnetwork.com/2e/05/1e/2e051e66dc3a07ce784ca1255ee7069f.js"></script>' + "`n"
+  $adsterraScript = ""
 }
 @"
+<div class="bs-ad bs-ad-bottom" aria-label="Advertisement"><script data-cfasync="false">atOptions={'key':'c9a22e9d90ba1b4f991c5b85297b0221','format':'iframe','height':250,'width':300,'params':{}};</script><script data-cfasync="false" src="https://www.highrevenueformat.com/c9a22e9d90ba1b4f991c5b85297b0221/invoke.js"></script></div>
+<aside class="bs-ad-rail" aria-label="Advertisement"><script data-cfasync="false">atOptions={'key':'badd8574d1b56dfdbc168804cdda0f12','format':'iframe','height':600,'width':160,'params':{}};</script><script data-cfasync="false" src="https://www.highrevenueformat.com/badd8574d1b56dfdbc168804cdda0f12/invoke.js"></script></aside>
 </main>
 </div>
 <a class="wa-float" href="https://wa.me/923218818909" target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp">
@@ -220,7 +205,7 @@ if ($IncludeAdsterra) {
 </picture>
 <span class="brand-text">Baloch Sahab</span>
 </a>
-<p>Complete verified tasks, daily check-ins, and offers. Instant ledger tracking and fast withdrawals to your mobile wallet.</p>
+<p>Watch video ads and earn. Instant ledger tracking and fast withdrawals to your mobile wallet.</p>
 <div class="socials" aria-label="Social links">
 <a href="https://wa.me/923218818909" target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp" title="WhatsApp">
 <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.5 3.5A11 11 0 0 0 3.2 17.7L2 22l4.4-1.2A11 11 0 1 0 20.5 3.5zm-8.5 17a9 9 0 0 1-4.6-1.3l-.3-.2-2.6.7.7-2.5-.2-.3A9 9 0 1 1 12 20.5zm5.2-6.7c-.3-.1-1.6-.8-1.9-.9s-.4-.1-.6.2-.7.9-.8 1-.3.2-.6.1a7.3 7.3 0 0 1-2.2-1.4 8.2 8.2 0 0 1-1.5-1.9c-.2-.3 0-.4.1-.6l.4-.5.2-.3a.5.5 0 0 0 0-.5c0-.1-.6-1.5-.8-2s-.5-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.8 11.8 11.8 0 0 0 4.5 4 14 14 0 0 0 1.5.6 3.6 3.6 0 0 0 1.7.1 2.9 2.9 0 0 0 1.9-1.3 2.4 2.4 0 0 0 .2-1.3c-.1-.1-.3-.2-.6-.3z"/></svg>
@@ -242,11 +227,8 @@ if ($IncludeAdsterra) {
 <div class="footer-col">
 <h4>Earning</h4>
 <ul>
-<li><a href="/daily-claim.html">Daily Claim</a></li>
-<li><a href="/faucet.html">Rolling Faucet</a></li>
-<li><a href="/ptc.html">PTC Ads</a></li>
-<li><a href="/shortlinks.html">Shortlinks</a></li>
-<li><a href="/offerwall.html">Offerwall Tasks</a></li>
+<li><a href="/video-ads.html">Video Ads</a></li>
+<li><a href="/watch-ads.html">Watch Ads</a></li>
 <li><a href="/referral.html">Referral Program</a></li>
 </ul>
 </div>

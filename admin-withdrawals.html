@@ -132,7 +132,9 @@
         "<tr>" +
         "<td>" + escapeHtml(w.userEmail) + "</td>" +
         "<td>" + formatMinor(w.amountMinor) + "</td>" +
-        "<td>" + escapeHtml(w.method) + "</td>" +
+        "<td>" + escapeHtml(w.method) + (w.destination ? "<br><small>" + Object.keys(w.destination).map(function (k) {
+          return escapeHtml(k) + ": " + escapeHtml(String(w.destination[k] == null ? "" : w.destination[k]));
+        }).join("<br>") + "</small>" : "") + "</td>" +
         '<td><span class="status-pill status-' + w.status + '">' + w.status + "</span></td>" +
         "<td>" + new Date(w.requestedAt).toLocaleString() + "</td>" +
         "<td>" + actionButtons(w) + "</td>" +

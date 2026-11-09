@@ -794,7 +794,37 @@
     }
 
     var withdrawForm = document.querySelector("[data-withdraw-form]");
+    // Owner 10 Nov: Payoneer + International bank. Label/placeholder follow the chosen method; international
+    // transfers also ask for country, bank name and SWIFT.
+    var METHOD_HINTS = {
+      jazzcash: ["JazzCash Mobile Number", "03XXXXXXXXX"],
+      easypaisa: ["Easypaisa Mobile Number", "03XXXXXXXXX"],
+      bank_transfer: ["IBAN", "PK36SCBL0000001123456702"],
+      usdt_trc20: ["USDT TRC20 Wallet Address", "T..."],
+      payoneer: ["Payoneer Account Email", "you@example.com"],
+      intl_bank: ["IBAN / Account Number", "GB29NWBK60161331926819"]
+    };
+    function payoutDestination(fd) {
+      var d = { accountTitle: fd.get("accountTitle"), accountNumber: fd.get("accountNumber") };
+      if (fd.get("method") === "intl_bank") { d.country = fd.get("country"); d.bankName = fd.get("bankName"); d.swift = fd.get("swift"); }
+      return d;
+    }
     if (withdrawForm) {
+      var methodSel = withdrawForm.querySelector('select[name="method"]');
+      var intlBox = withdrawForm.querySelector("[data-intl-fields]");
+      var acctLabel = withdrawForm.querySelector("[data-acct-label]");
+      var acctInput = withdrawForm.querySelector('input[name="accountNumber"]');
+      var syncMethod = function () {
+        var m = methodSel.value, h = METHOD_HINTS[m] || METHOD_HINTS.jazzcash;
+        if (acctLabel) acctLabel.textContent = h[0];
+        if (acctInput) { acctInput.placeholder = h[1]; acctInput.type = m === "payoneer" ? "email" : "text"; }
+        var intl = m === "intl_bank";
+        if (intlBox) {
+          intlBox.hidden = !intl;
+          intlBox.querySelectorAll("input").forEach(function (i) { i.required = intl; });
+        }
+      };
+      if (methodSel) { methodSel.addEventListener("change", syncMethod); syncMethod(); }
       withdrawForm.addEventListener("submit", function (e) {
         e.preventDefault();
         var fd = new FormData(withdrawForm);
@@ -810,7 +840,7 @@
           body: {
             amountMinor: amountMinor,
             method: fd.get("method"),
-            destination: { accountTitle: fd.get("accountTitle"), accountNumber: fd.get("accountNumber") },
+            destination: payoutDestination(fd),
           },
         }).then(function () {
           document.querySelector("[data-withdraw-success]").hidden = false;

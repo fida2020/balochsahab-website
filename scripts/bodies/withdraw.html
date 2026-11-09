@@ -75,6 +75,8 @@ Payment Method
 <option value="easypaisa">Easypaisa Mobile Account</option>
 <option value="bank_transfer">Pakistan Bank Transfer (IBAN)</option>
 <option value="usdt_trc20">USDT (TRC20 Network)</option>
+<option value="payoneer">Payoneer (Pakistan &amp; worldwide)</option>
+<option value="intl_bank">International Bank Transfer (outside Pakistan)</option>
 </select>
 </label>
 
@@ -85,9 +87,24 @@ Account Title
 </label>
 
 <label>
-Account Number / Wallet Address
+<span data-acct-label>Account Number / Wallet Address</span>
 <input type="text" name="accountNumber" placeholder="Mobile number, IBAN, or USDT TRC20 address" required>
 </label>
+
+<div data-intl-fields hidden>
+<label>
+Country
+<input type="text" name="country" placeholder="e.g. United Kingdom, UAE, Saudi Arabia">
+</label>
+<label>
+Bank Name
+<input type="text" name="bankName" placeholder="Your bank's name">
+</label>
+<label>
+SWIFT / BIC Code
+<input type="text" name="swift" placeholder="e.g. HBUKGB4B">
+</label>
+</div>
 
 <button class="btn btn-primary btn-lg" type="submit">Submit Withdrawal Request</button>
 <div class="form-error" data-withdraw-error hidden></div>

@@ -874,57 +874,46 @@
     if (!root) return;
     var statusEl = root.querySelector("[data-adlist-status]");
     var listEl = root.querySelector("[data-adlist-items]");
-    if (!isLoggedIn()) {
-      statusEl.innerHTML = 'Log in to see today\'s ads &mdash; <a href="/login.html">Log In</a> or <a href="/signup.html">Create Free Account</a>';
-      return;
-    }
+    function none(html) { listEl.innerHTML = ""; statusEl.innerHTML = html; statusEl.hidden = false; }
+    if (!isLoggedIn()) { none('No ads right now &mdash; <a href="/login.html">log in</a> to watch ads and earn'); return; }
     var ADS = [
-      { id: "rewarded", icon: "\uD83C\uDFAC", title: "Video Ad", desc: "Watch a short video ad to the end", fn: "showrew_adslab" },
-      { id: "interstitial", icon: "\u25B6\uFE0F", title: "Short Video Ad", desc: "Quick full-screen video ad", fn: "showint_adslab" }
+      { id: "rewarded", icon: "\uD83C\uDFAC", title: "Video Ad", fn: "showrew_adslab" },
+      { id: "interstitial", icon: "\u25B6\uFE0F", title: "Short Video Ad", fn: "showint_adslab" }
     ];
     var dayKey = "bs_ads_" + new Date().toISOString().slice(0, 10);
     function counts() { try { return JSON.parse(localStorage.getItem(dayKey) || "{}"); } catch (e) { return {}; } }
     function bump(id) { var c = counts(); c[id] = (c[id] || 0) + 1; try { localStorage.setItem(dayKey, JSON.stringify(c)); } catch (e) {} return c[id]; }
     function render() {
-      var c = counts();
+      var c = counts(), shown = 0;
       listEl.innerHTML = "";
       ADS.forEach(function (ad) {
-        var item = document.createElement("button");
-        item.type = "button";
-        item.className = "task-item";
-        item.style.width = "100%"; item.style.textAlign = "left"; item.style.cursor = "pointer"; item.style.font = "inherit"; item.style.color = "inherit";
-        var icon = document.createElement("span");
-        icon.className = "task-item-icon";
-        icon.style.display = "flex"; icon.style.alignItems = "center"; icon.style.justifyContent = "center"; icon.style.fontSize = "1.4rem";
-        icon.textContent = ad.icon;
-        var body = document.createElement("div");
-        body.className = "task-item-body";
-        var t = document.createElement("p"); t.className = "task-item-title"; t.textContent = ad.title;
-        var d = document.createElement("p"); d.className = "task-item-desc"; d.textContent = ad.desc;
-        body.appendChild(t); body.appendChild(d);
-        var badge = document.createElement("span");
-        badge.className = "task-item-reward";
-        badge.textContent = (c[ad.id] || 0) ? "Watched " + c[ad.id] + "x today" : "Tap to play";
-        item.appendChild(icon); item.appendChild(body); item.appendChild(badge);
-        item.addEventListener("click", function () {
-          if (typeof window[ad.fn] !== "function") { badge.textContent = "Not available right now"; return; }
-          item.disabled = true; badge.textContent = "Loading ad\u2026";
+        if (typeof window[ad.fn] !== "function") return; // provider not loaded -> no line
+        shown++;
+        var line = document.createElement("button");
+        line.type = "button"; line.className = "ad-line";
+        line.innerHTML = '<span class="ic"></span><span class="t"></span><span class="s"></span>';
+        line.querySelector(".ic").textContent = ad.icon;
+        line.querySelector(".t").textContent = ad.title;
+        var s = line.querySelector(".s");
+        s.textContent = "Watched " + (c[ad.id] || 0) + "x today";
+        line.addEventListener("click", function () {
+          line.disabled = true; s.textContent = "Loading\u2026";
           window[ad.fn]().then(function () {
-            var n = bump(ad.id);
-            badge.textContent = "Watched " + n + "x today";
-            statusEl.textContent = "Ad watched \u2014 your reward is credited automatically.";
-            item.disabled = false;
+            s.textContent = "Watched " + bump(ad.id) + "x today"; line.disabled = false;
           }).catch(function () {
-            badge.textContent = "No ad right now \u2014 try later";
-            item.disabled = false;
+            s.textContent = "No ad right now"; line.disabled = false;
           });
         });
-        listEl.appendChild(item);
+        listEl.appendChild(line);
       });
-      listEl.hidden = false;
+      if (!shown) none("No ads right now"); else statusEl.hidden = true;
     }
-    statusEl.textContent = "Tap any ad below. New ads keep coming all day.";
+    // The ad SDK loads async: draw now, and again once it is ready.
     render();
+    var tries = 0, t = setInterval(function () {
+      tries++;
+      if (typeof window.showrew_adslab === "function" || tries > 20) { clearInterval(t); render(); }
+    }, 500);
   }
 
   // ---------------------------------------------------------------------

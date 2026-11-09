@@ -1,9 +1,13 @@
-<section class="section" id="todays-ads" data-adlist-root>
+<section class="section home-ads">
 <div class="container">
-<div class="section-head center">
-<h1>Today&#39;s Ads</h1>
-<p data-adlist-status>Loading today&#39;s ads&hellip;</p>
+<style>.home-ads-grid{display:flex;flex-wrap:wrap;justify-content:center;gap:16px;min-height:120px}.home-ad{display:flex;justify-content:center}
+.no-ads{text-align:center;color:var(--text-muted,#aab);opacity:.35;font-size:1.1rem;margin:40px 0;letter-spacing:.02em}</style>
+<div class="home-ads-grid" data-home-ads>
+<div class="home-ad"><script data-cfasync="false">atOptions={'key':'c9a22e9d90ba1b4f991c5b85297b0221','format':'iframe','height':250,'width':300,'params':{}};</script><script data-cfasync="false" src="https://www.highrevenueformat.com/c9a22e9d90ba1b4f991c5b85297b0221/invoke.js"></script></div>
+<div class="home-ad"><script data-cfasync="false">atOptions={'key':'c9a22e9d90ba1b4f991c5b85297b0221','format':'iframe','height':250,'width':300,'params':{}};</script><script data-cfasync="false" src="https://www.highrevenueformat.com/c9a22e9d90ba1b4f991c5b85297b0221/invoke.js"></script></div>
 </div>
-<div class="task-list" data-adlist-items hidden></div>
+<p class="no-ads" data-no-ads hidden>No ads right now</p>
+<script>(function(){setTimeout(function(){var n=document.querySelectorAll(".bs-ad iframe, .home-ad iframe, .bs-ad-rail iframe").length;
+var p=document.querySelector("[data-no-ads]");if(p&&!n)p.hidden=false;},6000);})();</script>
 </div>
 </section>

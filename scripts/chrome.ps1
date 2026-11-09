@@ -99,33 +99,19 @@ $extra
 </picture>
 <span class="brand-text">Baloch Sahab</span>
 </a>
-<div class="user-profile" data-auth="user" hidden>
-<div class="user-avatar" data-user-avatar>B</div>
-<div class="user-balance"><span data-balance-pill>`$0.00000</span></div>
 </div>
-<nav class="sidebar-nav" data-nav aria-label="Primary">
-<a href="/index.html">🏠 Home</a>
-<a href="/watch-ads.html">📺 Watch Ads</a>
-<a href="/video-ads.html">🎬 Video Ads</a>
-<a href="/referral.html">👥 Referral</a>
-<a href="/vip.html">💎 VIP</a>
-<a href="/about.html">ℹ️ About</a>
-<a href="/faq.html">❓ FAQ</a>
-<a href="/contact.html">💬 Contact</a>
-</nav>
-</div>
-<div class="sidebar-bottom">
+<nav class="sidebar-nav drawer-nav" data-nav aria-label="Account">
 <span class="auth-slot auth-guest" data-auth="guest">
-<a class="btn btn-primary" href="/signup.html" style="width:100%;margin-bottom:0.6rem">Sign Up</a>
-<a class="btn btn-secondary" href="/login.html" style="width:100%">Log In</a>
+<a href="/login.html">🔑 Log In</a>
+<a href="/signup.html">✨ Sign Up</a>
 </span>
 <span class="auth-slot auth-user" data-auth="user" hidden>
-<a class="btn btn-secondary" href="/profile.html" style="width:100%;margin-bottom:0.5rem">👤 Profile</a>
-<a class="btn btn-secondary" href="/withdraw.html#request-payout" style="width:100%;margin-bottom:0.5rem">💳 Withdraw</a>
-<a class="btn btn-secondary" href="/settings.html" style="width:100%;margin-bottom:0.5rem">⚙️ Settings</a>
-<button class="btn logout-btn" type="button" data-logout style="width:100%">🚪 Log Out</button>
+<a href="/profile.html">👤 Profile</a>
+<a href="/settings.html">⚙️ Settings</a>
+<a href="/withdraw.html#request-payout">💳 Withdraw</a>
+<button class="drawer-logout" type="button" data-logout>🚪 Log Out</button>
 </span>
-</div>
+</nav>
 </aside>
 <div class="mobile-topbar">
 <a class="brand" href="/index.html">
@@ -152,32 +138,19 @@ $extra
 </a>
 <button class="mobile-panel-close" type="button" data-mobile-nav-close aria-label="Close menu"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
 </div>
-<nav class="mobile-panel-links" aria-label="Primary mobile">
-<a href="/watch-ads.html"><span>📺 Watch Ads</span></a>
-<a href="/video-ads.html"><span>🎬 Video Ads</span></a>
-<a href="/referral.html"><span>👥 Referral</span></a>
-<a href="/vip.html"><span>💎 VIP</span></a>
-</nav>
-<nav class="mobile-panel-links mobile-panel-links--secondary" aria-label="More">
-<a href="/index.html"><span>🏠 Home</span></a>
-<a href="/about.html"><span>ℹ️ About</span></a>
-<a href="/faq.html"><span>❓ FAQ</span></a>
-<a href="/contact.html"><span>💬 Contact</span></a>
-</nav>
 <span class="auth-slot auth-guest" data-auth="guest">
 <a class="btn btn-secondary" href="/login.html">Log In</a>
 <a class="btn btn-primary" href="/signup.html">Create Free Account</a>
 </span>
 <span class="auth-slot auth-user" data-auth="user" hidden>
-<a class="balance-pill" href="/withdraw.html" style="justify-content:center;padding:0.75rem">Wallet: <span data-balance-pill>`$0.00000</span></a>
-<a class="btn btn-secondary" href="/profile.html" style="width:100%">Profile</a>
-<a class="btn btn-secondary" href="/withdraw.html#request-payout" style="width:100%">Withdraw</a>
-<a class="btn btn-secondary" href="/settings.html" style="width:100%">Settings</a>
+<a class="btn btn-secondary" href="/profile.html" style="width:100%">👤 Profile</a>
+<a class="btn btn-secondary" href="/settings.html" style="width:100%">⚙️ Settings</a>
+<a class="btn btn-secondary" href="/withdraw.html#request-payout" style="width:100%">💳 Withdraw</a>
 <button class="btn btn-secondary" type="button" data-logout style="width:100%">Log Out</button>
 </span>
 </div>
 <main class="main-content" id="main">
-<style>.bs-ad{display:flex;justify-content:center;margin:14px auto;max-width:100%;overflow:hidden}.bs-ad-rail{position:fixed;right:12px;top:110px;width:160px;height:600px;z-index:5;display:none}@media (min-width:1500px){.bs-ad-rail{display:block}}</style><div class="bs-ad bs-ad-top" aria-label="Advertisement"><script data-cfasync="false">(function(){var w=window.innerWidth>=780,k=w?"3a76785af92c6d5596ed665170c05bba":"6145e2355db4998f2556010a89f70bfb";atOptions={key:k,format:"iframe",height:w?90:50,width:w?728:320,params:{}};document.write('<scr'+'ipt data-cfasync="false" src="https://www.highrevenueformat.com/'+k+'/invoke.js"></scr'+'ipt>');})();</script></div>
+<style>:root{--sidebar-w:168px}.sidebar{padding-top:1rem}.sidebar-top{padding:0 .6rem}.sidebar-brand{padding:.25rem 0 1rem;gap:.4rem}.sidebar .brand-text{font-size:.9rem}.drawer-nav .auth-slot{display:flex;flex-direction:column;gap:.25rem}.drawer-nav .auth-slot[hidden]{display:none}.drawer-nav a,.drawer-logout{display:block;width:100%;text-align:left;padding:.6rem .7rem;border-radius:10px;font:inherit;font-size:.88rem;font-weight:600;color:var(--text-muted,#aab);background:none;border:1px solid transparent;cursor:pointer;text-decoration:none}.drawer-nav a:hover,.drawer-logout:hover{color:var(--text,#fff);background:rgba(255,255,255,.05);border-color:var(--border,#334)}.drawer-logout{color:#f87171}.mobile-panel{max-width:240px}</style><style>.bs-ad{display:flex;justify-content:center;margin:14px auto;max-width:100%;overflow:hidden}.bs-ad-rail{position:fixed;right:12px;top:110px;width:160px;height:600px;z-index:5;display:none}@media (min-width:1500px){.bs-ad-rail{display:block}}</style><div class="bs-ad bs-ad-top" aria-label="Advertisement"><script data-cfasync="false">(function(){var w=window.innerWidth>=780,k=w?"3a76785af92c6d5596ed665170c05bba":"6145e2355db4998f2556010a89f70bfb";atOptions={key:k,format:"iframe",height:w?90:50,width:w?728:320,params:{}};document.write('<scr'+'ipt data-cfasync="false" src="https://www.highrevenueformat.com/'+k+'/invoke.js"></scr'+'ipt>');})();</script></div>
 "@
 }
 

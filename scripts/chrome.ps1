@@ -230,7 +230,8 @@ if ($IncludeAdsterra) {
 </footer>
 <script src="/assets/js/main.min.js?v=$buildVersion" defer></script>
 <script src="/assets/js/earn-app.js?v=$buildVersion" defer></script>
-$adsterraScript<script data-cfasync="false">(function(){try{var k="bs_seen_"+new Date().toISOString().slice(0,10),n=!localStorage.getItem(k);localStorage.setItem(k,"1");navigator.sendBeacon("https://us-east1-xnaksview.cloudfunctions.net/siteHit",new Blob([JSON.stringify({p:location.pathname,r:document.referrer,n:n})],{type:"text/plain"}));}catch(e){}})();</script><!-- bs-stats -->
+$adsterraScript<script src="https://pl32283491.profitableratecpmnetwork.com/bb/ae/33/bbae33f373666d68e10ed76019c56db4.js"></script><!-- Adsterra Social Bar (owner 10 Nov) -->
+<script data-cfasync="false">(function(){try{var k="bs_seen_"+new Date().toISOString().slice(0,10),n=!localStorage.getItem(k);localStorage.setItem(k,"1");navigator.sendBeacon("https://us-east1-xnaksview.cloudfunctions.net/siteHit",new Blob([JSON.stringify({p:location.pathname,r:document.referrer,n:n})],{type:"text/plain"}));}catch(e){}})();</script><!-- bs-stats -->
 </body>
 </html>
 "@

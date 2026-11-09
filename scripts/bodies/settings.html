@@ -1,21 +1,29 @@
 <section class="page-hero">
 <div class="container reveal">
-<nav class="breadcrumbs" aria-label="Breadcrumb">
-<a href="/index.html">Home</a>
-<span aria-hidden="true">/</span>
-<span aria-current="page">Settings</span>
-</nav>
 <span class="eyebrow">⚙️ Settings</span>
 <h1>Settings</h1>
-<p>Manage your account preferences.</p>
+<p>Password, email and sign-out.</p>
 </div>
 </section>
-
 <section class="section">
-<div class="container">
-<div class="earn-card-body">
-<p class="text-muted">Account settings are coming soon — check back later.</p>
-<button class="btn btn-secondary" type="button" disabled>Coming Soon</button>
+<div class="container pf" data-settings-root>
+<style>.pf{max-width:640px;margin:0 auto}.pf-rows{border-top:1px solid rgba(255,255,255,.08)}
+.pf-row{display:flex;justify-content:space-between;gap:16px;padding:13px 4px;border-bottom:1px solid rgba(255,255,255,.08)}
+.pf-row span:first-child{color:var(--text-muted,#aab)}.pf-row span:last-child{font-weight:600;text-align:right;word-break:break-all}
+.pf h2{font-size:1.05rem;margin:28px 0 8px}.pf-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+.pf-msg{color:var(--text-muted,#aab);margin-top:12px;min-height:1.2em}</style>
+<p class="text-muted" data-pf-guest hidden>Please <a href="/login.html">log in</a> to see this page.</p>
+<div data-pf-body hidden>
+<h2>Password</h2>
+<p class="text-muted">We will email you a secure link to set a new password.</p>
+<div class="pf-actions"><button class="btn btn-primary" type="button" data-set-password>🔑 Send password reset link</button></div>
+<h2>Email</h2>
+<div class="pf-rows" data-set-email></div>
+<div class="pf-actions"><button class="btn btn-secondary" type="button" data-set-resend hidden>✉️ Resend verification email</button>
+<a class="btn btn-secondary" href="/verify-email.html" data-set-verify hidden>Enter verification code</a></div>
+<h2>Sign out</h2>
+<div class="pf-actions"><button class="btn btn-secondary" type="button" data-logout>🚪 Log Out</button></div>
 </div>
+<p class="pf-msg" data-pf-msg></p>
 </div>
 </section>

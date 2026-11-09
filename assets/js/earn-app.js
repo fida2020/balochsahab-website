@@ -916,6 +916,74 @@
     }, 500);
   }
 
+
+  // ---------------------------------------------------------------------
+  // Profile + Settings pages (owner 10 Nov) -- read-only views of /users/me
+  // and /wallet/summary, plus password reset / verification-email actions.
+  // Only fields the backend actually returns are shown.
+  // ---------------------------------------------------------------------
+  function pfRow(label, value) {
+    var row = document.createElement("div"); row.className = "pf-row";
+    var a = document.createElement("span"); a.textContent = label;
+    var b = document.createElement("span"); b.textContent = value;
+    row.appendChild(a); row.appendChild(b); return row;
+  }
+  function pfDate(v) { var d = v ? new Date(v) : null; return d && !isNaN(d) ? d.toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" }) : null; }
+  function pfKyc(s) { return { APPROVED: "Verified \u2713", PENDING: "In review", IN_REVIEW: "In review", DECLINED: "Declined \u2014 try again on Withdraw" }[s] || "Not verified"; }
+  function initProfilePages() {
+    var root = document.querySelector("[data-profile-root], [data-settings-root]");
+    if (!root) return;
+    var body = root.querySelector("[data-pf-body]"), msg = root.querySelector("[data-pf-msg]");
+    if (!isLoggedIn()) { root.querySelector("[data-pf-guest]").hidden = false; return; }
+    msg.textContent = "Loading\u2026";
+    api("/users/me").then(function (u) {
+      u = u || {};
+      msg.textContent = ""; body.hidden = false;
+      var verified = u.emailVerified === true || u.isEmailVerified === true || !!u.emailVerifiedAt;
+      var acc = root.querySelector("[data-pf-account]");
+      if (acc) {
+        var name = u.displayName || u.name || u.fullName || u.username;
+        if (name) acc.appendChild(pfRow("Name", name));
+        if (u.email) acc.appendChild(pfRow("Email", u.email));
+        acc.appendChild(pfRow("Email verified", verified ? "Yes \u2713" : "Not yet"));
+        acc.appendChild(pfRow("Identity (KYC)", pfKyc(u.kycStatus)));
+        if (u.kycVerifiedName) acc.appendChild(pfRow("Verified name", u.kycVerifiedName));
+        if (u.referralCode) acc.appendChild(pfRow("Referral code", u.referralCode));
+        var since = pfDate(u.createdAt);
+        if (since) acc.appendChild(pfRow("Member since", since));
+      }
+      var em = root.querySelector("[data-set-email]");
+      if (em) {
+        if (u.email) em.appendChild(pfRow("Email", u.email));
+        em.appendChild(pfRow("Status", verified ? "Verified \u2713" : "Not verified"));
+        if (!verified) { root.querySelector("[data-set-resend]").hidden = false; root.querySelector("[data-set-verify]").hidden = false; }
+      }
+      var pw = root.querySelector("[data-set-password]");
+      if (pw) pw.addEventListener("click", function () {
+        if (!u.email) { msg.textContent = "No email on this account."; return; }
+        pw.disabled = true; msg.textContent = "Sending\u2026";
+        api("/auth/password-reset/request", { method: "POST", auth: false, body: { email: u.email } })
+          .then(function () { msg.textContent = "Password reset link sent to " + u.email + "."; })
+          .catch(function (e) { msg.textContent = e.message || "Could not send the link."; pw.disabled = false; });
+      });
+      var rs = root.querySelector("[data-set-resend]");
+      if (rs) rs.addEventListener("click", function () {
+        rs.disabled = true; msg.textContent = "Sending\u2026";
+        api("/users/me/resend-verification-email", { method: "POST" })
+          .then(function () { msg.textContent = "Verification email sent."; })
+          .catch(function (e) { msg.textContent = e.message || "Could not send the email."; rs.disabled = false; });
+      });
+    }).catch(function (e) { msg.textContent = e.message || "Could not load your account."; });
+    var wal = root.querySelector("[data-pf-wallet]");
+    if (wal) api("/wallet/summary").then(function (s) {
+      s = s || {};
+      wal.appendChild(pfRow("Available", formatMinor(s.availableBalanceMinor, s.currency)));
+      if (s.pendingBalanceMinor != null) wal.appendChild(pfRow("Pending", formatMinor(s.pendingBalanceMinor, s.currency)));
+      if (s.lifetimeEarnedMinor != null) wal.appendChild(pfRow("Lifetime earned", formatMinor(s.lifetimeEarnedMinor, s.currency)));
+      if (s.isVip != null) wal.appendChild(pfRow("VIP", s.isVip ? "Yes (" + s.vipMultiplier + "x rewards)" : "Not yet"));
+    }).catch(function () {});
+  }
+
   // ---------------------------------------------------------------------
   // Boot
   // ---------------------------------------------------------------------
@@ -927,5 +995,6 @@
     initWithdrawPage();
     initReferralPage();
     initAdList();
+    initProfilePages();
   });
 })();

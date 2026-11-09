@@ -184,7 +184,7 @@ $extra
 function Foot([bool]$IncludeAdsterra = $true) {
 $adsterraScript = ""
 if ($IncludeAdsterra) {
-  $adsterraScript = ""
+  $adsterraScript = '<script src="https://pl30954370.profitableratecpmnetwork.com/2e/05/1e/2e051e66dc3a07ce784ca1255ee7069f.js"></script>' + "`n"
 }
 @"
 <div class="bs-ad bs-ad-bottom" aria-label="Advertisement"><script data-cfasync="false">atOptions={'key':'c9a22e9d90ba1b4f991c5b85297b0221','format':'iframe','height':250,'width':300,'params':{}};</script><script data-cfasync="false" src="https://www.highrevenueformat.com/c9a22e9d90ba1b4f991c5b85297b0221/invoke.js"></script></div>

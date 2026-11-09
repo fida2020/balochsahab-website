@@ -21,7 +21,7 @@ function Write-Redirect($rel) {
 $schema = [IO.File]::ReadAllText((Join-Path $bodies "schema.html"), [Text.Encoding]::UTF8)
 
 Build-FromBody "index.html" "Baloch Sahab | Earn Rewards Online" "Baloch Sahab is an online earning and rewards platform. Complete real tasks, ads, and offers and withdraw your verified earnings." "/index.html" "home.html" $schema
-Build-FromBody "earn.html" "Earn | Baloch Sahab" "Earn rewards with PTC ads, shortlinks, offerwall tasks, games, video ads, a daily check-in, and the faucet." "/earn.html" "earn.html"
+Build-FromBody "earn.html" "Earn | Baloch Sahab" "Earn rewards by watching video ads and sponsored ads on Baloch Sahab." "/earn.html" "earn.html"
 Write-Redirect "daily-claim.html"
 Write-Redirect "faucet.html"
 Write-Redirect "spin-win.html"
